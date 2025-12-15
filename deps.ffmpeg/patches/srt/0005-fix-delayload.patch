@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1d831894..52e3540e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -997,8 +997,6 @@ if (srt_libspec_shared)
+ 		target_link_libraries(${TARGET_srt}_shared PRIVATE ws2_32.lib)
+ 		if (OPENSSL_USE_STATIC_LIBS)
+ 			target_link_libraries(${TARGET_srt}_shared PRIVATE crypt32.lib)
+-		else()
+-			set_target_properties(${TARGET_srt}_shared PROPERTIES LINK_FLAGS "/DELAYLOAD:libeay32.dll")
+ 		endif()
+ 	elseif (MINGW)
+ 		target_link_libraries(${TARGET_srt}_shared PRIVATE wsock32 ws2_32)

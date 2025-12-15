@@ -8,15 +8,19 @@ param(
     [array] $Patches = @(
         @{
             PatchFile = "${PSScriptRoot}/patches/srt/0002-update-mbedtls-discovery-windows.patch"
-            HashSum = "c6b236a15e36767cc516c626c410be42b9ff05bd42338c194e1cf6247e4cbdc5"
+            HashSum   = "c6b236a15e36767cc516c626c410be42b9ff05bd42338c194e1cf6247e4cbdc5"
         },
         @{
             PatchFile = "${PSScriptRoot}/patches/srt/0003-fix-mbedtls-v3.5.0-plus-build-error-on-windows.patch"
-            HashSum = "7253ecfc1a36b1ff88dcb995ab8779107a5c7f979fd1f74390354a91fdf9f00b"
+            HashSum   = "7253ecfc1a36b1ff88dcb995ab8779107a5c7f979fd1f74390354a91fdf9f00b"
         },
         @{
             PatchFile = "${PSScriptRoot}/patches/srt/0004-fix-link-bcrypt-on-windows-when-mbedtls-v3.5.0-plus.patch"
-            HashSum = "04a3c5be7402995328da91c2313aa0489c3d9501410361e406db8fff679d4054"
+            HashSum   = "04a3c5be7402995328da91c2313aa0489c3d9501410361e406db8fff679d4054"
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/srt/0005-fix-delayload.patch"
+            HashSum   = "EBFD1966E96ADF72523A99AF58F5458D636D05F394F5562C1EC886EE5A361DB4"
         }
     )
 )
@@ -42,6 +46,8 @@ function Patch {
         $Params = $_
         Safe-Patch @Params
     }
+
+
 }
 
 function Configure {
@@ -50,7 +56,8 @@ function Configure {
 
     if ( $ForceShared -and ( $script:Shared -eq $false ) ) {
         $Shared = $true
-    } else {
+    }
+    else {
         $Shared = $script:Shared.isPresent
     }
 

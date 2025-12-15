@@ -132,26 +132,26 @@ function Configure {
     }
 
     $CMakeTarget = @{
-        x64 = 'x64'
+        x64   = 'x64'
         arm64 = 'arm64'
     }
 
-    $Options = ($Options -join ' ') -replace '-G Visual Studio \d+ \d+','-G Ninja' -replace "-A $($CMakeTarget[$Target])",''
+    $Options = ($Options -join ' ') -replace '-G Visual Studio \d+ \d+', '-G Ninja' -replace "-A $($CMakeTarget[$Target])", ''
 
     Log-Information "Configure qtbase (${Target})"
 
     $Params = @{
-        BasePath = ${Directory}
-        BuildPath = 'qtbase'
+        BasePath     = ${Directory}
+        BuildPath    = 'qtbase'
         BuildCommand = "cmake -S . -B build_${Target} ${Options}"
-        Target = $Target
+        Target       = $Target
     }
 
     $Backup = @{
-        PATH = $env:PATH
+        PATH       = $env:PATH
         VCPKG_ROOT = $env:VCPKG_ROOT
     }
-    $env:PATH = "$(Resolve-Path ((Get-Command git).Source + '/../../usr/bin') | Convert-Path);$env:PATH"
+    $env:PATH = "$(Get-GitUnixBinPath);$env:PATH"
     $env:VCPKG_ROOT = ''
     Invoke-DevShell @Params
     $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
@@ -170,10 +170,10 @@ function Build {
     }
 
     $Params = @{
-        BasePath = ${Directory}
-        BuildPath = 'qtbase'
+        BasePath     = ${Directory}
+        BuildPath    = 'qtbase'
         BuildCommand = "cmake $($Options -join ' ')"
-        Target = $Target
+        Target       = $Target
     }
 
     Invoke-DevShell @Params
@@ -225,7 +225,7 @@ function Qt-Add-Submodules {
     }
 
     $CMakeTarget = @{
-        x64 = 'x64'
+        x64   = 'x64'
         arm64 = 'arm64'
     }
 
@@ -257,22 +257,22 @@ function Qt-Add-Submodules {
             }
         }
 
-        $ComponentOptions = ($ComponentOptions -join ' ') -replace '-G Visual Studio \d+ \d+','-G Ninja' -replace "-A $($CMakeTarget[$Target])",''
+        $ComponentOptions = ($ComponentOptions -join ' ') -replace '-G Visual Studio \d+ \d+', '-G Ninja' -replace "-A $($CMakeTarget[$Target])", ''
 
         Log-Information "Configure ${Component} (${Target})"
 
         $Params = @{
-            BasePath = ${Directory}
-            BuildPath = ${Component}
+            BasePath     = ${Directory}
+            BuildPath    = ${Component}
             BuildCommand = "cmake -S . -B build_${Target} ${ComponentOptions}"
-            Target = $Target
+            Target       = $Target
         }
 
         $Backup = @{
-            PATH = $env:PATH
+            PATH       = $env:PATH
             VCPKG_ROOT = $env:VCPKG_ROOT
         }
-        $env:PATH = "$(Resolve-Path ((Get-Command git).Source + '/../../usr/bin') | Convert-Path);$env:PATH"
+        $env:PATH = "$(Get-GitUnixBinPath);$env:PATH"
         $env:VCPKG_ROOT = ''
         Invoke-DevShell @Params
         $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "Env:\$($_.Key)" -Value $_.Value }
@@ -289,10 +289,10 @@ function Qt-Add-Submodules {
         }
 
         $Params = @{
-            BasePath = ${Directory}
-            BuildPath = ${Component}
+            BasePath     = ${Directory}
+            BuildPath    = ${Component}
             BuildCommand = "cmake $($BuildOptions -join ' ')"
-            Target = $Target
+            Target       = $Target
         }
 
         Invoke-DevShell @Params

@@ -34,7 +34,8 @@ function Run-Stages {
 
     if ( ( $SkipAll ) -or ( $SkipBuild ) ) {
         $Stages += @('Install', 'Fixup')
-    } else {
+    }
+    else {
         if ( $Clean ) {
             $Stages += 'Clean'
         }
@@ -91,10 +92,12 @@ function Run-Stages {
                 if ( Test-Path function:$Stage ) {
                     . $Stage
                 }
-            } catch {
+            }
+            catch {
                 Pop-Location -Stack BuildTemp
                 Log-Error "Error during build step ${Stage} - $_"
-            } finally {
+            }
+            finally {
                 $StageName = ''
                 Pop-Location -Stack BuildTemp
             }
@@ -122,9 +125,9 @@ function Package-Dependencies {
 
     switch ( $PackageName ) {
         ffmpeg {
-            Get-ChildItem ./bin/* -Include '*.exe','srt-ffplay' -Exclude 'ffmpeg.exe','ffprobe.exe' | Remove-Item -Force -Recurse
-            Get-ChildItem ./lib -Exclude 'librist.lib','zlibstatic.lib','srt.lib','libx264.lib','mbed*.lib','everest.lib','p256m.lib','zlib.lib','datachannel.lib','cmake' | Remove-Item -Force -Recurse
-            Get-ChildItem ./lib/cmake -Exclude 'LibDataChannel','MbedTLS' | Remove-Item -Force -Recurse
+            Get-ChildItem ./bin/* -Include '*.exe', 'srt-ffplay' -Exclude 'ffmpeg.exe', 'ffprobe.exe' | Remove-Item -Force -Recurse
+            Get-ChildItem ./lib -Exclude 'librist.lib', 'zlibstatic.lib', 'srt.lib', 'libx264.lib', 'mbed*.lib', 'everest.lib', 'p256m.lib', 'zlib.lib', 'datachannel.lib', 'cmake' | Remove-Item -Force -Recurse
+            Get-ChildItem ./lib/cmake -Exclude 'LibDataChannel', 'MbedTLS' | Remove-Item -Force -Recurse
             Get-ChildItem ./share/* | Remove-Item -Force -Recurse
             Get-ChildItem ./bin/*.lib | Move-Item -Destination ./lib
             Get-ChildItem -Attribute Directory -Recurse -Include 'pkgconfig' | Remove-Item -Force -Recurse
@@ -132,10 +135,10 @@ function Package-Dependencies {
         }
         dependencies {
             Get-ChildItem ./bin/*.lib | Move-Item -Destination ./lib
-            Get-ChildItem ./bin -Exclude 'lua51.dll','libcurl.dll','swig.exe','Lib' | Remove-Item
+            Get-ChildItem ./bin -Exclude 'lua51.dll', 'libcurl.dll', 'swig.exe', 'Lib' | Remove-Item
 
             if ( $script:Target -ne 'x86' ) {
-                Get-ChildItem ./cmake/pcre2*,./lib/pcre2* | Remove-Item
+                Get-ChildItem ./cmake/pcre2*, ./lib/pcre2* | Remove-Item
                 Remove-Item -Recurse ./lib/pkgconfig
                 Get-ChildItem ./share -Exclude 'cmake' | Remove-Item -Recurse
                 Get-ChildItem ./share/cmake -Exclude 'nlohmann_json*' | Remove-Item -Recurse
@@ -150,11 +153,11 @@ function Package-Dependencies {
 
     $Params = @{
         ErrorAction = "SilentlyContinue"
-        Path = @(
+        Path        = @(
             "share/obs-deps"
         )
-        ItemType = "Directory"
-        Force = $true
+        ItemType    = "Directory"
+        Force       = $true
     }
 
     New-Item @Params *> $null
@@ -164,8 +167,8 @@ function Package-Dependencies {
     Log-Information "Package dependencies"
 
     $Params = @{
-        Path = (Get-ChildItem -Exclude $ArchiveFileName)
-        DestinationPath = $ArchiveFileName
+        Path             = (Get-ChildItem -Exclude $ArchiveFileName)
+        DestinationPath  = $ArchiveFileName
         CompressionLevel = "Optimal"
     }
 
@@ -189,7 +192,7 @@ function Build-Main {
 
     $UtilityFunctions = Get-ChildItem -Path $PSScriptRoot/utils.pwsh/*.ps1 -Recurse
 
-    foreach($Utility in $UtilityFunctions) {
+    foreach ($Utility in $UtilityFunctions) {
         Write-Debug "Loading $($Utility.FullName)"
         . $Utility.FullName
     }
@@ -198,18 +201,21 @@ function Build-Main {
 
     $SubDir = if ( $PackageName -eq 'dependencies' ) {
         'deps.windows'
-    } else {
+    }
+    else {
         "deps.${PackageName}"
     }
 
     if ( $Dependencies.Count -eq 0 ) {
         $DependencyFiles = Get-ChildItem -Path $PSScriptRoot/${SubDir}/*.ps1 -File -Recurse
-    } else {
+    }
+    else {
         $DependencyFiles = $Dependencies | ForEach-Object {
             $Item = $_
             try {
                 Get-ChildItem $PSScriptRoot/${SubDir}/*$Item.ps1
-            } catch {
+            }
+            catch {
                 throw "Script for requested dependency ${Item} not found"
             }
         }

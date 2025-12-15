@@ -7,7 +7,7 @@ param(
     [array] $Patches = @(
         @{
             PatchFile = "${PSScriptRoot}/patches/libtheora/0001-add-windows-cmake.patch"
-            HashSum = "9F7554581AABC81F360D040E95C1CBF935E9CD80019526B1A6951A1179524D50"
+            HashSum   = "9F7554581AABC81F360D040E95C1CBF935E9CD80019526B1A6951A1179524D50"
         }
     )
 )
@@ -42,7 +42,6 @@ function Configure {
     $Options = @(
         $CmakeOptions
         "-DBUILD_SHARED_LIBS:BOOL=$($OnOff[$script:Shared.isPresent])"
-        "-DCMAKE_C_FLAGS=-wd4700"
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

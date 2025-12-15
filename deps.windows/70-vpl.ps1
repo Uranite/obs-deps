@@ -26,7 +26,8 @@ function Configure {
 
     if ( $ForceStatic -and $script:Shared ) {
         $Shared = $false
-    } else {
+    }
+    else {
         $Shared = $script:Shared.isPresent
     }
 
@@ -64,30 +65,41 @@ function Install {
 
     $Params = @{
         ErrorAction = "SilentlyContinue"
-        Path = @(
+        Path        = @(
             "$($ConfigData.OutputPath)/lib"
             "$($ConfigData.OutputPath)/include"
         )
-        ItemType = "Directory"
-        Force = $true
+        ItemType    = "Directory"
+        Force       = $true
     }
 
     New-Item @Params *> $null
 
+
+    $VplLib = "build_${Target}/$Configuration/vpl.lib"
+    if (-not (Test-Path $VplLib)) {
+        $VplLib = "build_${Target}/vpl.lib"
+    }
+    
+    $VpldLib = "build_${Target}/$Configuration/vpld.lib"
+    if (-not (Test-Path $VpldLib)) {
+        $VpldLib = "build_${Target}/vpld.lib"
+    }
+
     $Items = @(
         @{
-            Path = "api/vpl"
+            Path        = "api/vpl"
             Destination = "$($ConfigData.OutputPath)/include"
-            Recurse = $true
+            Recurse     = $true
             ErrorAction = 'SilentlyContinue'
         }
         @{
-            Path = "build_${Target}/$Configuration/vpl.lib"
+            Path        = $VplLib
             Destination = "$($ConfigData.OutputPath)/lib"
             ErrorAction = 'SilentlyContinue'
         }
         @{
-            Path = "build_${Target}/$Configuration/vpld.lib"
+            Path        = $VpldLib
             Destination = "$($ConfigData.OutputPath)/lib"
             ErrorAction = 'SilentlyContinue'
         }

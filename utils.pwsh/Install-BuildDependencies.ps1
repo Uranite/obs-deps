@@ -20,8 +20,8 @@ function Install-BuildDependencies {
 
     $Prefixes = @{
         'arm64' = ${env:ProgramFiles(arm)}
-        'x64' = ${env:ProgramFiles}
-        'x86' = ${env:ProgramFiles(x86)}
+        'x64'   = ${env:ProgramFiles}
+        'x86'   = ${env:ProgramFiles(x86)}
     }
 
     $Paths = $env:Path -split [System.IO.Path]::PathSeparator
@@ -35,7 +35,7 @@ function Install-BuildDependencies {
 
     Get-Content $WingetFile | ForEach-Object {
         $PackageEntry = $_
-        $_, $Package, $_, $Path, $_, $Binary, $_, $Version = $PackageEntry -replace ',','' -split " +(?=(?:[^\']*\'[^\']*\')*[^\']*$)" -replace "'",''
+        $_, $Package, $_, $Path, $_, $Binary, $_, $Version = $PackageEntry -replace ',', '' -split " +(?=(?:[^\']*\'[^\']*\')*[^\']*$)" -replace "'", ''
 
         Log-Debug "$($MyInvocation.MyCommand): $PackageEntry"
 
@@ -43,8 +43,15 @@ function Install-BuildDependencies {
             if ( ( Test-Path "${Path}\${Binary}*" ) -and ! ( $Paths -contains $Path ) ) {
                 $Paths = @($Path) + $Paths
             }
-        } else {
-            foreach($Prefix in $Prefixes.GetEnumerator()) {
+            elseif ( Get-Command -Name msys2 -ErrorAction SilentlyContinue ) {
+                $MsysPath = Invoke-External msys2 -c 'cygpath -w /usr/bin'
+                if ( ( $MsysPath ) -and ( Test-Path "${MsysPath}" ) -and ! ( $Paths -contains $MsysPath ) ) {
+                    $Paths = @($MsysPath) + $Paths
+                }
+            }
+        }
+        else {
+            foreach ($Prefix in $Prefixes.GetEnumerator()) {
                 $FullPath = "$($Prefix.value)\${Path}"
 
                 if ( ( Test-Path "${FullPath}\${Binary}*" ) -and ! ( $Paths -contains $FullPath ) ) {
@@ -61,7 +68,8 @@ function Install-BuildDependencies {
 
         if ( $Found ) {
             Log-Status "Found dependency ${Binary} as $($Found.Source)"
-        } else {
+        }
+        else {
             Log-Status "Installing package ${Package}$(if ( $Version -ne $null ) { " Version: ${Version}" } )"
 
             if ( $Version -ne $null ) {
@@ -73,12 +81,14 @@ function Install-BuildDependencies {
                     $Params = $WingetOptions + $Package
 
                     Invoke-External winget @Params
-                } else {
+                }
+                else {
                     if ( $Package -eq 'mesonbuild.meson' ) {
                         python3 -m pip install meson
                     }
                 }
-            } catch {
+            }
+            catch {
                 throw "Error while installing winget package ${Package}: $_"
             }
         }

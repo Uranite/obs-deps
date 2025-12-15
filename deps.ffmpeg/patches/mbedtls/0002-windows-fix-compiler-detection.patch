@@ -1,0 +1,15 @@
+--- ./CMakeLists.txt
++++ ./CMakeLists.txt
+@@ -78,11 +78,7 @@
+ 
+ option(DISABLE_PACKAGE_CONFIG_AND_INSTALL "Disable package configuration, target export and installation" ${MBEDTLS_AS_SUBPROJECT})
+ 
+-if (CMAKE_C_SIMULATE_ID)
+-    set(COMPILER_ID ${CMAKE_C_SIMULATE_ID})
+-else()
+-    set(COMPILER_ID ${CMAKE_C_COMPILER_ID})
+-endif(CMAKE_C_SIMULATE_ID)
++set(COMPILER_ID ${CMAKE_C_COMPILER_ID})
+ 
+ string(REGEX MATCH "Clang" CMAKE_COMPILER_IS_CLANG "${COMPILER_ID}")
+ string(REGEX MATCH "GNU" CMAKE_COMPILER_IS_GNU "${COMPILER_ID}")

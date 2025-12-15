@@ -4,7 +4,13 @@ param(
     [string] $Uri = 'https://github.com/aja-video/libajantv2.git',
     [string] $Hash = 'b6acce6b135c3d9ae7a2bce966180b159ced619f',
     [array] $Targets = @('x64'),
-    [switch] $ForceStatic = $true
+    [switch] $ForceStatic = $true,
+    [array] $Patches = @(
+        @{
+            PatchFile = "${PSScriptRoot}/patches/ajantv2/0001-clang-UDIV128.patch"
+            HashSum   = 'aaf6d4841c53d034b8a9366ceef6a1510735b26641b8dc7079a06529c1c74deb'
+        }
+    )
 )
 
 function Setup {
@@ -20,13 +26,24 @@ function Clean {
     }
 }
 
+function Patch {
+    Log-Information "Patch (${Target})"
+    Set-Location $Path
+
+    $Patches | ForEach-Object {
+        $Params = $_
+        Safe-Patch @Params
+    }
+}
+
 function Configure {
     Log-Information "Configure (${Target})"
     Set-Location $Path
 
     if ( $ForceStatic -and $script:Shared ) {
         $Shared = $false
-    } else {
+    }
+    else {
         $Shared = $script:Shared.isPresent
     }
 
@@ -86,21 +103,21 @@ function Fixup {
 
     $Params = @{
         ErrorAction = "SilentlyContinue"
-        Path = @(
+        Path        = @(
             "$($ConfigData.OutputPath)/bin"
             "$($ConfigData.OutputPath)/lib"
         )
-        ItemType = "Directory"
-        Force = $true
+        ItemType    = "Directory"
+        Force       = $true
     }
 
     New-Item @Params *> $null
 
     $Items = @(
         @{
-            Path = "$($ConfigData.OutputPath)/lib/ajantv2$(if ( $Configuration -eq 'Debug' ) { 'd' }).lib"
+            Path        = "$($ConfigData.OutputPath)/lib/ajantv2$(if ( $Configuration -eq 'Debug' ) { 'd' }).lib"
             Destination = "$($ConfigData.OutputPath)/lib"
-            Force = $true
+            Force       = $true
         }
     )
 

@@ -4,23 +4,23 @@ function Setup-Target {
     }
 
     $TargetData = @{
-        x64 = @{
-            Arch = 'x64'
-            UnixArch = 'x86_64'
+        x64   = @{
+            Arch      = 'x64'
+            UnixArch  = 'x86_64'
             CmakeArch = 'x64'
-            Bitness = '64'
+            Bitness   = '64'
         }
-        x86 = @{
-            Arch = 'x86'
-            UnixArch = 'x86'
+        x86   = @{
+            Arch      = 'x86'
+            UnixArch  = 'x86'
             CmakeArch = 'Win32'
-            Bitness = '32'
+            Bitness   = '32'
         }
         arm64 = @{
-            Arch = 'arm64'
-            UnixArch = 'aarch64'
+            Arch      = 'arm64'
+            UnixArch  = 'aarch64'
             CmakeArch = 'ARM64'
-            Bitness = '64'
+            Bitness   = '64'
         }
     }
 
@@ -91,23 +91,40 @@ function Setup-BuildParameters {
         }
     }
 
-    $script:CmakeOptions = @(
-        '-A', $script:ConfigData.CmakeArch
-        '-G', $VisualStudioId
-        "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
-        "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
-        "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"
-        "-DCMAKE_BUILD_TYPE=${script:Configuration}"
-        '--no-warn-unused-cli'
-    )
 
-    $script:CMakePostfix = @(
-        '--'
-        '/consoleLoggerParameters:Summary'
-        '/noLogo'
-        '/p:UseMultiToolTask=true'
-        '/p:EnforceProcessCountAcrossBuilds=true'
-    )
+    if ( ( Get-Command 'ninja' -ErrorAction SilentlyContinue ) -and ( Get-Command 'clang' -ErrorAction SilentlyContinue ) ) {
+        $script:CmakeOptions = @(
+            '-G', 'Ninja'
+            '-DCMAKE_C_COMPILER=clang'
+            '-DCMAKE_CXX_COMPILER=clang++'
+            "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
+            "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
+            "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"
+            "-DCMAKE_BUILD_TYPE=${script:Configuration}"
+            '--no-warn-unused-cli'
+        )
+
+        $script:CMakePostfix = @('--')
+    }
+    else {
+        $script:CmakeOptions = @(
+            '-A', $script:ConfigData.CmakeArch
+            '-G', $VisualStudioId
+            "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
+            "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
+            "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"
+            "-DCMAKE_BUILD_TYPE=${script:Configuration}"
+            '--no-warn-unused-cli'
+        )
+
+        $script:CMakePostfix = @(
+            '--'
+            '/consoleLoggerParameters:Summary'
+            '/noLogo'
+            '/p:UseMultiToolTask=true'
+            '/p:EnforceProcessCountAcrossBuilds=true'
+        )
+    }
 
     if ( $script:Quiet ) {
         $script:CmakeOptions += @(
@@ -141,7 +158,7 @@ function Find-VisualStudio {
         }
     }
 
-    $VisualStudioData = Get-VSSetupInstance -Prerelease:$($script:VSPrerelease) | Select-VSSetupInstance -Version '[16.0,18.0)' -Latest
+    $VisualStudioData = Get-VSSetupInstance -Prerelease:$($script:VSPrerelease) | Select-VSSetupInstance -Version '[16.0,19.0)' -Latest
 
     if ( $VisualStudioData -eq $null ) {
         $ErrorMessage = @(

@@ -7,7 +7,11 @@ param(
     [array] $Patches = @(
         @{
             PatchFile = "${PSScriptRoot}/patches/mbedtls/0001-enable-dtls-srtp-support-windows.patch"
-            HashSum = "38dbaff859242c5a4f8196a08e35f0251d2966b22e1d9547ecaaea2aec4aae1b"
+            HashSum   = "38dbaff859242c5a4f8196a08e35f0251d2966b22e1d9547ecaaea2aec4aae1b"
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/mbedtls/0002-windows-fix-compiler-detection.patch"
+            HashSum   = "965280B947A91EE89A844EB4E69883C5645B7550FD653BD5413CD57095FFE6AD"
         }
     ),
     [switch] $ForceStatic = $true
@@ -42,7 +46,8 @@ function Configure {
 
     if ( $ForceStatic -and $script:Shared ) {
         $Shared = $false
-    } else {
+    }
+    else {
         $Shared = $script:Shared.isPresent
     }
 

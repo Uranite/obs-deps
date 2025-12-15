@@ -11,13 +11,17 @@ function Run-PatchExe {
 
     $Is64Bit = [System.Environment]::Is64BitOperatingSystem
 
-    $GitBasePath = Resolve-Path -Path "$((Get-Command git).Source | Split-Path)\..\usr\bin"
+    $GitBasePath = Get-GitUnixBinPath
+    if (-not $GitBasePath) {
+        throw "Could not find 'usr\bin' directory in Git installation. Please ensure Git is installed correctly."
+    }
 
     $PatchExe = "${GitBasePath}\patch.exe"
 
     if ( $PSVersionTable.PSVersion -ge '7.3.0' ) {
         Invoke-External $PatchExe --binary @args
-    } else {
+    }
+    else {
         Invoke-External cmd.exe /c ('"' + $PatchExe + '" --binary ' + $args -join ' ' -replace '/', '\')
     }
 }
@@ -113,15 +117,16 @@ function Safe-Patch {
 
     if ( $PatchFile.SubString(0, 5) -eq "https" ) {
         $WebRequestParams = @{
-            UserAgent = "NativeHost"
-            Uri = $PatchFile
-            OutFile = [System.IO.Path]::GetFileName($PatchFile)
+            UserAgent       = "NativeHost"
+            Uri             = $PatchFile
+            OutFile         = [System.IO.Path]::GetFileName($PatchFile)
             UseBasicParsing = $true
-            ErrorAction = "Stop"
+            ErrorAction     = "Stop"
         }
 
         Invoke-WebRequest @WebRequestParams
-    } elseif  ( ! ( Test-Path $PatchFile ) ) {
+    }
+    elseif ( ! ( Test-Path $PatchFile ) ) {
         throw "Supplied patch file ${PatchFile} not found."
     }
 
@@ -138,12 +143,14 @@ function Safe-Patch {
 
         try {
             Revert-Patch -DryRun -Silent -PatchFile $PatchFile
-        } catch {
+        }
+        catch {
             Apply-Patch -PatchFile $PatchFile
         }
 
         Pop-Location -Stack SafePatchTemp
-    } else {
+    }
+    else {
         Pop-Location -Stack SafePatchTemp
 
         throw "Hash of patch file ${PatchFile} is '${PatchHash}'. Expected '${HashSum}'."

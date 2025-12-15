@@ -58,28 +58,39 @@ function Install {
 
     $Params = @{
         ErrorAction = "SilentlyContinue"
-        Path = @(
+        Path        = @(
             "$($ConfigData.OutputPath)/bin"
             "$($ConfigData.OutputPath)/lib"
             "$($ConfigData.OutputPath)/include"
         )
-        ItemType = "Directory"
-        Force = $true
+        ItemType    = "Directory"
+        Force       = $true
     }
 
     New-Item @Params *> $null
 
+
+    $LibSource = "./build_${Target}/${Configuration}/rnnoise.lib"
+    if (-not (Test-Path $LibSource)) {
+        $LibSource = "./build_${Target}/rnnoise.lib"
+    }
+
+    $DllSource = "./build_${Target}/${Configuration}/rnnoise.dll"
+    if (-not (Test-Path $DllSource)) {
+        $DllSource = "./build_${Target}/rnnoise.dll"
+    }
+
     $Items = @(
         @{
-            Path = "./include/rnnoise.h"
+            Path        = "./include/rnnoise.h"
             Destination = "$($ConfigData.OutputPath)/include/"
         }
         @{
-            Path = "./build_${Target}/${Configuration}/rnnoise.lib"
+            Path        = $LibSource
             Destination = "$($ConfigData.OutputPath)/lib/"
         }
         @{
-            Path = "./build_${Target}/${Configuration}/rnnoise.dll"
+            Path        = $DllSource
             Destination = "$($ConfigData.OutputPath)/bin/"
             ErrorAction = 'SilentlyContinue'
         }

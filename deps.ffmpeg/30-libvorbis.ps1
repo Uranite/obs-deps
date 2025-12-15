@@ -27,7 +27,6 @@ function Configure {
         $CmakeOptions
         '-DBUILD_TESTING:BOOL=OFF'
         "-DBUILD_SHARED_LIBS:BOOL=$($OnOff[$script:Shared.isPresent])"
-        '-DCMAKE_C_FLAGS=-wd4244'
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

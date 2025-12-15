@@ -7,13 +7,13 @@ param(
     [array] $Patches = @(
         @{
             PatchFile = "${PSScriptRoot}/patches/aom/0002-windows-fix-cmake-nasm-detection.patch"
-            HashSum = "9455ba4f016ac8ec8e9604b38af8c89238bed1a4b74c04bd4d250b95c96531fe"
+            HashSum   = "9455ba4f016ac8ec8e9604b38af8c89238bed1a4b74c04bd4d250b95c96531fe"
         }
     ),
     [array] $FixupPatches = @(
         @{
             PatchFile = "${PSScriptRoot}/patches/aom/0001-windows-pkg-config-fix.patch"
-            HashSum = "22f38b49d6307c2ee860b08df7495b5f8894658b451c020f8a13162fd7dd29f4"
+            HashSum   = "22f38b49d6307c2ee860b08df7495b5f8894658b451c020f8a13162fd7dd29f4"
         }
     )
 )
@@ -50,7 +50,7 @@ function Configure {
 
     $OnOff = @('OFF', 'ON')
     $TargetCPUs = @{
-        x64 = 'x86_64'
+        x64   = 'x86_64'
         arm64 = 'arm64'
     }
 
@@ -66,7 +66,13 @@ function Configure {
         "-DAOM_TARGET_CPU=$($TargetCPUs[$Target])"
     )
 
-    Invoke-External cmake -S . -B "build_${Target}" -T clangcl @Options
+    $StartArgs = @('-S', '.', '-B', "build_${Target}")
+
+    if ( $CmakeOptions -notcontains 'Ninja' ) {
+        $StartArgs += '-T', 'clangcl'
+    }
+
+    Invoke-External cmake @StartArgs @Options
 }
 
 function Build {

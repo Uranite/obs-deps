@@ -1,6 +1,6 @@
 --- null       			   2023-03-24 18:30:00.000000000 -0400
 +++ ./CMakeLists.txt       2023-03-24 18:30:00.000000000 -0400
-@@ -0,0 +1,83 @@
+@@ -0,0 +1,85 @@
 +cmake_minimum_required(VERSION 3.16)
 +
 +project(speexdsp)
@@ -8,10 +8,12 @@
 +include(GNUInstallDirs)
 +
 +if(WIN32)
-+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} /Oi")
-+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Oi")
-+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /Oi")
-+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Oi")
++    if(MSVC)
++        set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} /Oi")
++        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Oi")
++        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /Oi")
++        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Oi")
++    endif()
 +
 +    add_definitions(-DHAVE_CONFIG_H -D_LIB -DUNICODE -D_UNICODE)
 +    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")

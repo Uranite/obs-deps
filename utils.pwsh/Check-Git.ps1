@@ -18,8 +18,34 @@ function Check-Git {
     if ( ! ( Get-Command git ) ) {
         Log-Warning 'No Git executable found. Will try to install via winget...'
         winget install git
-    } else {
+    }
+    else {
         Log-Debug "Git found at $(Get-Command git)"
         Log-Status "Git found"
+    }
+}
+
+function Get-GitUnixBinPath {
+    if ( Get-Command git -ErrorAction SilentlyContinue ) {
+        try {
+            $GitExecPath = (git --exec-path).Trim()
+            $GitRoot = $GitExecPath | Split-Path -Parent | Split-Path -Parent | Split-Path -Parent
+            $UnixBin = Join-Path $GitRoot "usr\bin"
+            
+            if ( Test-Path $UnixBin ) {
+                return $UnixBin
+            }
+        }
+        catch {
+            Write-Verbose "Could not determine git exec path: $_"
+        }
+    }
+
+    # Fallback to relative path from executable (works for standard installs)
+    try {
+        return (Resolve-Path -Path "$((Get-Command git).Source | Split-Path)\..\usr\bin" -ErrorAction SilentlyContinue).Path
+    }
+    catch {
+        return $null
     }
 }

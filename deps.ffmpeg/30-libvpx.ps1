@@ -17,23 +17,10 @@ function Setup {
 }
 
 function Clean {
+    Set-Location "${Name}-${Version}"
     if ( Test-Path "build_${Target}" ) {
         Log-Information "Clean build directory (${Target})"
         Remove-Item -Path "build_${Target}" -Recurse -Force
-    }
-}
-
-function Patch {
-    Log-Information "Patch (${Target})"
-    Set-Location "${Name}-${Version}"
-
-    # Disable WholeProgramOptimization (LTO) in VS project generator
-    # This prevents /GL flag which is incompatible with lld-link
-    $GeneratorScript = "build/make/gen_msvs_vcxproj.sh"
-    if (Test-Path $GeneratorScript) {
-        (Get-Content $GeneratorScript) -replace 'tag_content WholeProgramOptimization true', 'tag_content WholeProgramOptimization false' | Set-Content $GeneratorScript
-        # Patch to ignore unknown flags instead of dying (fixes -O3 error)
-        (Get-Content $GeneratorScript) -replace 'die_unknown \$opt', 'echo "Warning: Ignoring unknown option $opt" >&2' | Set-Content $GeneratorScript
     }
 }
 
@@ -42,8 +29,8 @@ function Configure {
     Set-Location "${Name}-${Version}"
 
     $BuildTargets = @{
-        x64   = 'x86_64-win64-vs17'
-        x86   = 'x86-win32-vs17'
+        x64 = 'x86_64-win64-vs17'
+        x86 = 'x86-win32-vs17'
         arm64 = 'arm64-win64-vs17-clangcl'
     }
 
@@ -52,7 +39,7 @@ function Configure {
     $ConfigureCommand = @(
         'bash'
         '../configure'
-        ('--prefix="' + $($script:ConfigData.OutputPath -replace '([A-Fa-f]):', '/$1' -replace '\\', '/') + '"')
+        ('--prefix="' + $($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/') + '"')
         ('--target=' + $($BuildTargets[$Target]))
         '--enable-runtime-cpu-detect'
         $(if ( $Target -eq 'arm64' ) { '--disable-neon_dotprod --disable-neon_i8mm' })
@@ -74,10 +61,10 @@ function Configure {
     )
 
     $Params = @{
-        BasePath     = (Get-Location | Convert-Path)
-        BuildPath    = "build_${Target}"
+        BasePath = (Get-Location | Convert-Path)
+        BuildPath = "build_${Target}"
         BuildCommand = $($ConfigureCommand -join ' ')
-        Target       = $Target
+        Target = $Target
     }
 
     $Backup = @{
@@ -93,15 +80,15 @@ function Build {
     Set-Location "${Name}-${Version}"
 
     $Params = @{
-        BasePath     = (Get-Location | Convert-Path)
-        BuildPath    = "build_${Target}"
+        BasePath = (Get-Location | Convert-Path)
+        BuildPath = "build_${Target}"
         BuildCommand = "make -j${env:NUMBER_OF_PROCESSORS}"
-        Target       = $Target
+        Target = $Target
     }
 
     $Backup = @{
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
-        VERBOSE         = $env:VERBOSE
+        VERBOSE = $env:VERBOSE
     }
     $env:MSYS2_PATH_TYPE = 'inherit'
     $env:VERBOSE = $(if ( $VerbosePreference -eq 'Continue' ) { '1' })
@@ -114,15 +101,15 @@ function Install {
     Set-Location "${Name}-${Version}"
 
     $Params = @{
-        BasePath     = (Get-Location | Convert-Path)
-        BuildPath    = "build_${Target}"
+        BasePath = (Get-Location | Convert-Path)
+        BuildPath = "build_${Target}"
         BuildCommand = "make install"
-        Target       = $Target
+        Target = $Target
     }
 
     $Backup = @{
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
-        VERBOSE         = $env:VERBOSE
+        VERBOSE = $env:VERBOSE
     }
     $env:MSYS2_PATH_TYPE = 'inherit'
     $env:VERBOSE = $(if ( $VerbosePreference -eq 'Continue' ) { '1' })

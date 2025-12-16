@@ -45,26 +45,6 @@ function Patch {
         $Params = $_
         Safe-Patch @Params
     }
-
-    # Fix fftools/resources/graph.html path resolution which fails with missing slash on Windows
-    $ResMakefile = "fftools/resources/Makefile"
-    if (Test-Path $ResMakefile) {
-        Log-Information "Patching fftools/resources/Makefile to fix vpath issue..."
-        $Content = Get-Content $ResMakefile
-        $NewContent = $Content + @(
-            "",
-            "# Explicit dependencies and rules to fix vpath resolution/path corruption on Windows",
-            "fftools/resources/graph.html.gz: `$(SRC_PATH)/fftools/resources/graph.html",
-            "	`$(M)gzip -nc9 `$< > `$@",
-            "",
-            "fftools/resources/graph.css.min: `$(SRC_PATH)/fftools/resources/graph.css",
-            "	`$(M)sed 's!/\\*.*\\*/!!g' `$< | tr '\n' ' ' | tr -s ' ' | sed 's/^ //; s/ `$$//' > `$@",
-            "",
-            "fftools/resources/graph.css.min.gz: fftools/resources/graph.css.min",
-            "	`$(M)gzip -nc9 `$< > `$@"
-        )
-        $NewContent | Set-Content $ResMakefile
-    }
 }
 
 function Configure {
@@ -85,11 +65,10 @@ function Configure {
         ('--prefix="' + $($script:ConfigData.OutputPath -replace '([A-Fa-f]):', '/$1' -replace '\\', '/') + '"')
         ('--arch=' + $($TargetArch[$Target]))
         $(if ( $Target -ne $script:HostArchitecture ) { '--enable-cross-compile' })
-        '--cc=clang'
-        '--cxx=clang'
-        ('--extra-cflags=' + "'-D_WINDLL -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
-        ('--extra-cxxflags=' + "'-D_WIN32_WINNT=0x0A00'")
-        ('--extra-ldflags=' + "'-fuse-ld=lld -Wl,-APPCONTAINER:NO -Wl,-MACHINE:${Target}'")
+        '--toolchain=msvc'
+        ('--extra-cflags=' + "'-D_WINDLL -MD -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
+        ('--extra-cxxflags=' + "'-MD -D_WIN32_WINNT=0x0A00'")
+        ('--extra-ldflags=' + "'-APPCONTAINER:NO -MACHINE:${Target}'")
         $(if ( $Target -eq 'arm64' ) { '--as=armasm64.exe', '--cpu=armv8' })
         '--pkg-config=pkg-config'
         $(if ( $Target -ne 'x86' ) { '--target-os=win64' } else { '--target-os=win32' })
@@ -113,7 +92,6 @@ function Configure {
         '--disable-indev=jack'
         '--disable-sdl2'
         '--disable-doc'
-
         $(if ( ! $script:Shared ) { ('--pkg-config-flags=' + "'--static'") })
         $(if ( $Configuration -eq 'Debug' ) { '--enable-debug' } else { '--disable-debug' })
         $(if ( $Configuration -eq 'RelWithDebInfo' ) { '--disable-stripping' })
@@ -130,55 +108,19 @@ function Configure {
         CFLAGS            = $env:CFLAGS
         CXXFLAGS          = $env:CXXFLAGS
         PKG_CONFIG_LIBDIR = $env:PKG_CONFIG_LIBDIR
-        PKG_CONFIG_PATH   = $env:PKG_CONFIG_PATH
         LDFLAGS           = $env:LDFLAGS
         MSYS2_PATH_TYPE   = $env:MSYS2_PATH_TYPE
         PATH              = $env:PATH
     }
-    $env:CFLAGS = "-O3 -DNDEBUG -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
-    $env:CXXFLAGS = "-O3 -DNDEBUG -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
+    $env:CFLAGS = "$($script:CFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
+    $env:CXXFLAGS = "$($script:CxxFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:PKG_CONFIG_LIBDIR = "$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib/pkgconfig"
-    $env:PKG_CONFIG_PATH = "$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib/pkgconfig"
-    $env:LDFLAGS = "-L$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib"
+    $env:LDFLAGS = "-LIBPATH:$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib"
     $env:PATH = "$($script:WorkRoot -replace '([A-Fa-f]):','/$1' -replace '\\','/')/gas-preprocessor;${Env:PATH})"
     $env:MSYS2_PATH_TYPE = 'inherit'
     Invoke-DevShell @Params
     $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
     ($(Get-Content build_${Target}\config.h) -replace '[^\x20-\x7D]+', '') | Set-Content -Path build_${Target}\config.h
-
-    # Patch config.mak to remove -lm from HOSTEXTRALIBS (causes m.lib error on Windows)
-    $ConfigMak = "build_${Target}\ffbuild\config.mak"
-    if (Test-Path $ConfigMak) {
-        Log-Information "Patching config.mak to remove -lm..."
-        (Get-Content $ConfigMak) -replace 'HOSTEXTRALIBS=-lm', 'HOSTEXTRALIBS=' | Set-Content $ConfigMak
-
-        Log-Information "Patching config.mak to use explicit paths for internal libraries..."
-        # Change LD_LIB=%.lib to LD_LIB=lib%/%.lib to fix linking of internal libs (avutil.lib not found)
-        (Get-Content $ConfigMak) -replace 'LD_LIB=%.lib', 'LD_LIB=lib%/%.lib' | Set-Content $ConfigMak
-
-        Log-Information "Disabling resource compression and forcing explicit rules..."
-        # 1. Disable compression by clearing the variable (overrides any previous 'yes')
-        Add-Content -Path $ConfigMak -Value "CONFIG_RESOURCE_COMPRESSION="
-
-        # 2. Add explicit rules to fftools/resources/Makefile for the uncompressed path
-        # This fixes the 'fftoolsresources' path corruption issue in implicit rules
-        $ResMakefile = "fftools/resources/Makefile"
-        if (Test-Path $ResMakefile) {
-            $Rules = @(
-                "",
-                "# Explicit rules for uncompressed resources (Windows path fix)",
-                "fftools/resources/graph.css.min: `$(SRC_PATH)/fftools/resources/graph.css",
-                "	`$(M)sed 's!/\\*.*\\*/!!g' `$< | tr '\n' ' ' | tr -s ' ' | sed 's/^ //; s/ `$$//' > `$@",
-                "",
-                "fftools/resources/graph.css.c: fftools/resources/graph.css.min",
-                "	`$(M)`$(BIN2C) `$< `$@ graph_css",
-                "",
-                "fftools/resources/graph.html.c: `$(SRC_PATH)/fftools/resources/graph.html",
-                "	`$(M)`$(BIN2C) `$< `$@ graph_html"
-            )
-            Add-Content -Path $ResMakefile -Value ($Rules -join "`n")
-        }
-    }
 }
 
 function Build {

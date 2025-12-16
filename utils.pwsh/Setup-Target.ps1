@@ -92,39 +92,23 @@ function Setup-BuildParameters {
     }
 
 
-    if ( ( Get-Command 'ninja' -ErrorAction SilentlyContinue ) -and ( Get-Command 'clang' -ErrorAction SilentlyContinue ) ) {
-        $script:CmakeOptions = @(
-            '-G', 'Ninja'
-            '-DCMAKE_C_COMPILER=clang'
-            '-DCMAKE_CXX_COMPILER=clang++'
-            "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
-            "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
-            "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"
-            "-DCMAKE_BUILD_TYPE=${script:Configuration}"
-            '--no-warn-unused-cli'
-        )
+    $script:CmakeOptions = @(
+        '-A', $script:ConfigData.CmakeArch
+        '-G', $VisualStudioId
+        "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
+        "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
+        "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"
+        "-DCMAKE_BUILD_TYPE=${script:Configuration}"
+        '--no-warn-unused-cli'
+    )
 
-        $script:CMakePostfix = @('--')
-    }
-    else {
-        $script:CmakeOptions = @(
-            '-A', $script:ConfigData.CmakeArch
-            '-G', $VisualStudioId
-            "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
-            "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
-            "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"
-            "-DCMAKE_BUILD_TYPE=${script:Configuration}"
-            '--no-warn-unused-cli'
-        )
-
-        $script:CMakePostfix = @(
-            '--'
-            '/consoleLoggerParameters:Summary'
-            '/noLogo'
-            '/p:UseMultiToolTask=true'
-            '/p:EnforceProcessCountAcrossBuilds=true'
-        )
-    }
+    $script:CMakePostfix = @(
+        '--'
+        '/consoleLoggerParameters:Summary'
+        '/noLogo'
+        '/p:UseMultiToolTask=true'
+        '/p:EnforceProcessCountAcrossBuilds=true'
+    )
 
     if ( $script:Quiet ) {
         $script:CmakeOptions += @(

@@ -36,14 +36,15 @@ function Configure {
     Set-Location $Path
 
     $TargetCPUs = @{
-        x64 = 'x86_64'
-        x86 = 'x86'
+        x64   = 'x86_64'
+        x86   = 'x86'
         arm64 = 'aarch64'
     }
 
     if ( $ForceShared -and ( $script:Shared -eq $false ) ) {
         $Shared = $true
-    } else {
+    }
+    else {
         $Shared = $script:Shared.isPresent
     }
 
@@ -53,7 +54,7 @@ function Configure {
         'bash'
         '../configure'
         ('--host=' + $($TargetCPUs[$Target]) + '-mingw64')
-        ('--prefix="' + $($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/') + '"')
+        ('--prefix="' + $($script:ConfigData.OutputPath -replace '([A-Fa-f]):', '/$1' -replace '\\', '/') + '"')
         '--enable-static'
         '--enable-pic'
         '--disable-lsmash'
@@ -66,16 +67,16 @@ function Configure {
     )
 
     $Params = @{
-        BasePath = (Get-Location | Convert-Path)
-        BuildPath = "build_${Target}"
+        BasePath     = (Get-Location | Convert-Path)
+        BuildPath    = "build_${Target}"
         BuildCommand = $($ConfigureCommand -join ' ')
-        Target = $Target
+        Target       = $Target
     }
 
     $Backup = @{
-        CC = $env:CC
-        CFLAGS = $env:CFLAGS
-        CXXFLAGS = $env:CXXFLAGS
+        CC              = $env:CC
+        CFLAGS          = $env:CFLAGS
+        CXXFLAGS        = $env:CXXFLAGS
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
     }
     $env:CC = 'cl'
@@ -91,15 +92,15 @@ function Build {
     Set-Location $Path
 
     $Params = @{
-        BasePath = (Get-Location | Convert-Path)
-        BuildPath = "build_${Target}"
+        BasePath     = (Get-Location | Convert-Path)
+        BuildPath    = "build_${Target}"
         BuildCommand = "make -j${env:NUMBER_OF_PROCESSORS}"
-        Target = $Target
+        Target       = $Target
     }
 
     $Backup = @{
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
-        VERBOSE = $env:VERBOSE
+        VERBOSE         = $env:VERBOSE
     }
     $env:MSYS2_PATH_TYPE = 'inherit'
     $env:VERBOSE = $(if ( $VerbosePreference -eq 'Continue' ) { '1' })
@@ -112,15 +113,15 @@ function Install {
     Set-Location $Path
 
     $Params = @{
-        BasePath = (Get-Location | Convert-Path)
-        BuildPath = "build_${Target}"
+        BasePath     = (Get-Location | Convert-Path)
+        BuildPath    = "build_${Target}"
         BuildCommand = "make install"
-        Target = $Target
+        Target       = $Target
     }
 
     $Backup = @{
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
-        VERBOSE = $env:VERBOSE
+        VERBOSE         = $env:VERBOSE
     }
     $env:MSYS2_PATH_TYPE = 'inherit'
     $env:VERBOSE = $(if ( $VerbosePreference -eq 'Continue' ) { '1' })
@@ -132,14 +133,15 @@ function Fixup {
     Log-Information "Fixup (${Target})"
     Set-Location $Path
 
-   if ( $ForceShared -and ( $script:Shared -eq $false ) ) {
+    if ( $ForceShared -and ( $script:Shared -eq $false ) ) {
         $Shared = $true
-    } else {
+    }
+    else {
         $Shared = $script:Shared.isPresent
     }
 
     if ( $Shared ) {
-        Remove-Item -ErrorAction SilentlyContinue "$($script:ConfigData.OutputPath)/lib/libx264.lib"
-        Rename-Item "$($script:ConfigData.OutputPath)/lib/libx264.dll.lib" -NewName "$($script:ConfigData.OutputPath)/lib/libx264.lib"
+        Remove-Item -ErrorAction SilentlyContinue "$($script:ConfigData.OutputPath)/lib/x264.lib"
+        Rename-Item "$($script:ConfigData.OutputPath)/lib/libx264.dll.lib" -NewName "$($script:ConfigData.OutputPath)/lib/x264.lib"
     }
 }

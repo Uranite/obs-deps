@@ -82,24 +82,36 @@ function Run-Stages {
 
         if ( $Path -eq '' ) { $Path = [System.IO.Path]::GetFileNameWithoutExtension($Uri) }
 
-        Log-Output 'Initializing build'
+        $MarkerDir = "$($ConfigData.OutputPath)/.build_markers"
+        $MarkerFile = "${MarkerDir}/${Name}-${Target}.done"
 
-        $Stages | ForEach-Object {
-            $Stage = $_
-            $script:StageName = $Name
-            try {
-                Push-Location -Stack BuildTemp
-                if ( Test-Path function:$Stage ) {
-                    . $Stage
+        $SkipDependency = $false
+
+        if ( (Test-Path $MarkerFile) -and (! $Clean) -and (! $script:Force) ) {
+            Log-Output "Skipping ${Name}: already built (Marker found)."
+            $SkipDependency = $true
+        }
+
+        if ( ! $SkipDependency ) {
+            Log-Output 'Initializing build'
+
+            $Stages | ForEach-Object {
+                $Stage = $_
+                $script:StageName = $Name
+                try {
+                    Push-Location -Stack BuildTemp
+                    if ( Test-Path function:$Stage ) {
+                        . $Stage
+                    }
                 }
-            }
-            catch {
-                Pop-Location -Stack BuildTemp
-                Log-Error "Error during build step ${Stage} - $_"
-            }
-            finally {
-                $StageName = ''
-                Pop-Location -Stack BuildTemp
+                catch {
+                    Pop-Location -Stack BuildTemp
+                    Log-Error "Error during build step ${Stage} - $_"
+                }
+                finally {
+                    $StageName = ''
+                    Pop-Location -Stack BuildTemp
+                }
             }
         }
 
@@ -114,6 +126,11 @@ function Run-Stages {
 
             $null = New-Item -ItemType Directory -Path "$($ConfigData.OutputPath)/licenses" -ErrorAction SilentlyContinue
             Copy-Item -Path "$PSScriptRoot/licenses/${Name}" -Recurse -Force -Destination "$($ConfigData.OutputPath)/licenses"
+        }
+
+        if ( (! $SkipAll) -and (! $SkipBuild) ) {
+            $null = New-Item -ItemType Directory -Path $MarkerDir -Force -ErrorAction SilentlyContinue
+            New-Item -ItemType File -Path $MarkerFile -Force > $null
         }
     }
 }

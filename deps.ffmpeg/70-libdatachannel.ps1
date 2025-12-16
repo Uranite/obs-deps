@@ -4,7 +4,13 @@ param(
     [string] $Uri = 'https://github.com/paullouisageneau/libdatachannel.git',
     [string] $Hash = '9d5c46b8f506943727104d766e5dad0693c5a223',
     [array] $Targets = @('x64', 'arm64'),
-    [switch] $ForceShared = $true
+    [switch] $ForceShared = $true,
+    [array] $Patches = @(
+        @{
+            PatchFile = "${PSScriptRoot}/patches/libdatachannel/0001-fix-usrsctp-compiler-flags.patch"
+            HashSum   = "184F319866F302784DA6F1BFB772209C488DF2E0DB91190C37C4E676E0DC9A6B"
+        }
+    )
 )
 
 function Setup {
@@ -20,13 +26,24 @@ function Clean {
     }
 }
 
+function Patch {
+    Log-Information "Patch (${Target})"
+    Set-Location $Path
+
+    $Patches | ForEach-Object {
+        $Params = $_
+        Safe-Patch @Params
+    }
+}
+
 function Configure {
     Log-Information "Configure (${Target})"
     Set-Location $Path
 
     if ( $ForceShared -and ( $script:Shared -eq $false ) ) {
         $Shared = $true
-    } else {
+    }
+    else {
         $Shared = $script:Shared.isPresent
     }
 
@@ -39,6 +56,7 @@ function Configure {
         '-DNO_TESTS:BOOL=ON'
         '-DNO_EXAMPLES:BOOL=ON'
         '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
+        "-DCMAKE_CXX_FLAGS='-DNOMINMAX'"
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

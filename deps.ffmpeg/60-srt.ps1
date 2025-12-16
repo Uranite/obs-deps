@@ -107,3 +107,17 @@ function Install {
 
     Invoke-External cmake @Options
 }
+
+function Fixup {
+    Log-Information "Fixup (${Target})"
+    Set-Location "${Name}-${Version}"
+
+    # Fix srt.pc for clang (replace ws2_32.lib with -lws2_32)
+    # This must be done after Install, as srt.pc is generated during install.
+    $PkgConfigDir = "$($ConfigData.OutputPath)/lib/pkgconfig"
+    $SrtPc = "$PkgConfigDir/srt.pc"
+    if (Test-Path $SrtPc) {
+        Log-Information "Patching srt.pc for Clang compatibility..."
+        (Get-Content $SrtPc) -replace 'ws2_32.lib', '-lws2_32' | Set-Content $SrtPc
+    }
+}

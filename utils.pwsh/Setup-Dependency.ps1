@@ -25,35 +25,37 @@ function Setup-Dependency {
 
     if ( [System.IO.Path]::GetExtension($Uri) -eq '.git' ) {
         $Params = @{
-            Uri = $Uri
+            Uri    = $Uri
             Commit = $Hash
-            Path = $DestinationPath
+            Path   = $DestinationPath
         }
 
         if ( $Branch -ne "" ) {
-            $Params += @{Branch = $Branch}
+            $Params += @{Branch = $Branch }
         }
 
         if ( $PullRequest -ne "" ) {
-            $Params += @{PullRequest = $PullRequest}
+            $Params += @{PullRequest = $PullRequest }
         }
 
         if ( ! ( $script:SkipUnpack ) ) {
             Invoke-GitCheckout  @Params
         }
-    } else {
+    }
+    else {
         $File = [System.IO.Path]::GetFileName($Uri)
 
         if ( $Hash -eq "") {
             throw "No checksum file for ${File} supplied."
-        } elseif ( ! ( Test-Path $Hash ) ) {
+        }
+        elseif ( ! ( Test-Path $Hash ) ) {
             throw "Checksum file for ${File} not found."
         }
 
         $Params = @{
-            Uri = $Uri
+            Uri      = $Uri
             HashFile = $Hash
-            Resume = $true
+            Resume   = $true
         }
 
         if ( Test-Path $File ) {
@@ -63,7 +65,19 @@ function Setup-Dependency {
         Invoke-SafeWebRequest @Params
 
         if ( ! ( $script:SkipUnpack -or $script:SkipAll ) ) {
-            Expand-ArchiveExt -Path $File -DestinationPath $DestinationPath -Force
+            $ShouldUnpack = $true
+
+            if ( ( Test-Path $DestinationPath ) -and ( ! $script:Clean ) ) {
+                $DestAbs = Convert-Path $DestinationPath
+                if ( $DestAbs -ne (Get-Location).Path ) {
+                    Log-Information "Skipping unpack for ${File}: destination exists."
+                    $ShouldUnpack = $false
+                }
+            }
+
+            if ( $ShouldUnpack ) {
+                Expand-ArchiveExt -Path $File -DestinationPath $DestinationPath -Force
+            }
         }
     }
 }

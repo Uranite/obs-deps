@@ -7,7 +7,7 @@ param(
     [array] $Patches = @(
         @{
             PatchFile = "${PSScriptRoot}/patches/lame/0001-fix-nmake-64-bit-builds.patch"
-            HashSum = "0772e07d3d0c484d281e3bfdb4f93e81adf303623fe57d955b98196795725f39"
+            HashSum   = "0772e07d3d0c484d281e3bfdb4f93e81adf303623fe57d955b98196795725f39"
         }
     )
 )
@@ -20,10 +20,10 @@ function Setup {
 function Clean {
     Set-Location "${Name}-${Version}"
 
-    Get-ChildItem -Recurse -Include 'lame.exe','mp3x.exe','mp3rtp.exe' | Remove-Item
-    Get-ChildItem -Recurse -Include 'libmp3lame.*','libmp3lame-static.lib','lame_enc.dll' | Remove-Item
-    Get-ChildItem -Recurse -Include 'lame.pdb','icl.pch' | Remove-Item
-    Get-ChildItem -Recurse -Include '*.obj','*.res' | Remove-Item
+    Get-ChildItem -Recurse -Include 'lame.exe', 'mp3x.exe', 'mp3rtp.exe' | Remove-Item
+    Get-ChildItem -Recurse -Include 'libmp3lame.*', 'libmp3lame-static.lib', 'lame_enc.dll' | Remove-Item
+    Get-ChildItem -Recurse -Include 'lame.pdb', 'icl.pch' | Remove-Item
+    Get-ChildItem -Recurse -Include '*.obj', '*.res' | Remove-Item
 }
 
 function Patch {
@@ -34,6 +34,9 @@ function Patch {
         $Params = $_
         Safe-Patch @Params
     }
+
+    # Disable /GL (Link Time Code Generation) which causes issues with lld-link
+    (Get-Content Makefile.MSVC) -replace '/GL', '' | Set-Content Makefile.MSVC
 }
 
 function Build {
@@ -41,16 +44,16 @@ function Build {
     Set-Location "${Name}-${Version}"
 
     $BuildMachines = @{
-        x64 = 'x64'
-        x86 = 'I686'
+        x64   = 'x64'
+        x86   = 'I686'
         arm64 = 'arm64'
     }
 
     $Params = @{
-        BasePath = (Get-Location | Convert-Path)
-        BuildPath = "."
+        BasePath     = (Get-Location | Convert-Path)
+        BuildPath    = "."
         BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64"
-        Target = $Target
+        Target       = $Target
     }
 
     if ( $Target -eq 'x86' ) {
@@ -68,28 +71,28 @@ function Install {
 
     $Params = @{
         ErrorAction = "SilentlyContinue"
-        Path = @(
+        Path        = @(
             "$($ConfigData.OutputPath)/include/lame"
             "$($ConfigData.OutputPath)/lib"
         )
-        ItemType = "Directory"
-        Force = $true
+        ItemType    = "Directory"
+        Force       = $true
     }
 
     New-Item @Params *> $null
 
     $Items = @(
         @{
-            Path = "include/lame.h"
+            Path        = "include/lame.h"
             Destination = "$($ConfigData.OutputPath)/include/lame"
-            Recurse = $true
-            Force = $true
+            Recurse     = $true
+            Force       = $true
         },
         @{
-            Path = "output/libmp3lame-static.lib"
+            Path        = "output/libmp3lame-static.lib"
             Destination = "$($ConfigData.OutputPath)/lib/mp3lame.lib"
-            Recurse = $true
-            Force = $true
+            Recurse     = $true
+            Force       = $true
         }
     )
 

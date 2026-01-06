@@ -2,7 +2,7 @@ param(
     [string] $Name = 'FFmpeg',
     [string] $Version = '8.0',
     [string] $Uri = 'https://github.com/FFmpeg/FFmpeg.git',
-    [string] $Hash = "9c93070155903e2c2d08f9f7234a920877903f80",
+    [string] $Hash = "abb609bb5864beb39faaf109cb0187250d4659e1",
     [array] $Targets = @('x64', 'arm64'),
     [array] $Patches = @(
         @{

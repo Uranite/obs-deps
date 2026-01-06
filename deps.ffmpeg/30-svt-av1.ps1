@@ -2,7 +2,7 @@ param(
     [string] $Name = 'svt-av1',
     [string] $Version = '3.1.3',
     [string] $Uri = 'https://github.com/juliobbv-p/svt-av1-hdr.git',
-    [string] $Hash = '0519bc76a4667de1cd40c1d559c7ad9c91d9c593',
+    [string] $Hash = 'd93a71cbe567db901ee0968d80cbeebc721ef03d',
     [array] $Targets = @('x64'),
     [array] $Patches = @()
 )

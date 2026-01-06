@@ -42,11 +42,9 @@ function Configure {
         $CmakeOptions
         "-DBUILD_SHARED_LIBS:BOOL=$($OnOff[$script:Shared.isPresent])"
         '-DBUILD_APPS:BOOL=OFF'
-        '-DBUILD_DEC:BOOL=ON'
-        '-DBUILD_ENC:BOOL=ON'
         '-DENABLE_NASM:BOOL=ON'
         '-DBUILD_TESTING:BOOL=OFF'
-        '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
+        '-T v143'
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

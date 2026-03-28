@@ -15,7 +15,7 @@ function Build {
     Set-Location $Path
 
     $msvcbuild = Get-Content "src/msvcbuild.bat" -Raw
-    $msvcbuild = $msvcbuild -replace '@set LJCOMPILE=cl', '@set LJCOMPILE=clang' -replace '@set LJLINK=link', '@set LJLINK=lld-link'
+    $msvcbuild = $msvcbuild -replace '@set LJCOMPILE=cl', '@set LJCOMPILE=clang-cl' -replace '@set LJLINK=link', '@set LJLINK=lld-link'
     Set-Content "src/msvcbuild.bat" $msvcbuild -NoNewline
 
     $Params = @{

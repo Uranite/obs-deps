@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'ntv2',
-    [string] $Version = '17.0.1',
+    [string] $Version = '17.6.0',
     [string] $Uri = 'https://github.com/aja-video/libajantv2.git',
-    [string] $Hash = 'b6acce6b135c3d9ae7a2bce966180b159ced619f',
+    [string] $Hash = '2d7636d86b6180bb4c5075fea040b1b812cc8b57',
     [array] $Targets = @('x64'),
     [switch] $ForceStatic = $true,
     [array] $Patches = @(

@@ -58,46 +58,35 @@ function Setup-BuildParameters {
 
     switch ( ${script:Configuration} ) {
         Debug {
-            $script:CFlags += @(
-                '-Ob0 -Od -RTC1'
-            )
-            $script:CxxFlags += @(
-                '-Ob0 -Od -RTC1'
-            )
+            $script:CFlags += @('-O0')
+            $script:CxxFlags += @('-O0')
         }
         RelWithDebInfo {
-            $script:CFlags += @(
-                '-O2 -Ob1 -DNDEBUG'
-            )
-            $script:CxxFlags += @(
-                '-O2 -Ob1 -DNDEBUG'
-            )
+            $script:CFlags += @('-O2', '-DNDEBUG')
+            $script:CxxFlags += @('-O2', '-DNDEBUG')
         }
         Release {
-            $script:CFlags += @(
-                '-O2 -Ob2 -DNDEBUG'
-            )
-            $script:CxxFlags += @(
-                '-O2 -Ob2 -DNDEBUG'
-            )
+            $script:CFlags += @('-O2', '-DNDEBUG')
+            $script:CxxFlags += @('-O2', '-DNDEBUG')
         }
         MinSizeRel {
-            $script:CFlags += @(
-                '-O1 -Ob1 -DNDEBUG'
-            )
-            $script:CxxFlags += @(
-                '-O1 -Ob1 -DNDEBUG'
-            )
+            $script:CFlags += @('-O1', '-DNDEBUG')
+            $script:CxxFlags += @('-O1', '-DNDEBUG')
         }
     }
 
-    $env:CC = 'clang'
-    $env:CXX = 'clang++'
+    $ClangTargets = @{
+        x64 = 'x86_64-pc-windows-msvc'
+        x86 = 'i686-pc-windows-msvc'
+        arm64 = 'aarch64-pc-windows-msvc'
+    }
 
     $script:CmakeOptions = @(
-        '-A', $script:ConfigData.CmakeArch
-        '-G', $VisualStudioId
         '-G', 'Ninja'
+        "-DCMAKE_C_COMPILER=clang"
+        "-DCMAKE_CXX_COMPILER=clang++"
+        "-DCMAKE_C_COMPILER_TARGET=$($ClangTargets[$script:Target])"
+        "-DCMAKE_CXX_COMPILER_TARGET=$($ClangTargets[$script:Target])"
         '-DCMAKE_RC_COMPILER=llvm-rc'
         "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
         "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
@@ -106,13 +95,7 @@ function Setup-BuildParameters {
         '--no-warn-unused-cli'
     )
 
-    $script:CMakePostfix = @(
-        '--'
-        '/consoleLoggerParameters:Summary'
-        '/noLogo'
-        '/p:UseMultiToolTask=true'
-        '/p:EnforceProcessCountAcrossBuilds=true'
-    )
+    $script:CMakePostfix = @()
 
     if ( $script:Quiet ) {
         $script:CmakeOptions += @(

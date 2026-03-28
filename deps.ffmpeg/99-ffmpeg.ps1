@@ -66,6 +66,8 @@ function Configure {
         ('--arch=' + $($TargetArch[$Target]))
         $(if ( $Target -ne $script:HostArchitecture ) { '--enable-cross-compile' })
         '--toolchain=msvc'
+        '--cc=clang-cl'
+        '--cxx=clang-cl'
         ('--extra-cflags=' + "'-D_WINDLL -MD -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
         ('--extra-cxxflags=' + "'-MD -D_WIN32_WINNT=0x0A00'")
         ('--extra-ldflags=' + "'-APPCONTAINER:NO -MACHINE:${Target}'")
@@ -105,6 +107,8 @@ function Configure {
     }
 
     $Backup = @{
+        CC = $env:CC
+        CXX = $env:CXX
         CFLAGS = $env:CFLAGS
         CXXFLAGS = $env:CXXFLAGS
         PKG_CONFIG_LIBDIR = $env:PKG_CONFIG_LIBDIR
@@ -112,6 +116,8 @@ function Configure {
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
         PATH = $env:PATH
     }
+    $env:CC = "clang-cl"
+    $env:CXX = "clang-cl"
     $env:CFLAGS = "$($script:CFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:CXXFLAGS = "$($script:CxxFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:PKG_CONFIG_LIBDIR = "$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib/pkgconfig"

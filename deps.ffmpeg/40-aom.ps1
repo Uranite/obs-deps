@@ -66,7 +66,7 @@ function Configure {
         "-DAOM_TARGET_CPU=$($TargetCPUs[$Target])"
     )
 
-    Invoke-External cmake -S . -B "build_${Target}" -T clangcl @Options
+    Invoke-External cmake -S . -B "build_${Target}" @Options
 }
 
 function Build {

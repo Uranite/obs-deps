@@ -94,6 +94,7 @@ function Setup-BuildParameters {
     $script:CmakeOptions = @(
         '-A', $script:ConfigData.CmakeArch
         '-G', $VisualStudioId
+        '-T', 'ClangCL'
         "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
         "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
         "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"

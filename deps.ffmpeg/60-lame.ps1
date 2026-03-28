@@ -49,7 +49,7 @@ function Build {
     $Params = @{
         BasePath = (Get-Location | Convert-Path)
         BuildPath = "."
-        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64"
+        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64 CC=clang-cl LN=lld-link"
         Target = $Target
     }
 

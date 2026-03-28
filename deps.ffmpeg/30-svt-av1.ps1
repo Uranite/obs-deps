@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'svt-av1',
-    [string] $Version = '4.0.1',
-    [string] $Uri = 'https://github.com/juliobbv-p/svt-av1-hdr.git',
-    [string] $Hash = 'fdf177bfbb55db408994192a7aa166d37130b26d',
+    [string] $Version = '4.1.0',
+    [string] $Uri = 'https://gitlab.com/AOMediaCodec/SVT-AV1.git',
+    [string] $Hash = 'f8b6146e6209a3a2c58b87395e950260efb92140',
     [array] $Targets = @('x64'),
     [array] $Patches = @()
 )

@@ -22,6 +22,10 @@ function Configure {
     Log-Information "Configure (${Target})"
     Set-Location $Path
 
+    $cml = Get-Content "CMakeLists.txt" -Raw
+    $cml = $cml -replace 'set\(ZLIB_SRCS \$\{ZLIB_SRCS\} win32/zlib1\.rc\)', ''
+    Set-Content "CMakeLists.txt" $cml -NoNewline
+
     $Options = @(
         $CmakeOptions
         '-DZ_HAVE_UNISTD_H:BOOL=OFF'

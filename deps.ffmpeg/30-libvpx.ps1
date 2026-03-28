@@ -29,8 +29,8 @@ function Configure {
     Set-Location "${Name}-${Version}"
 
     $BuildTargets = @{
-        x64 = 'x86_64-win64-vs17-clangcl'
-        x86 = 'x86-win32-vs17-clangcl'
+        x64 = 'x86_64-win64-vs17'
+        x86 = 'x86-win32-vs17'
         arm64 = 'arm64-win64-vs17-clangcl'
     }
 

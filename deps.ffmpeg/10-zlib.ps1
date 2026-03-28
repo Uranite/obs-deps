@@ -25,6 +25,7 @@ function Configure {
     $Options = @(
         $CmakeOptions
         '-DZ_HAVE_UNISTD_H:BOOL=OFF'
+        '-DZLIB_BUILD_TESTING:BOOL=OFF'
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

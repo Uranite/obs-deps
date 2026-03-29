@@ -16,8 +16,7 @@ function Build {
 
     $msvcbuild = Get-Content "src/msvcbuild.bat" -Raw
     $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
-    $linkTarget = if ($Target -eq 'arm64') { 'ARM64' } elseif ($Target -eq 'x86') { 'X86' } else { 'X64' }
-    $msvcbuild = $msvcbuild -replace '@set LJCOMPILE=cl', "@set LJCOMPILE=clang-cl --target=$clangTarget" -replace '@set LJLINK=link', "@set LJLINK=lld-link /MACHINE:$linkTarget"
+    $msvcbuild = $msvcbuild -replace '@set LJCOMPILE=cl', "@set LJCOMPILE=clang-cl --target=$clangTarget"
     Set-Content "src/msvcbuild.bat" $msvcbuild -NoNewline
 
     $Params = @{

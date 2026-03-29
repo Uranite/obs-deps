@@ -66,10 +66,10 @@ function Configure {
         ('--arch=' + $($TargetArch[$Target]))
         $(if ( $Target -ne $script:HostArchitecture ) { '--enable-cross-compile' })
         '--toolchain=msvc'
-        '--cc=clang-cl'
-        '--cxx=clang-cl'
-        ('--extra-cflags=' + "'--target=$clangTarget -D_WINDLL -MD -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
-        ('--extra-cxxflags=' + "'--target=$clangTarget -MD -D_WIN32_WINNT=0x0A00'")
+        ('--cc=clang-cl --target=' + $clangTarget)
+        ('--cxx=clang-cl --target=' + $clangTarget)
+        ('--extra-cflags=' + "'-D_WINDLL -MD -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
+        ('--extra-cxxflags=' + "'-MD -D_WIN32_WINNT=0x0A00'")
         ('--extra-ldflags=' + "'-APPCONTAINER:NO -MACHINE:${Target}'")
         $(if ( $Target -eq 'arm64' ) { '--as=armasm64.exe','--cpu=armv8' })
         '--pkg-config=pkg-config'
@@ -116,8 +116,8 @@ function Configure {
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
         PATH = $env:PATH
     }
-    $env:CC = "clang-cl"
-    $env:CXX = "clang-cl"
+    $env:CC = "clang-cl --target=$clangTarget"
+    $env:CXX = "clang-cl --target=$clangTarget"
     $env:CFLAGS = "$($script:CFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:CXXFLAGS = "$($script:CxxFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:PKG_CONFIG_LIBDIR = "$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib/pkgconfig"

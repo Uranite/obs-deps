@@ -66,8 +66,8 @@ function Configure {
         ('--arch=' + $($TargetArch[$Target]))
         $(if ( $Target -ne $script:HostArchitecture ) { '--enable-cross-compile' })
         '--toolchain=msvc'
-        ('--cc=clang-cl --target=' + $clangTarget)
-        ('--cxx=clang-cl --target=' + $clangTarget)
+        ('--cc="clang-cl --target=' + $clangTarget + '"')
+        ('--cxx="clang-cl --target=' + $clangTarget + '"')
         ('--extra-cflags=' + "'-D_WINDLL -MD -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
         ('--extra-cxxflags=' + "'-MD -D_WIN32_WINNT=0x0A00'")
         ('--extra-ldflags=' + "'-APPCONTAINER:NO -MACHINE:${Target}'")

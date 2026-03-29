@@ -39,6 +39,8 @@ function Configure {
         '-DNO_TESTS:BOOL=ON'
         '-DNO_EXAMPLES:BOOL=ON'
         '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
+        "-DCMAKE_C_COMPILER=clang-cl"
+        "-DCMAKE_CXX_COMPILER=clang-cl"
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

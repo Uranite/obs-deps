@@ -68,8 +68,8 @@ function Configure {
         '--toolchain=msvc'
         '--cc=clang-cl'
         '--cxx=clang-cl'
-        ('--extra-cflags=' + "'-D_WINDLL -MD -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
-        ('--extra-cxxflags=' + "'-MD -D_WIN32_WINNT=0x0A00'")
+        ('--extra-cflags=' + "'--target=$clangTarget -D_WINDLL -MD -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
+        ('--extra-cxxflags=' + "'--target=$clangTarget -MD -D_WIN32_WINNT=0x0A00'")
         ('--extra-ldflags=' + "'-APPCONTAINER:NO -MACHINE:${Target}'")
         $(if ( $Target -eq 'arm64' ) { '--as=armasm64.exe','--cpu=armv8' })
         '--pkg-config=pkg-config'

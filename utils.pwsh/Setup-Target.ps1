@@ -90,8 +90,8 @@ function Setup-BuildParameters {
         '-DCMAKE_RC_COMPILER=llvm-rc'
         '-DCMAKE_MT=llvm-mt'
         '-DCMAKE_LINKER=lld-link'
-        '-DCMAKE_AR=llvm-lib'
-        '-DCMAKE_RANLIB=echo'
+        '-DCMAKE_AR=llvm-ar'
+        '-DCMAKE_RANLIB=llvm-ranlib'
         "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
         "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
         "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"

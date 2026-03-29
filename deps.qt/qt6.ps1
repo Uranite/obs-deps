@@ -136,6 +136,7 @@ function Configure {
         arm64 = 'arm64'
     }
 
+    $Options = $Options | Where-Object { $_ -notmatch 'DCMAKE_C_COMPILER' -and $_ -notmatch 'DCMAKE_CXX_COMPILER' }
     $Options = ($Options -join ' ') -replace '-G Visual Studio \d+ \d+','-G Ninja' -replace "-A $($CMakeTarget[$Target])",'' -replace '-T ClangCL',''
 
     Log-Information "Configure qtbase (${Target})"
@@ -261,6 +262,7 @@ function Qt-Add-Submodules {
             }
         }
 
+        $ComponentOptions = $ComponentOptions | Where-Object { $_ -notmatch 'DCMAKE_C_COMPILER' -and $_ -notmatch 'DCMAKE_CXX_COMPILER' }
         $ComponentOptions = ($ComponentOptions -join ' ') -replace '-G Visual Studio \d+ \d+','-G Ninja' -replace "-A $($CMakeTarget[$Target])",'' -replace '-T ClangCL',''
 
         Log-Information "Configure ${Component} (${Target})"

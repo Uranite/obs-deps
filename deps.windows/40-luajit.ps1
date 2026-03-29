@@ -15,8 +15,6 @@ function Build {
     Set-Location $Path
 
     $msvcbuild = Get-Content "src/msvcbuild.bat" -Raw
-    $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
-    $msvcbuild = $msvcbuild -replace '@set LJCOMPILE=cl', "@set LJCOMPILE=clang-cl --target=$clangTarget"
     Set-Content "src/msvcbuild.bat" $msvcbuild -NoNewline
 
     $Params = @{

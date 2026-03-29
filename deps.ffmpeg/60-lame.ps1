@@ -46,10 +46,11 @@ function Build {
         arm64 = 'arm64'
     }
 
+    $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
     $Params = @{
         BasePath = (Get-Location | Convert-Path)
         BuildPath = "."
-        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64 CC=clang LN=lld-link"
+        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64 CC=`"clang-cl --target=$clangTarget`" LN=link"
         Target = $Target
     }
 

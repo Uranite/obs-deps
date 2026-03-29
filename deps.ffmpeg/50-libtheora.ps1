@@ -42,7 +42,6 @@ function Configure {
     $Options = @(
         $CmakeOptions
         "-DBUILD_SHARED_LIBS:BOOL=$($OnOff[$script:Shared.isPresent])"
-        "-DCMAKE_C_FLAGS=-wd4700"
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

@@ -136,7 +136,6 @@ function Configure {
         arm64 = 'arm64'
     }
 
-    $Options = $Options | Where-Object { $_ -notmatch 'DCMAKE_C_COMPILER' -and $_ -notmatch 'DCMAKE_CXX_COMPILER' }
     $Options = ($Options -join ' ') -replace '-G Visual Studio \d+ \d+','-G Ninja' -replace "-A $($CMakeTarget[$Target])",'' -replace '-T ClangCL',''
 
     Log-Information "Configure qtbase (${Target})"
@@ -156,8 +155,8 @@ function Configure {
     }
     $env:PATH = "$(Resolve-Path ((Get-Command git).Source + '/../../usr/bin') | Convert-Path);$env:PATH"
     $env:VCPKG_ROOT = ''
-    $env:CC = "clang-cl -U__SIZEOF_INT128__"
-    $env:CXX = "clang-cl -U__SIZEOF_INT128__"
+    $env:CC = "C:/PROGRA~1/LLVM/bin/clang-cl.exe -U__SIZEOF_INT128__"
+    $env:CXX = "C:/PROGRA~1/LLVM/bin/clang-cl.exe -U__SIZEOF_INT128__"
     Invoke-DevShell @Params
     $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
 }
@@ -262,7 +261,6 @@ function Qt-Add-Submodules {
             }
         }
 
-        $ComponentOptions = $ComponentOptions | Where-Object { $_ -notmatch 'DCMAKE_C_COMPILER' -and $_ -notmatch 'DCMAKE_CXX_COMPILER' }
         $ComponentOptions = ($ComponentOptions -join ' ') -replace '-G Visual Studio \d+ \d+','-G Ninja' -replace "-A $($CMakeTarget[$Target])",'' -replace '-T ClangCL',''
 
         Log-Information "Configure ${Component} (${Target})"
@@ -282,8 +280,8 @@ function Qt-Add-Submodules {
         }
         $env:PATH = "$(Resolve-Path ((Get-Command git).Source + '/../../usr/bin') | Convert-Path);$env:PATH"
         $env:VCPKG_ROOT = ''
-        $env:CC = "clang-cl -U__SIZEOF_INT128__"
-        $env:CXX = "clang-cl -U__SIZEOF_INT128__"
+        $env:CC = "C:/PROGRA~1/LLVM/bin/clang-cl.exe -U__SIZEOF_INT128__"
+        $env:CXX = "C:/PROGRA~1/LLVM/bin/clang-cl.exe -U__SIZEOF_INT128__"
         Invoke-DevShell @Params
         $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "Env:\$($_.Key)" -Value $_.Value }
 

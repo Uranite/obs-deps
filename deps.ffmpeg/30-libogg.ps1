@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'libogg',
-    [string] $Version = '1.3.5',
+    [string] $Version = '1.3.6',
     [string] $Uri = 'https://github.com/xiph/ogg.git',
-    [string] $Hash = "fa80aae9d50096160f2b56ada35527d7aee3f746",
+    [string] $Hash = "06a5e0262cdc28aa4ae6797627a783b5010440f0",
     [array] $Targets = @('x64', 'arm64')
 )
 

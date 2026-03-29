@@ -5,9 +5,9 @@ local name='opus'
 local version='1.5.2'
 local url='https://github.com/xiph/opus.git'
 local -A hashes=(
-  macos ddbe48383984d56acd9e1ab6a090c54ca6b735a6
-  linux ddbe48383984d56acd9e1ab6a090c54ca6b735a6
-  windows ddbe48383984d56acd9e1ab6a090c54ca6b735a6
+  macos 788cc89ce4f2c42025d8c70ec1b4457dc89cd50f
+  linux 788cc89ce4f2c42025d8c70ec1b4457dc89cd50f
+  windows 788cc89ce4f2c42025d8c70ec1b4457dc89cd50f
 )
 
 ## Build Steps

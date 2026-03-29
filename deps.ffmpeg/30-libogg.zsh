@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='libogg'
-local version='1.3.5'
+local version='1.3.6'
 local url='https://github.com/xiph/ogg.git'
-local hash=fa80aae9d50096160f2b56ada35527d7aee3f746
+local hash=06a5e0262cdc28aa4ae6797627a783b5010440f0
 
 ## Build Steps
 setup() {

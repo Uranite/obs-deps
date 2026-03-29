@@ -72,14 +72,18 @@ function Configure {
         Target = $Target
     }
 
+    $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
+    Set-Content -Path "build_${Target}/cl" -Value "#!/bin/bash`nexec clang-cl --target=$clangTarget `"`$@`""
+    
     $Backup = @{
+        PATH = $env:PATH
         CC = $env:CC
         CFLAGS = $env:CFLAGS
         CXXFLAGS = $env:CXXFLAGS
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
     }
-    $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
-    $env:CC = "clang-cl --target=$clangTarget"
+    $env:PATH = "$((Get-Item "build_${Target}").FullName -replace '\\','/');$env:PATH"
+    $env:CC = "cl"
     $env:CFLAGS = $($($script:CFlags) + ' -wd4003')
     $env:CXXFLAGS = $($($script:CxxFlags) + ' -wd4003')
     $env:MSYS2_PATH_TYPE = 'inherit'
@@ -99,9 +103,11 @@ function Build {
     }
 
     $Backup = @{
+        PATH = $env:PATH
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
         VERBOSE = $env:VERBOSE
     }
+    $env:PATH = "$((Get-Item "build_${Target}").FullName -replace '\\','/');$env:PATH"
     $env:MSYS2_PATH_TYPE = 'inherit'
     $env:VERBOSE = $(if ( $VerbosePreference -eq 'Continue' ) { '1' })
     Invoke-DevShell @Params
@@ -120,9 +126,11 @@ function Install {
     }
 
     $Backup = @{
+        PATH = $env:PATH
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
         VERBOSE = $env:VERBOSE
     }
+    $env:PATH = "$((Get-Item "build_${Target}").FullName -replace '\\','/');$env:PATH"
     $env:MSYS2_PATH_TYPE = 'inherit'
     $env:VERBOSE = $(if ( $VerbosePreference -eq 'Continue' ) { '1' })
     Invoke-DevShell @Params

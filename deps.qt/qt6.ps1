@@ -156,8 +156,8 @@ function Configure {
     }
     $env:PATH = "$(Resolve-Path ((Get-Command git).Source + '/../../usr/bin') | Convert-Path);$env:PATH"
     $env:VCPKG_ROOT = ''
-    $env:CC = "clang-cl"
-    $env:CXX = "clang-cl"
+    $env:CC = "clang-cl -U__SIZEOF_INT128__"
+    $env:CXX = "clang-cl -U__SIZEOF_INT128__"
     Invoke-DevShell @Params
     $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
 }
@@ -282,8 +282,8 @@ function Qt-Add-Submodules {
         }
         $env:PATH = "$(Resolve-Path ((Get-Command git).Source + '/../../usr/bin') | Convert-Path);$env:PATH"
         $env:VCPKG_ROOT = ''
-        $env:CC = "clang-cl"
-        $env:CXX = "clang-cl"
+        $env:CC = "clang-cl -U__SIZEOF_INT128__"
+        $env:CXX = "clang-cl -U__SIZEOF_INT128__"
         Invoke-DevShell @Params
         $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "Env:\$($_.Key)" -Value $_.Value }
 

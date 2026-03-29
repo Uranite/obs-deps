@@ -66,14 +66,15 @@ function Configure {
         ('--arch=' + $($TargetArch[$Target]))
         $(if ( $Target -ne $script:HostArchitecture ) { '--enable-cross-compile' })
         '--toolchain=msvc'
-        ('--cc="clang-cl --target=' + $clangTarget + '"')
-        ('--cxx="clang-cl --target=' + $clangTarget + '"')
+        $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
+        ('--cc="' + "$($script:LlvmBin)/clang-cl.exe --target=$clangTarget" + '"')
+        ('--cxx="' + "$($script:LlvmBin)/clang-cl.exe --target=$clangTarget" + '"')
         ('--extra-cflags=' + "'-D_WINDLL -MD -D_WIN32_WINNT=0x0A00" + $(if ( $Target -eq 'arm64' ) { ' -D__ARM_PCS_VFP' }) + "'")
         ('--extra-cxxflags=' + "'-MD -D_WIN32_WINNT=0x0A00'")
         ('--extra-ldflags=' + "'-APPCONTAINER:NO -MACHINE:${Target}'")
-        '--ar=llvm-ar'
-        '--nm=llvm-nm'
-        '--ld=lld-link'
+        ("--ar=`"$($script:LlvmBin)/llvm-ar.exe`"")
+        ("--nm=`"$($script:LlvmBin)/llvm-nm.exe`"")
+        ("--ld=`"$($script:LlvmBin)/lld-link.exe`"")
         $(if ( $Target -eq 'arm64' ) { '--as=armasm64.exe','--cpu=armv8' })
         '--pkg-config=pkg-config'
         $(if ( $Target -ne 'x86' ) { '--target-os=win64' } else { '--target-os=win32' })
@@ -119,8 +120,9 @@ function Configure {
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
         PATH = $env:PATH
     }
-    $env:CC = "clang-cl --target=$clangTarget"
-    $env:CXX = "clang-cl --target=$clangTarget"
+    $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
+    $env:CC = "$($script:LlvmBin)/clang-cl.exe --target=$clangTarget"
+    $env:CXX = "$($script:LlvmBin)/clang-cl.exe --target=$clangTarget"
     $env:CFLAGS = "$($script:CFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:CXXFLAGS = "$($script:CxxFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:PKG_CONFIG_LIBDIR = "$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib/pkgconfig"

@@ -81,13 +81,27 @@ function Setup-BuildParameters {
         arm64 = 'aarch64-pc-windows-msvc'
     }
 
+    $ClangPath = Get-Command clang.exe -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
+    if ($ClangPath) {
+        $script:LlvmBin = [System.IO.Path]::GetDirectoryName($ClangPath).Replace('\', '/')
+    } else {
+        $script:LlvmBin = 'C:/Program Files/LLVM/bin'
+    }
+
     $script:CmakeOptions = @(
         '-G', 'Ninja'
-        "-DCMAKE_C_COMPILER=clang"
-        "-DCMAKE_CXX_COMPILER=clang++"
+        "-DCMAKE_C_COMPILER=$($script:LlvmBin)/clang.exe"
+        "-DCMAKE_CXX_COMPILER=$($script:LlvmBin)/clang++.exe"
         "-DCMAKE_C_COMPILER_TARGET=$($ClangTargets[$script:Target])"
         "-DCMAKE_CXX_COMPILER_TARGET=$($ClangTargets[$script:Target])"
-        '-DCMAKE_RC_COMPILER=llvm-rc'
+        "-DCMAKE_RC_COMPILER=$($script:LlvmBin)/llvm-rc.exe"
+        "-DCMAKE_MT=$($script:LlvmBin)/llvm-mt.exe"
+        "-DCMAKE_LINKER=$($script:LlvmBin)/lld-link.exe"
+        "-DCMAKE_AR=$($script:LlvmBin)/llvm-ar.exe"
+        "-DCMAKE_RANLIB=$($script:LlvmBin)/llvm-ranlib.exe"
+        "-DCMAKE_NM=$($script:LlvmBin)/llvm-nm.exe"
+        "-DCMAKE_OBJDUMP=$($script:LlvmBin)/llvm-objdump.exe"
+        "-DCMAKE_STRIP=$($script:LlvmBin)/llvm-strip.exe"
         "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
         "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
         "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"

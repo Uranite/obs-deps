@@ -61,7 +61,14 @@ function Configure {
         '-DAJA_INSTALL_CMAKE:BOOL=OFF'
     )
 
+    $Backup = @{
+        CC = $env:CC
+        CXX = $env:CXX
+    }
+    $env:CC = "clang"
+    $env:CXX = "clang++"
     Invoke-External cmake -S . -B "build_${Target}" @Options
+    $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
 }
 
 function Build {
@@ -77,7 +84,14 @@ function Build {
         $Options += '--verbose'
     }
 
+    $Backup = @{
+        CC = $env:CC
+        CXX = $env:CXX
+    }
+    $env:CC = "clang"
+    $env:CXX = "clang++"
     Invoke-External cmake @Options
+    $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
 }
 
 function Install {

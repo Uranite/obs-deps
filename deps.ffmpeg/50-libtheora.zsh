@@ -5,10 +5,7 @@ local name='libtheora'
 local version='edfba372beb02ff70a1e2797d8cf561c242d0e0b'
 local url='https://github.com/xiph/theora.git'
 local hash='edfba372beb02ff70a1e2797d8cf561c242d0e0b'
-local -a patches=(
-  "macos ${0:a:h}/patches/libtheora/0001-fix-flat-namespace-on-big-sur.patch \
-    83af02f2aa2b746bb7225872cab29a253264be49db0ecebb12f841562d9a2923"
-)
+local -a patches=()
 
 ## Dependency Overrides
 local targets=('macos-*' 'linux-*')

@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='ntv2'
-local version='17.0.1'
+local version='2d7636d86b6180bb4c5075fea040b1b812cc8b57'
 local url='https://github.com/aja-video/libajantv2.git'
-local hash='b6acce6b135c3d9ae7a2bce966180b159ced619f'
+local hash='2d7636d86b6180bb4c5075fea040b1b812cc8b57'
 
 ## Dependency Overrides
 local -i shared_libs=0

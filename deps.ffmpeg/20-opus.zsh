@@ -40,8 +40,6 @@ config() {
       ;;
     macos-arm64 | macos-universal)
       args+=(
-        -DCMAKE_ASM_FLAGS="-DPNG_ARM_NEON_IMPLEMENTATION=1"
-        -DPNG_ARM_NEON=on
         -DOPUS_STACK_PROTECTOR=ON
       )
 

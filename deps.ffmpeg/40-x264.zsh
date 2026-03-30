@@ -5,11 +5,6 @@ local name='x264'
 local version='0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee'
 local url='https://code.videolan.org/videolan/x264.git'
 local hash='0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee'
-local -A hashes=(
-  macos 0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee
-  linux 0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee
-  windows 0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee
-)
 
 ## Dependency Overrides
 local script_order=${${(s:-:)0:t:r}[1]}

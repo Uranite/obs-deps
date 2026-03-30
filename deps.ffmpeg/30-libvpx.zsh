@@ -13,7 +13,7 @@ local -a patches=(
 )
 
 ## Dependency Overrides
-local dir="${name}-${versions[${target%%-*}]}"
+local dir="${name}-${version}"
 
 ## Build Steps
 setup() {

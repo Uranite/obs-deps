@@ -17,6 +17,9 @@ local targets=('macos-*' 'linux-*')
 setup() {
   log_info "Setup (%F{3}${target}%f)"
   setup_dep ${url} ${hash}
+
+  cd ${dir}
+  progress ./autogen.sh
 }
 
 clean() {

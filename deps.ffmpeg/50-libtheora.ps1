@@ -13,7 +13,7 @@ param(
 )
 
 function Setup {
-    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath .
+    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath $Path
 }
 
 function Clean {

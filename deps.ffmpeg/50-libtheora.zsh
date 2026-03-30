@@ -88,6 +88,7 @@ config() {
     "--${_onoff[(( shared_libs + 1 ))]}-shared"
   )
 
+  if [[ ${target_config[arch]} == arm64 || ${target_config[arch]} == aarch64 ]] args+=(--disable-asm)
   if [[ ${config} == Debug ]] args+=(--enable-debug)
 
   log_debug "Configure options: ${args}"

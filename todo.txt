@@ -7,9 +7,6 @@ see if a patch for libsrt is possible
 
 turn lame mod into a patch
 
-check env bleed for subsequent run in the same terminal and fix it
-check libvpx llvm-ar
-
 for ffmpeg:
 sed -i 's/if test "`$cc_type" = "clang"; then/if true; then/' configure
 sed -i 's/test "`$cc_type" != "`$ld_type" && die "LTO requires same compiler and linker"/true/' configure
@@ -20,10 +17,13 @@ see if it's possible to compile modify luajit to compile with clang
 
 turn speexdsp mod into a patch
 
-check qt6 mod
-
 check zlib unistd patch
 
-check if setting CMAKE_RC_COMPILER is still necessary or not
-
 try msvc v145
+
+fix cache hmm maybe we can make it a workflow_dispatch thing
+
+done:
+check if setting CMAKE_RC_COMPILER is still necessary or not
+check qt6 mod
+check libvpx llvm-ar

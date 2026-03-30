@@ -12,13 +12,13 @@ local -a patches=(
 
 ## Dependency Overrides
 local targets=('macos-*' 'linux-*')
+local dir="${name}-${version}"
 
 ## Build Steps
 setup() {
   log_info "Setup (%F{3}${target}%f)"
   setup_dep ${url} ${hash}
 
-  cd ${dir}
   progress ./autogen.sh
 }
 

@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'srt',
-    [string] $Version = '1.5.2',
-    [string] $Uri = 'https://github.com/Haivision/srt/archive/refs/tags/v1.5.2.zip',
-    [string] $Hash = "${PSScriptRoot}/checksums/v1.5.2.zip.sha256",
+    [string] $Version = '44d106f491333a022351f8c105e23886aad4e248',
+    [string] $Uri = 'https://github.com/Haivision/srt.git',
+    [string] $Hash = "44d106f491333a022351f8c105e23886aad4e248",
     [array] $Targets = @('x64', 'arm64'),
     [switch] $ForceShared = $true,
     [array] $Patches = @(

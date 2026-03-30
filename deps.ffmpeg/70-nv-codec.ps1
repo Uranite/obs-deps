@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'nv-codec-headers',
-    [string] $Version = '12.2.72.0',
+    [string] $Version = '33a9ede8d9914299d9262539c576a15bd0a19621',
     [string] $Uri = 'https://github.com/FFmpeg/nv-codec-headers.git',
-    [string] $Hash = 'c69278340ab1d5559c7d7bf0edf615dc33ddbba7',
+    [string] $Hash = '33a9ede8d9914299d9262539c576a15bd0a19621',
     [array] $Targets = @('x64')
 )
 

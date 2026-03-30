@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'libdatachannel',
-    [string] $Version = 'v0.21.0',
+    [string] $Version = '4079f8039b0c0f0f3005987b2e435e5da2ef8577',
     [string] $Uri = 'https://github.com/paullouisageneau/libdatachannel.git',
-    [string] $Hash = '9d5c46b8f506943727104d766e5dad0693c5a223',
+    [string] $Hash = '4079f8039b0c0f0f3005987b2e435e5da2ef8577',
     [array] $Targets = @('x64', 'arm64'),
     [switch] $ForceShared = $true
 )

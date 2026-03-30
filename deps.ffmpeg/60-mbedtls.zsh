@@ -2,17 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='mbedtls'
-local -A versions=(
-  macos 3.6.4
-  linux 3.6.4
-  windows 3.6.4
-)
+local version='63d1f7f6efd9be95cb7ae36b0cd20a02d9ce8980'
 local url='https://github.com/Mbed-TLS/mbedtls.git'
-local -A hashes=(
-  macos c765c831e5c2a0971410692f92f7a81d6ec65ec2
-  linux c765c831e5c2a0971410692f92f7a81d6ec65ec2
-  windows c765c831e5c2a0971410692f92f7a81d6ec65ec2
-)
+local hash='63d1f7f6efd9be95cb7ae36b0cd20a02d9ce8980'
 local -a patches=(
   "macos ${0:a:h}/patches/mbedtls/0001-enable-posix-threading-support.patch \
     ea52cf47ca01211cbadf03c0493986e8d4e0d1e9ab4aaa42365b2dea7b591188"

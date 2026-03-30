@@ -62,8 +62,8 @@ function Configure {
         '-DENABLE_APPS:BOOL=OFF'
         '-DUSE_ENCLIB:STRING=mbedtls'
         '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
-        "-DCMAKE_C_COMPILER=clang-cl"
-        "-DCMAKE_CXX_COMPILER=clang-cl"
+        "-DCMAKE_C_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
+        "-DCMAKE_CXX_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
         "-DCMAKE_SHARED_LINKER_FLAGS=delayimp.lib"
     )
 

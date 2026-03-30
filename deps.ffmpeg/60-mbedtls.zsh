@@ -5,14 +5,7 @@ local name='mbedtls'
 local version='63d1f7f6efd9be95cb7ae36b0cd20a02d9ce8980'
 local url='https://github.com/Mbed-TLS/mbedtls.git'
 local hash='63d1f7f6efd9be95cb7ae36b0cd20a02d9ce8980'
-local -a patches=(
-  "macos ${0:a:h}/patches/mbedtls/0001-enable-posix-threading-support.patch \
-    ea52cf47ca01211cbadf03c0493986e8d4e0d1e9ab4aaa42365b2dea7b591188"
-  "linux ${0:a:h}/patches/mbedtls/0001-enable-posix-threading-support.patch \
-    ea52cf47ca01211cbadf03c0493986e8d4e0d1e9ab4aaa42365b2dea7b591188"
-  "* ${0:a:h}/patches/mbedtls/0002-enable-dtls-srtp-support.patch \
-    c299066df252b8b5a08d169925a82ea6c76d6ae8b6c0069b1bb72ac1d40ba67e"
-)
+local -a patches=()
 
 ## Dependency Overrides
 local -i shared_libs=1
@@ -40,14 +33,18 @@ patch() {
 
   cd ${dir}
 
-  local patch
-  local _target
-  local _url
-  local _hash
   for patch (${patches}) {
     read _target _url _hash <<< "${patch}"
 
     if [[ "${target%%-*}" == ${~_target} ]] apply_patch "${_url}" "${_hash}"
+  }
+
+  log_info "Configuring mbedtls_config.h via scripts/config.py"
+  python3 scripts/config.py set MBEDTLS_SSL_DTLS_SRTP
+
+  if [[ ${target%%-*} == (macos|linux) ]] {
+    python3 scripts/config.py set MBEDTLS_THREADING_C
+    python3 scripts/config.py set MBEDTLS_THREADING_PTHREAD
   }
 }
 
@@ -62,7 +59,7 @@ config() {
     -DUSE_STATIC_MBEDTLS_LIBRARY=ON
     -DENABLE_PROGRAMS=OFF
     -DENABLE_TESTING=OFF
-    -DGEN_FILES=OFF
+    -DGEN_FILES=ON
   )
 
   if [[ ${config} == Release ]] args=(${args//-DCMAKE_C_FLAGS=/-DCMAKE_C_FLAGS=-g })

@@ -2,7 +2,7 @@ param(
     [string] $Name = 'mbedtls',
     [string] $Version = '4.0.0',
     [string] $Uri = 'https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-4.0.0/mbedtls-4.0.0.tar.bz2',
-    [string] $Hash = '2f3a47f7b3a541ddef450e4867eeecb7ce2ef7776093f3a11d6d43ead6bf2827',
+    [string] $Hash = "${PSScriptRoot}/checksums/mbedtls-${Version}.tar.bz2.win.sha256",
     [array] $Targets = @('x64', 'arm64'),
     [array] $Patches = @(
         @{

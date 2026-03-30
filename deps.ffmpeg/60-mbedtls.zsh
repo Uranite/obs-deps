@@ -4,7 +4,7 @@ autoload -Uz log_debug log_error log_info log_status log_output
 local name='mbedtls'
 local version='4.0.0'
 local url='https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-4.0.0/mbedtls-4.0.0.tar.bz2'
-local hash='2f3a47f7b3a541ddef450e4867eeecb7ce2ef7776093f3a11d6d43ead6bf2827'
+local hash="${0:a:h}/checksums/mbedtls-${version}.tar.bz2.sha256"
 local -a patches=()
 
 ## Dependency Overrides

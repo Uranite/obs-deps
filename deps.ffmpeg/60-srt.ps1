@@ -65,6 +65,8 @@ function Configure {
         "-DCMAKE_C_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
         "-DCMAKE_CXX_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
         "-DCMAKE_SHARED_LINKER_FLAGS=delayimp.lib"
+        "-DCMAKE_C_FLAGS=-w /EHsc"
+        "-DCMAKE_CXX_FLAGS=-w /EHsc"
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

@@ -7,7 +7,7 @@ local url='https://github.com/Haivision/srt.git'
 local hash="44d106f491333a022351f8c105e23886aad4e248"
 local -a patches=(
   "* ${0:a:h}/patches/srt/0001-enable-proper-cmake-build-types.patch \
-    3920f428f10e0ba1e3ea8caa3dd8f48d8d69b5ca76dff9086485fa171cb98cff"
+    463d548a33d50937716d9918614c94b23dfec33cdb4038c492c199ce44b477e0"
 )
 
 ## Dependency Overrides

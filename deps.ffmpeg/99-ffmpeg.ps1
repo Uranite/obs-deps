@@ -42,8 +42,10 @@ function Patch {
         Safe-Patch @Params
     }
 
-    bash -c "sed -i 's/if test \"`$cc_type\" = \"clang\"; then/if true; then/' configure"
-    bash -c "sed -i 's/test \"`$cc_type\" != \"`$ld_type\" && die \"LTO requires same compiler and linker\"/true/' configure"
+    $configure = Get-Content configure -Raw
+    $configure = $configure -replace 'if test "\$cc_type" = "clang"; then', 'if true; then'
+    $configure = $configure -replace 'test "\$cc_type" != "\$ld_type" && die "LTO requires same compiler and linker"', 'true'
+    Set-Content -Path configure -Value $configure -NoNewline
 }
 
 function Configure {

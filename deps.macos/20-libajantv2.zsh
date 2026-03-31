@@ -7,7 +7,7 @@ local url='https://github.com/aja-video/libajantv2.git'
 local hash='2d7636d86b6180bb4c5075fea040b1b812cc8b57'
 local -a patches=(
   "* ${0:a:h}/patches/ajantv2/0001-install-m31-headers.patch \
-    D77DCCB550A1E9C1522ABEAD997C479065ECCCD251393BFF5CBF3B7BA6E222CB"
+    d77dccb550a1e9c1522abead997c479065ecccd251393bff5cbf3b7ba6e222cb"
 )
 
 ## Dependency Overrides

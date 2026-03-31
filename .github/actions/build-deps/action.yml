@@ -51,7 +51,7 @@ runs:
           !${{ inputs.workingDirectory }}/*_build_temp/*.tar.gz
           !${{ inputs.workingDirectory }}/*_build_temp/*.tar.xz
           !${{ inputs.workingDirectory }}/*_build_temp/*.zip
-        key: v2-${{ inputs.target }}-deps-${{ inputs.type }}-${{ inputs.config }}-${{ steps.env-setup.outputs.hash }}
+        key: ${{ inputs.target }}-deps-${{ inputs.type }}-${{ inputs.config }}-${{ steps.env-setup.outputs.hash }}
 
     - name: Build and Install Dependencies
       if: runner.os == 'macOS'
@@ -95,4 +95,4 @@ runs:
           !${{ inputs.workingDirectory }}/*_build_temp/*.tar.gz
           !${{ inputs.workingDirectory }}/*_build_temp/*.tar.xz
           !${{ inputs.workingDirectory }}/*_build_temp/*.zip
-        key: v2-${{ inputs.target }}-deps-${{ inputs.type }}-${{ inputs.config }}-${{ steps.env-setup.outputs.hash }}
+        key: ${{ inputs.target }}-deps-${{ inputs.type }}-${{ inputs.config }}-${{ steps.env-setup.outputs.hash }}

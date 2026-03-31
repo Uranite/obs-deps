@@ -62,7 +62,7 @@ runs:
           !${{ inputs.workingDirectory }}/*_build_temp/*.tar.gz
           !${{ inputs.workingDirectory }}/*_build_temp/*.tar.xz
           !${{ inputs.workingDirectory }}/*_build_temp/*.zip
-        key: v2-${{ inputs.target }}-qt${{ inputs.qtVersion }}-${{inputs.config }}-${{ steps.env-setup.outputs.depHash }}-${{ steps.env-setup.outputs.patchHash }}
+        key: ${{ inputs.target }}-qt${{ inputs.qtVersion }}-${{inputs.config }}-${{ steps.env-setup.outputs.depHash }}-${{ steps.env-setup.outputs.patchHash }}
 
     - name: Build and Install Qt
       if: runner.os == 'macOS'
@@ -108,4 +108,4 @@ runs:
           !${{ inputs.workingDirectory }}/*_build_temp/*.tar.gz
           !${{ inputs.workingDirectory }}/*_build_temp/*.tar.xz
           !${{ inputs.workingDirectory }}/*_build_temp/*.zip
-        key: v2-${{ inputs.target }}-qt${{ inputs.qtVersion }}-${{inputs.config }}-${{ steps.env-setup.outputs.depHash }}-${{ steps.env-setup.outputs.patchHash }}
+        key: ${{ inputs.target }}-qt${{ inputs.qtVersion }}-${{inputs.config }}-${{ steps.env-setup.outputs.depHash }}-${{ steps.env-setup.outputs.patchHash }}

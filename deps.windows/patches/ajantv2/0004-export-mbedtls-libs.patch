@@ -1,0 +1,9 @@
+--- ajantv2/CMakeLists.txt
++++ ajantv2/CMakeLists.txt
+@@ -808,5 +808,4 @@
+ 
+-     target_link_libraries(${PROJECT_NAME} PRIVATE ${MBEDTLS_LINK_LIBS})
+-     target_link_libraries(${PROJECT_NAME} INTERFACE
+-         "$<BUILD_INTERFACE:${MBEDTLS_LINK_LIBS}>")
++     target_link_libraries(${PROJECT_NAME} PRIVATE ${MBEDTLS_LINK_LIBS})
++     target_link_libraries(${PROJECT_NAME} INTERFACE "$<BUILD_INTERFACE:${MBEDTLS_LINK_LIBS}>" "$<INSTALL_INTERFACE:MbedTLS::mbedtls;MbedTLS::mbedcrypto;MbedTLS::mbedx509>")

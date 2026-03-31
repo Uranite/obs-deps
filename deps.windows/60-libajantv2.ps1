@@ -13,6 +13,14 @@ param(
         @{
             PatchFile = "${PSScriptRoot}/patches/ajantv2/0002-install-m31-headers.patch"
             HashSum = 'D77DCCB550A1E9C1522ABEAD997C479065ECCCD251393BFF5CBF3B7BA6E222CB'
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/ajantv2/0003-fix-getdeviceinfolist-scoping.patch"
+            HashSum = 'E8F3B5B21C7D04B3CE738B5EC703D6931A153BB31B62AEAED31D5DDB65514363'
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/ajantv2/0004-export-mbedtls-libs.patch"
+            HashSum = 'ED7249170AD978DE7CA663339A3A06FDB9D4899F02BB6CC2F8CEFFD6BADDD1A8'
         }
     )
 )

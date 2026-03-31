@@ -8,6 +8,10 @@ local hash='2d7636d86b6180bb4c5075fea040b1b812cc8b57'
 local -a patches=(
   "* ${0:a:h}/patches/ajantv2/0001-install-m31-headers.patch \
     d77dccb550a1e9c1522abead997c479065ecccd251393bff5cbf3b7ba6e222cb"
+  "* ${0:a:h}/patches/ajantv2/0002-fix-getdeviceinfolist-scoping.patch \
+    e8f3b5b21c7d04b3ce738b5ec703d6931a153bb31b62aeaed31d5ddb65514363"
+  "* ${0:a:h}/patches/ajantv2/0003-export-mbedtls-libs.patch \
+    ed7249170ad978de7ca663339a3a06fdb9d4899f02bb6cc2f8ceffd6baddd1a8"
 )
 
 ## Dependency Overrides

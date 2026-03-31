@@ -22,11 +22,11 @@ param(
 )
 
 function Setup {
-    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath .
+    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath $Path
 }
 
 function Clean {
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     if ( Test-Path "build_${Target}" ) {
         Log-Information "Clean build directory (${Target})"
@@ -36,7 +36,7 @@ function Clean {
 
 function Patch {
     Log-Information "Patch (${Target})"
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     $Patches | ForEach-Object {
         $Params = $_
@@ -46,7 +46,7 @@ function Patch {
 
 function Configure {
     Log-Information "Configure (${Target})"
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     if ( $ForceShared -and ( $script:Shared -eq $false ) ) {
         $Shared = $true
@@ -72,7 +72,7 @@ function Configure {
 
 function Build {
     Log-Information "Build (${Target})"
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     $Options = @(
         '--build', "build_${Target}"
@@ -90,7 +90,7 @@ function Build {
 
 function Install {
     Log-Information "Install (${Target})"
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     $Options = @(
         '--install', "build_${Target}"

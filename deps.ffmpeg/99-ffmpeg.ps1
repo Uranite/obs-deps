@@ -45,6 +45,7 @@ function Patch {
     $configure = Get-Content configure -Raw
     $configure = $configure -replace 'if test "\$cc_type" = "clang"; then', 'if true; then'
     $configure = $configure -replace 'test "\$cc_type" != "\$ld_type" && die "LTO requires same compiler and linker"', 'true'
+    $configure = $configure -replace 'mingw32\|win32\)', 'mingw32|win32|win64|arm64)'
     $configure = $configure -replace "SLIB_CREATE_DEF_CMD='LDFLAGS", "SLIB_CREATE_DEF_CMD='AR=""`$(AR_CMD)"" NM=""`$(NM_CMD)"" LDFLAGS"
     Set-Content -Path configure -Value $configure -NoNewline
 }
@@ -130,7 +131,7 @@ function Configure {
     $env:CXXFLAGS = "$($script:CxxFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:PKG_CONFIG_LIBDIR = "$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib/pkgconfig"
     $env:LDFLAGS = "-LIBPATH:$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib"
-    $env:PATH = "$($script:WorkRoot -replace '([A-Fa-f]):','/$1' -replace '\\','/')/gas-preprocessor;${Env:PATH})"
+    $env:PATH = "$($script:WorkRoot -replace '([A-Fa-f]):','/$1' -replace '\\','/')/gas-preprocessor;$env:PATH"
     $env:MSYS2_PATH_TYPE = 'inherit'
     Invoke-DevShell @Params
     $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
@@ -155,7 +156,7 @@ function Build {
     }
     $env:MSYS2_PATH_TYPE = 'inherit'
     $env:VERBOSE = $(if ( $VerbosePreference -eq 'Continue' ) { '1' })
-    $env:PATH = "$($script:WorkRoot -replace '([A-Fa-f]):','/$1' -replace '\\','/')/gas-preprocessor;${Env:PATH})"
+    $env:PATH = "$($script:WorkRoot -replace '([A-Fa-f]):','/$1' -replace '\\','/')/gas-preprocessor;$env:PATH"
     Invoke-DevShell @Params
     $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
 }

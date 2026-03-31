@@ -1,0 +1,13 @@
+--- a/ajantv2/CMakeLists.txt
++++ b/ajantv2/CMakeLists.txt
+@@ -143,8 +143,8 @@
+     includes/ntv2fixed.h
+     includes/ntv2formatdescriptor.h
+     includes/ntv2konaflashprogram.h
+-#   includes/ntv2m31enums.h				# removed in SDK 17.6
+-#   includes/ntv2m31publicinterface.h	# removed in SDK 17.6
++    includes/ntv2m31enums.h
++    includes/ntv2m31publicinterface.h
+     includes/ntv2mailbox.h
+     includes/ntv2mbcontroller.h
+     includes/ntv2mcsfile.h

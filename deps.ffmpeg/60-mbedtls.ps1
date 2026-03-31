@@ -1,15 +1,9 @@
 param(
     [string] $Name = 'mbedtls',
-    [string] $Version = '4.0.0',
-    [string] $Uri = 'https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-4.0.0/mbedtls-4.0.0.tar.bz2',
+    [string] $Version = '3.6.5',
+    [string] $Uri = 'https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.5/mbedtls-3.6.5.tar.bz2',
     [string] $Hash = "${PSScriptRoot}/checksums/mbedtls-${Version}.tar.bz2.win.sha256",
     [array] $Targets = @('x64', 'arm64'),
-    [array] $Patches = @(
-        @{
-            PatchFile = "${PSScriptRoot}/patches/mbedtls/0001-enable-dtls-srtp-support-windows.patch"
-            HashSum = "38dbaff859242c5a4f8196a08e35f0251d2966b22e1d9547ecaaea2aec4aae1b"
-        }
-    ),
     [switch] $ForceStatic = $true
 )
 
@@ -30,10 +24,8 @@ function Patch {
     Log-Information "Patch (${Target})"
     Set-Location "${Name}-${Version}"
 
-    $Patches | ForEach-Object {
-        $Params = $_
-        Safe-Patch @Params
-    }
+    Log-Information "Configuring mbedtls_config.h via scripts/config.py"
+    Invoke-External python scripts/config.py set MBEDTLS_SSL_DTLS_SRTP
 }
 
 function Configure {

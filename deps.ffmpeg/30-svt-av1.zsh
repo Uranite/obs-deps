@@ -8,11 +8,11 @@ local hash='f8b6146e6209a3a2c58b87395e950260efb92140'
 
 local -a patches=(
   "macos ${SCRIPT_HOME}/deps.macos/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch f899afbbfe5c3330e4f8b64249b434b2f2be3c84ea70ce0002c858891b1c6473"
-  "macos ${SCRIPT_HOME}/deps.macos/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 37f3ce3d5888718173d248f12d8be266db1239ac3ee81367f66ed765fe27e3bf"
+  "macos ${SCRIPT_HOME}/deps.macos/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 2d21d229ce7d61c4db08edbdc85ea30d50908525d31743a3bce59660c0381a10"
   "linux ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch f899afbbfe5c3330e4f8b64249b434b2f2be3c84ea70ce0002c858891b1c6473"
-  "linux ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 37f3ce3d5888718173d248f12d8be266db1239ac3ee81367f66ed765fe27e3bf"
+  "linux ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 2d21d229ce7d61c4db08edbdc85ea30d50908525d31743a3bce59660c0381a10"
   "windows ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch f899afbbfe5c3330e4f8b64249b434b2f2be3c84ea70ce0002c858891b1c6473"
-  "windows ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 37f3ce3d5888718173d248f12d8be266db1239ac3ee81367f66ed765fe27e3bf"
+  "windows ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 2d21d229ce7d61c4db08edbdc85ea30d50908525d31743a3bce59660c0381a10"
 )
 
 ## Dependency Overrides

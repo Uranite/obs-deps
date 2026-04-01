@@ -123,7 +123,7 @@ function Package-Dependencies {
     switch ( $PackageName ) {
         ffmpeg {
             Get-ChildItem ./bin/* -Include '*.exe','srt-ffplay' -Exclude 'ffmpeg.exe','ffprobe.exe' | Remove-Item -Force -Recurse
-            Get-ChildItem ./lib -Exclude 'librist.lib','zlibstatic.lib','srt.lib','libx264.lib','mbed*.lib','everest.lib','p256m.lib','zlib.lib','datachannel.lib','*SvtAv1*','*svtav1*','cmake' | Remove-Item -Force -Recurse
+            Get-ChildItem ./lib -Exclude 'librist.lib','zlibstatic.lib','srt.lib','libx264.lib','mbed*.lib','everest.lib','p256m.lib','zlib.lib','datachannel.lib','cmake' | Remove-Item -Force -Recurse
             Get-ChildItem ./lib/cmake -Exclude 'LibDataChannel','MbedTLS' | Remove-Item -Force -Recurse
             Get-ChildItem ./share/* | Remove-Item -Force -Recurse
             Get-ChildItem ./bin/*.lib | Move-Item -Destination ./lib
@@ -132,7 +132,7 @@ function Package-Dependencies {
         }
         dependencies {
             Get-ChildItem ./bin/*.lib | Move-Item -Destination ./lib
-            Get-ChildItem ./bin -Exclude 'lua51.dll','libcurl.dll','swig.exe','Lib','*SvtAv1*','*svtav1*' | Remove-Item
+            Get-ChildItem ./bin -Exclude 'lua51.dll','libcurl.dll','swig.exe','Lib' | Remove-Item
 
             if ( $script:Target -ne 'x86' ) {
                 Get-ChildItem ./cmake/pcre2*,./lib/pcre2* | Remove-Item

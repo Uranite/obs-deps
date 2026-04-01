@@ -1,14 +1,14 @@
 diff --git a/Source/Lib/Codec/enc_mode_config.c b/Source/Lib/Codec/enc_mode_config.c
-index 5e66c4e9b..e069d1c3b 100644
+index d86c9a0a..c1037950 100644
 --- a/Source/Lib/Codec/enc_mode_config.c
 +++ b/Source/Lib/Codec/enc_mode_config.c
-@@ -6785,50 +6785,7 @@ void svt_aom_sig_deriv_enc_dec_light_pd1(PictureControlSet *pcs, ModeDecisionCon
+@@ -7359,50 +7359,7 @@ void svt_aom_sig_deriv_enc_dec_light_pd1(PictureControlSet* pcs, ModeDecisionCon
      instead of and LPD1_LEVEL check to ensure that M9 and below do not use it.
      */
      if (rtc_tune) {
--        if (pcs->enc_mode <= ENC_M8)
+-        if (pcs->enc_mode <= ENC_M8) {
 -            ctx->lpd1_skip_inter_tx_level = 0;
--        else if (pcs->enc_mode <= ENC_M10) {
+-        } else if (pcs->enc_mode <= ENC_M10) {
 -            if (lpd1_level <= LPD1_LVL_2) {
 -                ctx->lpd1_skip_inter_tx_level = 0;
 -            } else {
@@ -35,9 +35,9 @@ index 5e66c4e9b..e069d1c3b 100644
 -            }
 -        }
 -    } else {
--        if (pcs->enc_mode <= ENC_M9)
+-        if (pcs->enc_mode <= ENC_M9) {
 -            ctx->lpd1_skip_inter_tx_level = 0;
--        else {
+-        } else {
 -            assert(pcs->enc_mode >= ENC_M10 && "Only enable this feature for M10+ in RA or M8+ for low delay");
 -            if (lpd1_level <= LPD1_LVL_2) {
 -                ctx->lpd1_skip_inter_tx_level = 0;

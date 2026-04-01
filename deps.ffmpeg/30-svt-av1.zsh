@@ -7,9 +7,9 @@ local url='https://gitlab.com/AOMediaCodec/SVT-AV1.git'
 local hash='f8b6146e6209a3a2c58b87395e950260efb92140'
 
 local -a patches=(
-  "macos ${SCRIPT_HOME}/deps.macos/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch D212F9BA5266793892F3201A2E67D290CC32AF1815914C4ADA5CB64A1F3B8275"
-  "linux ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch D212F9BA5266793892F3201A2E67D290CC32AF1815914C4ADA5CB64A1F3B8275"
-  "windows ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch D212F9BA5266793892F3201A2E67D290CC32AF1815914C4ADA5CB64A1F3B8275"
+  "macos ${SCRIPT_HOME}/deps.macos/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch f899afbbfe5c3330e4f8b64249b434b2f2be3c84ea70ce0002c858891b1c6473"
+  "linux ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch f899afbbfe5c3330e4f8b64249b434b2f2be3c84ea70ce0002c858891b1c6473"
+  "windows ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0001-rtc-disable-lpd1-skip-inter-tx.patch f899afbbfe5c3330e4f8b64249b434b2f2be3c84ea70ce0002c858891b1c6473"
 )
 
 ## Dependency Overrides

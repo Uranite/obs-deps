@@ -94,7 +94,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -155,7 +155,7 @@ jobs:
         shell: pwsh
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Build FFmpeg
         uses: ./.github/actions/build-ffmpeg
@@ -184,7 +184,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -245,7 +245,7 @@ jobs:
         shell: pwsh
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Build libajantv2 Debug
         if: matrix.target == 'x64'
@@ -308,7 +308,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -362,7 +362,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup

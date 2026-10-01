@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output dep_checkout
 
 ## Dependency Information
 local name='amf'
-local version='1.5.0'
+local version='d0b3e6dd544a5f207bb6a12a1ecb98532491176a'
 local url='https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git'
-local hash='afed28d37aca1938da2eedc50599bb3535a987ec'
+local hash='d0b3e6dd544a5f207bb6a12a1ecb98532491176a'
 
 ## Dependency Overrides
 local targets=('windows-x*')

@@ -2,33 +2,21 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='libtheora'
-local -A versions=(
-  macos 1.1.1
-  linux 1.1.1
-  windows 1.1.1
-)
-local -A urls=(
-  macos https://ftp.osuosl.org/pub/xiph/releases/theora/libtheora-1.1.1.tar.xz
-  linux https://ftp.osuosl.org/pub/xiph/releases/theora/libtheora-1.1.1.tar.xz
-  windows https://github.com/xiph/theora.git
-)
-local -A hashes=(
-  macos "${0:a:h}/checksums/libtheora-1.1.1.tar.xz.sha256"
-  linux "${0:a:h}/checksums/libtheora-1.1.1.tar.xz.sha256"
-  windows 7180717276af1ebc7da15c83162d6c5d6203aabf
-)
-local -a patches=(
-  "macos ${0:a:h}/patches/libtheora/0001-fix-flat-namespace-on-big-sur.patch \
-    83af02f2aa2b746bb7225872cab29a253264be49db0ecebb12f841562d9a2923"
-)
+local version='edfba372beb02ff70a1e2797d8cf561c242d0e0b'
+local url='https://github.com/xiph/theora.git'
+local hash='edfba372beb02ff70a1e2797d8cf561c242d0e0b'
+local -a patches=()
 
 ## Dependency Overrides
 local targets=('macos-*' 'linux-*')
+local dir="${name}-${version}"
 
 ## Build Steps
 setup() {
   log_info "Setup (%F{3}${target}%f)"
   setup_dep ${url} ${hash}
+
+  progress ./autogen.sh
 }
 
 clean() {
@@ -100,6 +88,7 @@ config() {
     "--${_onoff[(( shared_libs + 1 ))]}-shared"
   )
 
+  if [[ ${target_config[arch]} == arm64 || ${target_config[arch]} == aarch64 ]] args+=(--disable-asm)
   if [[ ${config} == Debug ]] args+=(--enable-debug)
 
   log_debug "Configure options: ${args}"

@@ -27,7 +27,7 @@ function Setup-Target {
     $script:ConfigData = $TargetData[$script:Target]
 
     $script:ConfigData += @{
-        OutputPath = "${script:ProjectRoot}/windows/obs-${script:PackageName}-${script:Target}"
+        OutputPath = "${script:ProjectRoot}\windows\obs-${script:PackageName}-${script:Target}"
     }
 
     Log-Debug "
@@ -58,56 +58,44 @@ function Setup-BuildParameters {
 
     switch ( ${script:Configuration} ) {
         Debug {
-            $script:CFlags += @(
-                '-Ob0 -Od -RTC1'
-            )
-            $script:CxxFlags += @(
-                '-Ob0 -Od -RTC1'
-            )
+            $script:CFlags += @('-O0')
+            $script:CxxFlags += @('-O0')
         }
         RelWithDebInfo {
-            $script:CFlags += @(
-                '-O2 -Ob1 -DNDEBUG'
-            )
-            $script:CxxFlags += @(
-                '-O2 -Ob1 -DNDEBUG'
-            )
+            $script:CFlags += @('-O2', '-DNDEBUG')
+            $script:CxxFlags += @('-O2', '-DNDEBUG')
         }
         Release {
-            $script:CFlags += @(
-                '-O2 -Ob2 -DNDEBUG'
-            )
-            $script:CxxFlags += @(
-                '-O2 -Ob2 -DNDEBUG'
-            )
+            $script:CFlags += @('-O2', '-DNDEBUG')
+            $script:CxxFlags += @('-O2', '-DNDEBUG')
         }
         MinSizeRel {
-            $script:CFlags += @(
-                '-O1 -Ob1 -DNDEBUG'
-            )
-            $script:CxxFlags += @(
-                '-O1 -Ob1 -DNDEBUG'
-            )
+            $script:CFlags += @('-O1', '-DNDEBUG')
+            $script:CxxFlags += @('-O1', '-DNDEBUG')
         }
     }
 
+    $ClangTargets = @{
+        x64 = 'x86_64-pc-windows-msvc'
+        x86 = 'i686-pc-windows-msvc'
+        arm64 = 'aarch64-pc-windows-msvc'
+    }
+
     $script:CmakeOptions = @(
-        '-A', $script:ConfigData.CmakeArch
-        '-G', $VisualStudioId
+        '-G', 'Ninja'
+        "-DCMAKE_C_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
+        "-DCMAKE_CXX_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
+        "-DCMAKE_C_COMPILER_TARGET=$($ClangTargets[$script:Target])"
+        "-DCMAKE_CXX_COMPILER_TARGET=$($ClangTargets[$script:Target])"
         "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
         "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
         "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"
+        "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>"
         "-DCMAKE_BUILD_TYPE=${script:Configuration}"
         '--no-warn-unused-cli'
     )
 
-    $script:CMakePostfix = @(
-        '--'
-        '/consoleLoggerParameters:Summary'
-        '/noLogo'
-        '/p:UseMultiToolTask=true'
-        '/p:EnforceProcessCountAcrossBuilds=true'
-    )
+    $script:CMakePostfix = @()
 
     if ( $script:Quiet ) {
         $script:CmakeOptions += @(
@@ -141,11 +129,11 @@ function Find-VisualStudio {
         }
     }
 
-    $VisualStudioData = Get-VSSetupInstance -Prerelease:$($script:VSPrerelease) | Select-VSSetupInstance -Version '[17.0,19.0)' -Latest
+    $VisualStudioData = Get-VSSetupInstance -Prerelease:$($script:VSPrerelease) | Select-VSSetupInstance -Version '[16.0,19.0)' -Latest
 
     if ( $VisualStudioData -eq $null ) {
         $ErrorMessage = @(
-            "A Visual Studio installation (2022 or newer) is required for this build script.",
+            "A Visual Studio installation (2019 or newer) is required for this build script.",
             "The Visual Studio Community edition is available for free at https://visualstudio.microsoft.com/vs/community/.",
             "",
             "If Visual Studio is indeed installed, locate the directory ",

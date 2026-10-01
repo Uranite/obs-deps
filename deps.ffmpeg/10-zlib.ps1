@@ -1,14 +1,8 @@
 param(
     [string] $Name = 'zlib',
-    [string] $Version = '1.3.1',
+    [string] $Version = 'f9dd6009be3ed32415edf1e89d1bc38380ecb95d',
     [string] $Uri = 'https://github.com/madler/zlib.git',
-    [string] $Hash = "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf",
-    [array] $Patches = @(
-        @{
-            PatchFile = "${PSScriptRoot}/patches/zlib/0001-fix-unistd-detection.patch"
-            HashSum = "2114ff9ebfc79765019353b06915a09f4dc4802ce722d2df6e640a59666dd875"
-        }
-    ),
+    [string] $Hash = "f9dd6009be3ed32415edf1e89d1bc38380ecb95d",
     [array] $Targets = @('x64', 'arm64')
 )
 
@@ -24,16 +18,6 @@ function Clean {
     }
 }
 
-function Patch {
-    Log-Information "Patch (${Target})"
-    Set-Location $Path
-
-    $Patches | ForEach-Object {
-        $Params = $_
-        Safe-Patch @Params
-    }
-}
-
 function Configure {
     Log-Information "Configure (${Target})"
     Set-Location $Path
@@ -41,6 +25,7 @@ function Configure {
     $Options = @(
         $CmakeOptions
         '-DZ_HAVE_UNISTD_H:BOOL=OFF'
+        '-DZLIB_BUILD_TESTING:BOOL=OFF'
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options
@@ -78,4 +63,14 @@ function Install {
     }
 
     Invoke-External cmake @Options
+}
+
+function Fixup {
+    Log-Information "Fixup (${Target})"
+    Set-Location $Path
+
+    $LibPath = "$($script:ConfigData.OutputPath)/lib"
+    if ( Test-Path "$LibPath/zs.lib" ) {
+        Move-Item -Path "$LibPath/zs.lib" -Destination "$LibPath/zlib.lib" -Force
+    }
 }

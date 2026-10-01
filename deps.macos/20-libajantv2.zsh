@@ -2,9 +2,17 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='ntv2'
-local version='17.0.1'
+local version='2d7636d86b6180bb4c5075fea040b1b812cc8b57'
 local url='https://github.com/aja-video/libajantv2.git'
-local hash='b6acce6b135c3d9ae7a2bce966180b159ced619f'
+local hash='2d7636d86b6180bb4c5075fea040b1b812cc8b57'
+local -a patches=(
+  "* ${0:a:h}/patches/ajantv2/0001-install-m31-headers.patch \
+    d77dccb550a1e9c1522abead997c479065ecccd251393bff5cbf3b7ba6e222cb"
+  "* ${0:a:h}/patches/ajantv2/0002-fix-getdeviceinfolist-scoping.patch \
+    5e21bcf3d960d469679271f5fef6cb1445ba3819fb2e5e9cf7a4bbdcfb6b5dfe"
+  "* ${0:a:h}/patches/ajantv2/0003-export-mbedtls-libs.patch \
+    4073b345b818d424c2dd5f2abc02438b0de383ef925123275c6271d6ab57ff38"
+)
 
 ## Dependency Overrides
 local -i shared_libs=0
@@ -13,6 +21,23 @@ local -i shared_libs=0
 setup() {
   log_info "Setup (%F{3}${target}%f)"
   setup_dep ${url} ${hash}
+}
+
+patch() {
+  autoload -Uz apply_patch
+
+  log_info "Patch (%F{3}${target}%f)"
+  cd ${dir}
+
+  local patch
+  local _target
+  local _url
+  local _hash
+  for patch (${patches}) {
+    read _target _url _hash <<< "${patch}"
+
+    if [[ ${target%%-*} == ${~_target} ]] apply_patch ${_url} ${_hash}
+  }
 }
 
 clean() {

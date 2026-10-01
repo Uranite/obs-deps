@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'srt',
-    [string] $Version = '1.5.2',
-    [string] $Uri = 'https://github.com/Haivision/srt/archive/refs/tags/v1.5.2.zip',
-    [string] $Hash = "${PSScriptRoot}/checksums/v1.5.2.zip.sha256",
+    [string] $Version = '44d106f491333a022351f8c105e23886aad4e248',
+    [string] $Uri = 'https://github.com/Haivision/srt.git',
+    [string] $Hash = "44d106f491333a022351f8c105e23886aad4e248",
     [array] $Targets = @('x64', 'arm64'),
     [switch] $ForceShared = $true,
     [array] $Patches = @(
@@ -22,11 +22,11 @@ param(
 )
 
 function Setup {
-    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath .
+    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath $Path
 }
 
 function Clean {
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     if ( Test-Path "build_${Target}" ) {
         Log-Information "Clean build directory (${Target})"
@@ -36,7 +36,7 @@ function Clean {
 
 function Patch {
     Log-Information "Patch (${Target})"
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     $Patches | ForEach-Object {
         $Params = $_
@@ -46,7 +46,7 @@ function Patch {
 
 function Configure {
     Log-Information "Configure (${Target})"
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     if ( $ForceShared -and ( $script:Shared -eq $false ) ) {
         $Shared = $true
@@ -62,6 +62,11 @@ function Configure {
         '-DENABLE_APPS:BOOL=OFF'
         '-DUSE_ENCLIB:STRING=mbedtls'
         '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
+        "-DCMAKE_C_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
+        "-DCMAKE_CXX_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
+        "-DCMAKE_SHARED_LINKER_FLAGS=delayimp.lib"
+        "-DCMAKE_C_FLAGS=-w /EHsc"
+        "-DCMAKE_CXX_FLAGS=-w /EHsc"
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options
@@ -69,7 +74,7 @@ function Configure {
 
 function Build {
     Log-Information "Build (${Target})"
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     $Options = @(
         '--build', "build_${Target}"
@@ -87,7 +92,7 @@ function Build {
 
 function Install {
     Log-Information "Install (${Target})"
-    Set-Location "${Name}-${Version}"
+    Set-Location $Path
 
     $Options = @(
         '--install', "build_${Target}"
@@ -99,4 +104,18 @@ function Install {
     }
 
     Invoke-External cmake @Options
+}
+
+function Fixup {
+    Log-Information "Fixup (${Target})"
+    Set-Location $Path
+
+    $PkgConfigPath = "$($script:ConfigData.OutputPath)/lib/pkgconfig"
+    if ( Test-Path $PkgConfigPath ) {
+        Get-ChildItem -Path $PkgConfigPath -Filter *.pc | ForEach-Object {
+            $content = Get-Content $_.FullName -Raw
+            $content = $content -replace '(?i)\bws2_32\.lib\b', '-lws2_32'
+            Set-Content -Path $_.FullName -Value $content -NoNewline
+        }
+    }
 }

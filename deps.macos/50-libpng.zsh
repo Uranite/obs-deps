@@ -2,13 +2,10 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='libpng'
-local version='1.6.47'
-local url='https://downloads.sourceforge.net/project/libpng/libpng16/1.6.47/libpng-1.6.47.tar.xz'
-local hash="${0:a:h}/checksums/libpng-1.6.47.tar.xz.sha256"
-local -a patches=(
-  "macos ${0:a:h}/patches/libpng/0001-fix-cmake-architecture-handling.patch \
-  65667ae3bac56def291a6ad581f272fc77e801e5b429dfdd7de72ffe59449048"
-)
+local version='ef378794235277f3116860c2fa0d356659b05441'
+local url='https://github.com/pnggroup/libpng.git'
+local hash="ef378794235277f3116860c2fa0d356659b05441"
+local -a patches=()
 
 local -i shared_libs=0
 
@@ -62,16 +59,6 @@ config() {
     args+=(-DPNG_DEBUG=OFF)
   }
 
-  case ${target} {
-    macos-arm64 | macos-universal)
-      args+=(
-        -DCMAKE_ASM_FLAGS="-DPNG_ARM_NEON_IMPLEMENTATION=1"
-        -DPNG_ARM_NEON=on
-      )
-
-      mkdir -p ${dir}/build_${arch}/arm64
-      ;;
-  }
 
   log_info "Config (%F{3}${target}%f)"
   cd ${dir}

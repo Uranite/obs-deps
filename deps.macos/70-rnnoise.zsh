@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='rnnoise'
-local version='2020-07-28'
+local version='70f1d256acd4b34a572f999a05c87bf00b67730d'
 local url='https://github.com/xiph/rnnoise.git'
-local hash='085d8f484af6141b1b88281a4043fb9215cead01'
+local hash='70f1d256acd4b34a572f999a05c87bf00b67730d'
 
 local -i shared_libs=0
 

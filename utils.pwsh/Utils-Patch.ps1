@@ -16,9 +16,9 @@ function Run-PatchExe {
     $PatchExe = "${GitBasePath}\patch.exe"
 
     if ( $PSVersionTable.PSVersion -ge '7.3.0' ) {
-        Invoke-External $PatchExe --binary @args
+        Invoke-External $PatchExe @args
     } else {
-        Invoke-External cmd.exe /c ('"' + $PatchExe + '" --binary ' + $args -join ' ' -replace '/', '\')
+        Invoke-External cmd.exe /c ('"' + $PatchExe + '" ' + $args -join ' ' -replace '/', '\')
     }
 }
 

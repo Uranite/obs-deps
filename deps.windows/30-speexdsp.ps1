@@ -41,6 +41,10 @@ function Configure {
 
     $Options = $CmakeOptions
 
+    $cml = Get-Content "CMakeLists.txt" -Raw
+    $cml = $cml -replace ' /Oi', ''
+    Set-Content "CMakeLists.txt" $cml -NoNewline
+
     Invoke-External cmake -S . -B "build_${Target}" @Options
 }
 

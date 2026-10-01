@@ -82,12 +82,12 @@ function Install {
             ErrorAction = 'SilentlyContinue'
         }
         @{
-            Path = "build_${Target}/$Configuration/vpl.lib"
+            Path = "build_${Target}/vpl.lib"
             Destination = "$($ConfigData.OutputPath)/lib"
             ErrorAction = 'SilentlyContinue'
         }
         @{
-            Path = "build_${Target}/$Configuration/vpld.lib"
+            Path = "build_${Target}/vpld.lib"
             Destination = "$($ConfigData.OutputPath)/lib"
             ErrorAction = 'SilentlyContinue'
         }

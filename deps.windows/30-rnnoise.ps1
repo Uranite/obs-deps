@@ -75,11 +75,11 @@ function Install {
             Destination = "$($ConfigData.OutputPath)/include/"
         }
         @{
-            Path = "./build_${Target}/${Configuration}/rnnoise.lib"
+            Path = "./build_${Target}/rnnoise.lib"
             Destination = "$($ConfigData.OutputPath)/lib/"
         }
         @{
-            Path = "./build_${Target}/${Configuration}/rnnoise.dll"
+            Path = "./build_${Target}/rnnoise.dll"
             Destination = "$($ConfigData.OutputPath)/bin/"
             ErrorAction = 'SilentlyContinue'
         }

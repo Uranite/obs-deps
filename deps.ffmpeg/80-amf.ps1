@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'amf',
-    [string] $Version = '1.5.0',
+    [string] $Version = 'd0b3e6dd544a5f207bb6a12a1ecb98532491176a',
     [string] $Uri = 'https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git',
-    [string] $Hash = 'afed28d37aca1938da2eedc50599bb3535a987ec',
+    [string] $Hash = 'd0b3e6dd544a5f207bb6a12a1ecb98532491176a',
     [array] $Targets = @('x64')
 )
 

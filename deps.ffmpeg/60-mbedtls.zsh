@@ -2,25 +2,10 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='mbedtls'
-local -A versions=(
-  macos 3.6.4
-  linux 3.6.4
-  windows 3.6.4
-)
-local url='https://github.com/Mbed-TLS/mbedtls.git'
-local -A hashes=(
-  macos c765c831e5c2a0971410692f92f7a81d6ec65ec2
-  linux c765c831e5c2a0971410692f92f7a81d6ec65ec2
-  windows c765c831e5c2a0971410692f92f7a81d6ec65ec2
-)
-local -a patches=(
-  "macos ${0:a:h}/patches/mbedtls/0001-enable-posix-threading-support.patch \
-    ea52cf47ca01211cbadf03c0493986e8d4e0d1e9ab4aaa42365b2dea7b591188"
-  "linux ${0:a:h}/patches/mbedtls/0001-enable-posix-threading-support.patch \
-    ea52cf47ca01211cbadf03c0493986e8d4e0d1e9ab4aaa42365b2dea7b591188"
-  "* ${0:a:h}/patches/mbedtls/0002-enable-dtls-srtp-support.patch \
-    c299066df252b8b5a08d169925a82ea6c76d6ae8b6c0069b1bb72ac1d40ba67e"
-)
+local version='3.6.5'
+local url='https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.5/mbedtls-3.6.5.tar.bz2'
+local hash="${0:a:h}/checksums/mbedtls-${version}.tar.bz2.sha256"
+local -a patches=()
 
 ## Dependency Overrides
 local -i shared_libs=1
@@ -48,14 +33,18 @@ patch() {
 
   cd ${dir}
 
-  local patch
-  local _target
-  local _url
-  local _hash
   for patch (${patches}) {
     read _target _url _hash <<< "${patch}"
 
     if [[ "${target%%-*}" == ${~_target} ]] apply_patch "${_url}" "${_hash}"
+  }
+
+  log_info "Configuring mbedtls_config.h via scripts/config.py"
+  python3 scripts/config.py set MBEDTLS_SSL_DTLS_SRTP
+
+  if [[ ${target%%-*} == (macos|linux) ]] {
+    python3 scripts/config.py set MBEDTLS_THREADING_C
+    python3 scripts/config.py set MBEDTLS_THREADING_PTHREAD
   }
 }
 

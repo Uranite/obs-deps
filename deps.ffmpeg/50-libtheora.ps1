@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'libtheora',
-    [string] $Version = '1.1.1',
-    [string] $Uri = 'https://ftp.osuosl.org/pub/xiph/releases/theora/libtheora-1.1.1.zip',
-    [string] $Hash = "${PSScriptRoot}/checksums/libtheora-1.1.1.zip.sha256",
+    [string] $Version = '28fd5ec77f0ad0e07a371cef1047828116f6bd8a',
+    [string] $Uri = 'https://github.com/xiph/theora.git',
+    [string] $Hash = "28fd5ec77f0ad0e07a371cef1047828116f6bd8a",
     [array] $Targets = @('x64', 'arm64'),
     [array] $Patches = @(
         @{
@@ -13,7 +13,7 @@ param(
 )
 
 function Setup {
-    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath .
+    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath $Path
 }
 
 function Clean {
@@ -42,7 +42,6 @@ function Configure {
     $Options = @(
         $CmakeOptions
         "-DBUILD_SHARED_LIBS:BOOL=$($OnOff[$script:Shared.isPresent])"
-        "-DCMAKE_C_FLAGS=-wd4700"
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

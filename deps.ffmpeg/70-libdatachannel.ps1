@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'libdatachannel',
-    [string] $Version = 'v0.24.2',
+    [string] $Version = '773e5b3de2d6c6501fa74cc9aa5c9e6aab1d9e12',
     [string] $Uri = 'https://github.com/paullouisageneau/libdatachannel.git',
-    [string] $Hash = '4e4f4892dccb2a57fe3a490d0c9d958de4244e74',
+    [string] $Hash = '773e5b3de2d6c6501fa74cc9aa5c9e6aab1d9e12',
     [array] $Targets = @('x64', 'arm64'),
     [switch] $ForceShared = $true
 )
@@ -39,6 +39,8 @@ function Configure {
         '-DNO_TESTS:BOOL=ON'
         '-DNO_EXAMPLES:BOOL=ON'
         '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
+        "-DCMAKE_C_FLAGS=-w /EHsc"
+        "-DCMAKE_CXX_FLAGS=-w /EHsc"
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

@@ -14,7 +14,6 @@ param(
 
 function Setup {
     Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath .
-    Invoke-External tar -xf "${Name}-${Version}.tar"
 }
 
 function Clean {
@@ -46,10 +45,21 @@ function Build {
         arm64 = 'arm64'
     }
 
+    $mk = Get-Content "Makefile.MSVC" -Raw
+    $mk = $mk -replace '/O2b2ity', '/O2' -replace '/GAy', '' -replace '/Gs1024', '' -replace '/Zp8', ''
+    Set-Content "Makefile.MSVC" $mk -NoNewline
+
+    $cfg = Get-Content "configMS.h" -Raw
+    $cfg = $cfg -replace '(?m)^\s*typedef\s+(__int\d+|unsigned __int\d+|float|double)\s+(u?int\d+_t|float\d+_t);\s*$', ''
+    $cfg = $cfg -replace '(?m)^#define\s+(u?int\d+_t)\s+(signed|unsigned)?\s*(char|short|int|long).*$', ''
+    $cfg = "#include <stdint.h>`n" + $cfg
+    Set-Content "configMS.h" $cfg -NoNewline
+
+    $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
     $Params = @{
         BasePath = (Get-Location | Convert-Path)
         BuildPath = "."
-        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64"
+        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64 CC=`"clang-cl --target=$clangTarget`" LN=link"
         Target = $Target
     }
 

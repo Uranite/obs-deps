@@ -117,6 +117,14 @@ runs:
 
         ./Build-Dependencies.ps1 @BuildArgs
 
+    - name: Upload FFmpeg config.log
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ffmpeg-config-log-${{ inputs.target }}-${{ runner.os }}
+        path: |
+          **/*_build_temp/**/ffbuild/config.log
+
     - name: Save FFmpeg to Cache
       if: github.event_name == 'schedule' || (github.event_name == 'push' && steps.ffmpeg-cache.outputs.cache-hit != 'true')
       uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae

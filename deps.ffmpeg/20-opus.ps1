@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'opus',
-    [string] $Version = '1.5.2',
+    [string] $Version = '503d81b138d76621aae4b12786e90de48aa8db3a',
     [string] $Uri = 'https://github.com/xiph/opus.git',
-    [string] $Hash = "ddbe48383984d56acd9e1ab6a090c54ca6b735a6",
+    [string] $Hash = "503d81b138d76621aae4b12786e90de48aa8db3a",
     [array] $Targets = @('x64', 'arm64')
 )
 

@@ -1,13 +1,11 @@
-Instead of setting internal debug status based on CMake standard build types,
-libsrt uses inverse logic. This patches honors the official CMake types and
-sets internal debug status accordingly.
-
---- ./CMakeLists.txt   2022-09-21 16:29:01.000000000 +0200
-+++ ./CMakeLists.txt   2022-11-03 12:40:20.973886158 +0100
-@@ -47,14 +47,8 @@
-
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3422b73d..19633a23 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -54,14 +54,8 @@ set_if(NEED_DESTINATION  ${CMAKE_VERSION} VERSION_LESS "3.14.0")
+ 
  include(GNUInstallDirs)
-
+ 
 -# The CMAKE_BUILD_TYPE seems not to be always set, weird.
 -if (NOT DEFINED ENABLE_DEBUG)
 -
@@ -19,9 +17,9 @@ sets internal debug status accordingly.
 +if(NOT CMAKE_BUILD_TYPE)
 +    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type [Release, RelWithDebInfo, Debug, MinSizeRel]" FORCE)
  endif()
-
+ 
  # XXX This is a kind of workaround - this part to set the build
-@@ -64,21 +58,16 @@
+@@ -71,26 +65,16 @@ endif()
  # sets _DEBUG and NDEBUG flags itself, so this shouldn't be done
  # at all in this case.
  if (NOT MICROSOFT)
@@ -30,7 +28,12 @@ sets internal debug status accordingly.
 -	# that ENABLE_DEBUG is set as it should.
 -	if (ENABLE_DEBUG EQUAL 2)
 -		set (CMAKE_BUILD_TYPE "RelWithDebInfo")
--		add_definitions(-DNDEBUG)
+-		if (ENABLE_ASSERT)
+-			# Add _DEBUG macro if explicitly requested, to enable SRT_ASSERT().
+-			add_definitions(-D_DEBUG)
+-		else()
+-			add_definitions(-DNDEBUG)
+-		endif()
 -	elseif (ENABLE_DEBUG) # 1, ON, YES, TRUE, Y, or any other non-zero number
 -		set (CMAKE_BUILD_TYPE "Debug")
 -
@@ -51,5 +54,5 @@ sets internal debug status accordingly.
 +        set(ENABLE_DEBUG OFF)
 +    endif()
  endif()
-
+ 
  message(STATUS "BUILD TYPE: ${CMAKE_BUILD_TYPE}")

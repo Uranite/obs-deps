@@ -1,15 +1,9 @@
 param(
     [string] $Name = 'svt-av1',
-    [string] $Version = '2.3.0',
+    [string] $Version = 'd235cfcc0cfa0a24ec32ea77ec156907921e3a23',
     [string] $Uri = 'https://gitlab.com/AOMediaCodec/SVT-AV1.git',
-    [string] $Hash = '6e69def4ec283fe0b71195671245c3b768bebdef',
-    [array] $Targets = @('x64'),
-    [array] $Patches = @(
-        @{
-            PatchFile = "${PSScriptRoot}/patches/svt-av1/0001-cpuinfo-MSVC-detection.patch"
-            HashSum = "27c0de86f8a8e9a3ae87f7c3cc3c8677551ffea2e62e28dcbf2b40ac5bc7a38b"
-        }
-    )
+    [string] $Hash = 'd235cfcc0cfa0a24ec32ea77ec156907921e3a23',
+    [array] $Targets = @('x64')
 )
 
 function Setup {
@@ -28,16 +22,6 @@ function Clean {
     }
 }
 
-function Patch {
-    Log-Information "Patch (${Target})"
-    Set-Location $Path
-
-    $Patches | ForEach-Object {
-        $Params = $_
-        Safe-Patch @Params
-    }
-}
-
 function Configure {
     Log-Information "Configure (${Target})"
     Set-Location $Path
@@ -47,11 +31,6 @@ function Configure {
         $CmakeOptions
         "-DBUILD_SHARED_LIBS:BOOL=$($OnOff[$script:Shared.isPresent])"
         '-DBUILD_APPS:BOOL=OFF'
-        '-DBUILD_DEC:BOOL=ON'
-        '-DBUILD_ENC:BOOL=ON'
-        '-DENABLE_NASM:BOOL=ON'
-        '-DBUILD_TESTING:BOOL=OFF'
-        '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
     )
 
     Invoke-External cmake -S . -B "build_${Target}" @Options

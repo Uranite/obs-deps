@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'aom',
-    [string] $Version = '3.13.1',
+    [string] $Version = 'e80624b5ed070d8e88a39ea78cae60d25a65adba',
     [string] $Uri = 'https://aomedia.googlesource.com/aom.git',
-    [string] $Hash = 'd772e334cc724105040382a977ebb10dfd393293',
+    [string] $Hash = 'e80624b5ed070d8e88a39ea78cae60d25a65adba',
     [array] $Targets = @('x64', 'arm64'),
     [array] $Patches = @(
         @{
@@ -66,7 +66,7 @@ function Configure {
         "-DAOM_TARGET_CPU=$($TargetCPUs[$Target])"
     )
 
-    Invoke-External cmake -S . -B "build_${Target}" -T clangcl @Options
+    Invoke-External cmake -S . -B "build_${Target}" @Options
 }
 
 function Build {

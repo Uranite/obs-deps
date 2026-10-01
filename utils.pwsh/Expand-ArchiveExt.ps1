@@ -42,7 +42,10 @@ function Expand-ArchiveExt {
         }
         .gz {
             try {
-                Invoke-External tar -x -o $DestinationPath -f $Path
+                if ( ! ( Test-Path $DestinationPath ) ) {
+                    New-Item -ItemType Directory -Path $DestinationPath -Force | Out-Null
+                }
+                Invoke-External tar -x -f $Path -C $DestinationPath
             } catch {
                 if ( Get-Command 7z ) {
                     Invoke-External 7z x -y $Path "-o${DestinationPath}"
@@ -54,7 +57,10 @@ function Expand-ArchiveExt {
         }
         .xz {
             try {
-                Invoke-External tar -x -o $DestinationPath -f $Path
+                if ( ! ( Test-Path $DestinationPath ) ) {
+                    New-Item -ItemType Directory -Path $DestinationPath -Force | Out-Null
+                }
+                Invoke-External tar -x -f $Path -C $DestinationPath
             } catch {
                 if ( Get-Command 7z ) {
                     Invoke-External 7z x -y $Path "-o${DestinationPath}"
@@ -62,6 +68,22 @@ function Expand-ArchiveExt {
                     throw "Fallback utility 7-zip not found. Please install 7-zip first."
                 }
             }
+            break
+        }
+        .bz2 {
+            try {
+                if ( ! ( Test-Path $DestinationPath ) ) {
+                    New-Item -ItemType Directory -Path $DestinationPath -Force | Out-Null
+                }
+                Invoke-External tar -x -f $Path -C $DestinationPath
+            } catch {
+                if ( Get-Command 7z ) {
+                    Invoke-External 7z x -y $Path "-o${DestinationPath}"
+                } else {
+                    throw "Fallback utility 7-zip not found. Please install 7-zip first."
+                }
+            }
+            break
         }
         default {
             throw "Unsupported archive extension provided."

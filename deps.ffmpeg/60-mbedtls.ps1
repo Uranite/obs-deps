@@ -1,24 +1,18 @@
 param(
     [string] $Name = 'mbedtls',
-    [string] $Version = '3.6.4',
-    [string] $Uri = 'https://github.com/Mbed-TLS/mbedtls.git',
-    [string] $Hash = 'c765c831e5c2a0971410692f92f7a81d6ec65ec2',
+    [string] $Version = '3.6.5',
+    [string] $Uri = 'https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.5/mbedtls-3.6.5.tar.bz2',
+    [string] $Hash = "${PSScriptRoot}/checksums/mbedtls-${Version}.tar.bz2.win.sha256",
     [array] $Targets = @('x64', 'arm64'),
-    [array] $Patches = @(
-        @{
-            PatchFile = "${PSScriptRoot}/patches/mbedtls/0001-enable-dtls-srtp-support-windows.patch"
-            HashSum = "38dbaff859242c5a4f8196a08e35f0251d2966b22e1d9547ecaaea2aec4aae1b"
-        }
-    ),
     [switch] $ForceStatic = $true
 )
 
 function Setup {
-    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath $Path
+    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath .
 }
 
 function Clean {
-    Set-Location $Path
+    Set-Location "${Name}-${Version}"
 
     if ( Test-Path "build_${Target}" ) {
         Log-Information "Clean build directory (${Target})"
@@ -28,17 +22,15 @@ function Clean {
 
 function Patch {
     Log-Information "Patch (${Target})"
-    Set-Location $Path
+    Set-Location "${Name}-${Version}"
 
-    $Patches | ForEach-Object {
-        $Params = $_
-        Safe-Patch @Params
-    }
+    Log-Information "Configuring mbedtls_config.h via scripts/config.py"
+    Invoke-External python scripts/config.py set MBEDTLS_SSL_DTLS_SRTP
 }
 
 function Configure {
     Log-Information "Configure (${Target})"
-    Set-Location $Path
+    Set-Location "${Name}-${Version}"
 
     if ( $ForceStatic -and $script:Shared ) {
         $Shared = $false
@@ -61,7 +53,7 @@ function Configure {
 
 function Build {
     Log-Information "Build (${Target})"
-    Set-Location $Path
+    Set-Location "${Name}-${Version}"
 
     $Options = @(
         '--build', "build_${Target}"
@@ -79,7 +71,7 @@ function Build {
 
 function Install {
     Log-Information "Install (${Target})"
-    Set-Location $Path
+    Set-Location "${Name}-${Version}"
 
     $Options = @(
         '--install', "build_${Target}"

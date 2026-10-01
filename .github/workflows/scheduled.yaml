@@ -2,8 +2,8 @@ name: Scheduled
 run-name: Scheduled Repository Actions ⏰
 on:
   workflow_dispatch:
-  schedule:
-    - cron: 12 0 * * *
+#  schedule:
+#    - cron: 12 0 * * *
 permissions:
   contents: write
 concurrency:
@@ -94,7 +94,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@v6
 
       - name: Setup Environment
         id: setup
@@ -120,7 +120,7 @@ jobs:
 
       - name: Restore Compilation Cache
         id: ccache-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
+        uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/.ccache
           key: ${{ matrix.target }}-ccache-ffmpeg-${{ steps.setup.outputs.ccacheDate }}
@@ -136,7 +136,7 @@ jobs:
 
   ffmpeg-windows-build:
     name: Build FFmpeg for Windows
-    runs-on: windows-2022
+    runs-on: windows-2025-vs2026
     needs: cache-cleanup
     strategy:
       fail-fast: true
@@ -155,7 +155,7 @@ jobs:
         shell: pwsh
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@v6
 
       - name: Build FFmpeg
         uses: ./.github/actions/build-ffmpeg
@@ -184,7 +184,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@v6
 
       - name: Setup Environment
         id: setup
@@ -208,7 +208,7 @@ jobs:
 
       - name: Restore Compilation Cache
         id: ccache-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
+        uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/.ccache
           key: ${{ matrix.target }}-ccache-deps-${{ matrix.config }}-${{ steps.setup.outputs.ccacheDate }}
@@ -224,7 +224,7 @@ jobs:
 
   windows-build:
     name: Build Windows Dependencies
-    runs-on: windows-2022
+    runs-on: windows-2025-vs2026
     needs: cache-cleanup
     strategy:
       fail-fast: true
@@ -245,7 +245,7 @@ jobs:
         shell: pwsh
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@v6
 
       - name: Build libajantv2 Debug
         if: matrix.target == 'x64'
@@ -308,7 +308,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@v6
 
       - name: Setup Environment
         id: setup
@@ -332,7 +332,7 @@ jobs:
 
       - name: Restore Compilation Cache
         id: ccache-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
+        uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/.ccache
           key: macos-universal-ccache-qt6-${{ steps.setup.outputs.ccacheDate }}
@@ -355,14 +355,14 @@ jobs:
         config: [RelWithDebInfo, Debug]
         include:
           - target: x64
-            runner-os: windows-2022
+            runner-os: windows-2025-vs2026
           - target: arm64
             runner-os: windows-11-arm
     runs-on: ${{ matrix.runner-os }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@v6
 
       - name: Setup Environment
         id: setup
@@ -382,7 +382,7 @@ jobs:
 
       - name: Publish Build Artifacts
         if: matrix.target == 'x64'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.setup.outputs.artifactName }}
           path: ${{ github.workspace }}/windows/${{ steps.setup.outputs.artifactFileName }}

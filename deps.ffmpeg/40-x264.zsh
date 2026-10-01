@@ -2,17 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='x264'
-local -A versions=(
-  macos r3106
-  linux r3106
-  windows r3106
-)
-local url='https://github.com/mirror/x264.git'
-local -A hashes=(
-  macos eaa68fad9e5d201d42fde51665f2d137ae96baf0
-  linux eaa68fad9e5d201d42fde51665f2d137ae96baf0
-  windows eaa68fad9e5d201d42fde51665f2d137ae96baf0
-)
+local version='0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee'
+local url='https://code.videolan.org/videolan/x264.git'
+local hash='0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee'
 
 ## Dependency Overrides
 local script_order=${${(s:-:)0:t:r}[1]}
@@ -116,6 +108,7 @@ config() {
     --disable-gpac
     --disable-interlaced
     --disable-lavf
+    --enable-lto
   )
 
   if (( shared_libs )) args+=(--enable-shared)

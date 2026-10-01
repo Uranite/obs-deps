@@ -1,14 +1,42 @@
 param(
     [string] $Name = 'ntv2',
-    [string] $Version = '17.0.1',
+    [string] $Version = '21574e4e8e24f53171ffb07792d61d06d3b6c11c',
     [string] $Uri = 'https://github.com/aja-video/libajantv2.git',
-    [string] $Hash = 'b6acce6b135c3d9ae7a2bce966180b159ced619f',
+    [string] $Hash = '21574e4e8e24f53171ffb07792d61d06d3b6c11c',
     [array] $Targets = @('x64'),
-    [switch] $ForceStatic = $true
+    [switch] $ForceStatic = $true,
+    [array] $Patches = @(
+        @{
+            PatchFile = "${PSScriptRoot}/patches/ajantv2/0001-fix-clang-udiv128.patch"
+            HashSum = '1e4571a214081b7a369037c6c4b97f435029cdee8282c05c2d112e581b93b758'
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/ajantv2/0002-install-m31-headers.patch"
+            HashSum = 'D77DCCB550A1E9C1522ABEAD997C479065ECCCD251393BFF5CBF3B7BA6E222CB'
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/ajantv2/0003-fix-getdeviceinfolist-scoping.patch"
+            HashSum = '5E21BCF3D960D469679271F5FEF6CB1445BA3819FB2E5E9CF7A4BBDCFB6B5DFE'
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/ajantv2/0004-export-mbedtls-libs.patch"
+            HashSum = '4073B345B818D424C2DD5F2ABC02438B0DE383EF925123275C6271D6AB57FF38'
+        }
+    )
 )
 
 function Setup {
     Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath $Path
+}
+
+function Patch {
+    Log-Information "Patch (${Target})"
+    Set-Location $Path
+
+    $Patches | ForEach-Object {
+        $Params = $_
+        Safe-Patch @Params
+    }
 }
 
 function Clean {
@@ -45,7 +73,14 @@ function Configure {
         '-DAJA_INSTALL_CMAKE:BOOL=OFF'
     )
 
+    $Backup = @{
+        CC = $env:CC
+        CXX = $env:CXX
+    }
+    $env:CC = "clang"
+    $env:CXX = "clang++"
     Invoke-External cmake -S . -B "build_${Target}" @Options
+    $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
 }
 
 function Build {
@@ -61,7 +96,14 @@ function Build {
         $Options += '--verbose'
     }
 
+    $Backup = @{
+        CC = $env:CC
+        CXX = $env:CXX
+    }
+    $env:CC = "clang"
+    $env:CXX = "clang++"
     Invoke-External cmake @Options
+    $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }
 }
 
 function Install {

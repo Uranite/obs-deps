@@ -1,0 +1,14 @@
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>Microsoft.PowerShell.Commands.FileHashInfo</T>
+      <T>System.Object</T>
+    </TN>
+    <ToString>Microsoft.PowerShell.Commands.FileHashInfo</ToString>
+    <Props>
+      <S N="Algorithm">SHA256</S>
+      <S N="Hash">2F3A47F7B3A541DDEF450E4867EEECB7CE2EF7776093F3A11D6D43EAD6BF2827</S>
+      <S N="Path">mbedtls-4.0.0.tar.bz2</S>
+    </Props>
+  </Obj>
+</Objs>

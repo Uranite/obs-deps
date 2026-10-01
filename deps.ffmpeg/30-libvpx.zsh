@@ -2,21 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='libvpx'
-local -A versions=(
-  macos 1.14.1
-  linux 1.14.1
-  windows 1.14.1
-)
-local -A urls=(
-  macos https://github.com/webmproject/libvpx/archive/v1.14.1.tar.gz
-  linux https://github.com/webmproject/libvpx/archive/v1.14.1.tar.gz
-  windows https://github.com/webmproject/libvpx/archive/v1.14.1.tar.gz
-)
-local -A hashes=(
-  macos "${0:a:h}/checksums/v1.14.1.tar.gz.sha256"
-  linux "${0:a:h}/checksums/v1.14.1.tar.gz.sha256"
-  windows "${0:a:h}/checksums/v1.14.1.tar.gz.sha256"
-)
+local version='0a6f769e44989222d99ded46daa1e9763637cc19'
+local url='https://github.com/webmproject/libvpx.git'
+local hash='0a6f769e44989222d99ded46daa1e9763637cc19'
 local -a patches=(
   "windows ${0:a:h}/patches/libvpx/0001-libvpx-crosscompile-win-dll.patch \
   9553b8186feac616d4421188d7c6ca75fbce900265e688cafdf1ed3333ad376a"
@@ -25,7 +13,7 @@ local -a patches=(
 )
 
 ## Dependency Overrides
-local dir="${name}-${versions[${target%%-*}]}"
+local dir="${name}-${version}"
 
 ## Build Steps
 setup() {

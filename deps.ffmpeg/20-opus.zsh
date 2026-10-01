@@ -2,13 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='opus'
-local version='1.5.2'
+local version='503d81b138d76621aae4b12786e90de48aa8db3a'
 local url='https://github.com/xiph/opus.git'
-local -A hashes=(
-  macos ddbe48383984d56acd9e1ab6a090c54ca6b735a6
-  linux ddbe48383984d56acd9e1ab6a090c54ca6b735a6
-  windows ddbe48383984d56acd9e1ab6a090c54ca6b735a6
-)
+local hash='503d81b138d76621aae4b12786e90de48aa8db3a'
 
 ## Build Steps
 setup() {
@@ -44,8 +40,6 @@ config() {
       ;;
     macos-arm64 | macos-universal)
       args+=(
-        -DCMAKE_ASM_FLAGS="-DPNG_ARM_NEON_IMPLEMENTATION=1"
-        -DPNG_ARM_NEON=on
         -DOPUS_STACK_PROTECTOR=ON
       )
 

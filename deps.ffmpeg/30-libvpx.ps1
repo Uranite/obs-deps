@@ -1,18 +1,16 @@
 param(
     [string] $Name = 'libvpx',
-    [string] $Version = '1.14.1',
-    [string] $Uri = 'https://github.com/webmproject/libvpx/archive/refs/tags/v1.14.1.zip',
-    [string] $Hash = "${PSScriptRoot}/checksums/v1.14.1.zip.sha256",
+    [string] $Version = '0a6f769e44989222d99ded46daa1e9763637cc19',
+    [string] $Uri = 'https://github.com/webmproject/libvpx.git',
+    [string] $Hash = '0a6f769e44989222d99ded46daa1e9763637cc19',
     [array] $Targets = @('x64', 'arm64')
 )
 
 function Setup {
-    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath "."
+    Setup-Dependency -Uri $Uri -Hash $Hash -DestinationPath "${Name}-${Version}"
 
     if ( ! ( $SkipAll -or $SkipDeps ) ) {
-        Invoke-External pacman.exe -S --noconfirm --needed --noprogressbar nasm
-        Invoke-External pacman.exe -S --noconfirm --needed --noprogressbar make
-        Invoke-External pacman.exe -S --noconfirm --needed --noprogressbar diffutils
+        Invoke-External pacman.exe -S --noconfirm --needed --noprogressbar nasm make diffutils
     }
 }
 
@@ -21,6 +19,18 @@ function Clean {
     if ( Test-Path "build_${Target}" ) {
         Log-Information "Clean build directory (${Target})"
         Remove-Item -Path "build_${Target}" -Recurse -Force
+    }
+}
+
+function Patch {
+    Log-Information "Patch (${Target})"
+    Set-Location "${Name}-${Version}"
+
+    $VcxprojGen = "build/make/gen_msvs_vcxproj.sh"
+    if ( Test-Path $VcxprojGen ) {
+        $Content = Get-Content $VcxprojGen -Raw
+        $Content = $Content -replace 'tag_content WholeProgramOptimization true', 'tag_content WholeProgramOptimization false'
+        $Content | Set-Content $VcxprojGen -NoNewline
     }
 }
 

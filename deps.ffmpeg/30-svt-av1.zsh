@@ -6,15 +6,6 @@ local version='b486d839ac13c1ed8a616aaccefd78ed295f4f3b'
 local url='https://gitlab.com/AOMediaCodec/SVT-AV1.git'
 local hash='b486d839ac13c1ed8a616aaccefd78ed295f4f3b'
 
-local -a patches=(
-  "macos ${SCRIPT_HOME}/deps.macos/patches/svt-av1/0001-fix-preset-8-and-higher.patch a4e353e1e3425de4f2cf89cda198dd2f13cef94686d498ade21df23ede785640"
-  "macos ${SCRIPT_HOME}/deps.macos/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 2d21d229ce7d61c4db08edbdc85ea30d50908525d31743a3bce59660c0381a10"
-  "linux ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0001-fix-preset-8-and-higher.patch a4e353e1e3425de4f2cf89cda198dd2f13cef94686d498ade21df23ede785640"
-  "linux ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 2d21d229ce7d61c4db08edbdc85ea30d50908525d31743a3bce59660c0381a10"
-  "windows ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0001-fix-preset-8-and-higher.patch a4e353e1e3425de4f2cf89cda198dd2f13cef94686d498ade21df23ede785640"
-  "windows ${SCRIPT_HOME}/deps.ffmpeg/patches/svt-av1/0002-fix-eb-new-macro-trailing-comma.patch 2d21d229ce7d61c4db08edbdc85ea30d50908525d31743a3bce59660c0381a10"
-)
-
 ## Dependency Overrides
 local targets=(windows-x64 'macos-*' 'linux-*')
 
@@ -22,23 +13,6 @@ local targets=(windows-x64 'macos-*' 'linux-*')
 setup() {
   log_info "Setup (%F{3}${target}%f)"
   setup_dep ${url} ${hash}
-}
-
-patch() {
-  autoload -Uz apply_patch
-
-  log_info "Patch (%F{3}${target}%f)"
-  cd ${dir}
-
-  local patch
-  local _target
-  local _url
-  local _hash
-  for patch (${patches}) {
-    read _target _url _hash <<< "${patch}"
-
-    if [[ ${_target} == ${target%%-*} ]] apply_patch ${_url} ${_hash}
-  }
 }
 
 clean() {

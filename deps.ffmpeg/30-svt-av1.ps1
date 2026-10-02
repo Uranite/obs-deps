@@ -3,13 +3,7 @@ param(
     [string] $Version = '1f21a05614db24ec028f65155161e3a6cdd1fdde',
     [string] $Uri = 'https://gitlab.com/AOMediaCodec/SVT-AV1.git',
     [string] $Hash = '1f21a05614db24ec028f65155161e3a6cdd1fdde',
-    [array] $Targets = @('x64'),
-    [array] $Patches = @(
-        @{
-            PatchFile = "$PSScriptRoot/patches/svt-av1/0001-fix-preset-8-and-higher.patch"
-            HashSum = "a4e353e1e3425de4f2cf89cda198dd2f13cef94686d498ade21df23ede785640"
-        }
-    )
+    [array] $Targets = @('x64')
 )
 
 function Setup {
@@ -25,16 +19,6 @@ function Clean {
     if ( Test-Path "build_${Target}" ) {
         Log-Information "Clean build directory (${Target})"
         Remove-Item -Path "build_${Target}" -Recurse -Force
-    }
-}
-
-function Patch {
-    Log-Information "Patch (${Target})"
-    Set-Location $Path
-
-    $Patches | ForEach-Object {
-        $Params = $_
-        Safe-Patch @Params
     }
 }
 

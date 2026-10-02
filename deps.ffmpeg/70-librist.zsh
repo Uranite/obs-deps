@@ -90,9 +90,6 @@ config() {
     -Dhave_mingw_pthreads=true
     -Duse_mbedtls=true
     -Dbuiltin_cjson=true
-    # Use the bundled LZ4. Linking the system/Homebrew copy makes meson emit
-    # "Requires.private: liblz4" into librist.pc, which FFmpeg's configure then
-    # cannot resolve because PKG_CONFIG_LIBDIR points only at our output dir.
     -Dbuiltin_lz4=true
     -Dtest=false
     -Dbuilt_tools=false

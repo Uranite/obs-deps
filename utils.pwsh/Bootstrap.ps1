@@ -31,6 +31,7 @@ function Bootstrap {
     Setup-Host
     Setup-Target
     Setup-BuildParameters
+    Initialize-ClangShim
 }
 
 $Self = $MyInvocation.MyCommand.Name

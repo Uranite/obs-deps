@@ -73,9 +73,6 @@ function Configure {
         Target = $Target
     }
 
-    $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
-    Set-Content -Path "build_${Target}/cl" -Value "#!/bin/bash`nexec clang-cl --target=$clangTarget `"`$@`""
-    
     $Backup = @{
         PATH = $env:PATH
         CC = $env:CC
@@ -83,10 +80,10 @@ function Configure {
         CXXFLAGS = $env:CXXFLAGS
         MSYS2_PATH_TYPE = $env:MSYS2_PATH_TYPE
     }
-    $env:PATH = "$((Get-Item "build_${Target}").FullName -replace '\\','/');$env:PATH"
+    $env:PATH = "$($script:ClangShimDir -replace '\\','/');$env:PATH"
     $env:CC = "cl"
-    $env:CFLAGS = $($($script:CFlags) + ' -wd4003')
-    $env:CXXFLAGS = $($($script:CxxFlags) + ' -wd4003')
+    $env:CFLAGS = $($script:CFlags)
+    $env:CXXFLAGS = $($script:CxxFlags)
     $env:MSYS2_PATH_TYPE = 'inherit'
     Invoke-DevShell @Params
     $Backup.GetEnumerator() | ForEach-Object { Set-Item -Path "env:\$($_.Key)" -Value $_.Value }

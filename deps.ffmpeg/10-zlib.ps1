@@ -70,7 +70,13 @@ function Fixup {
     Set-Location $Path
 
     $LibPath = "$($script:ConfigData.OutputPath)/lib"
+
     if ( Test-Path "$LibPath/zs.lib" ) {
         Move-Item -Path "$LibPath/zs.lib" -Destination "$LibPath/zlib.lib" -Force
+    }
+
+    if ( -not ( Test-Path "$LibPath/z.lib" ) -and ( Test-Path "$LibPath/libz.lib" ) ) {
+        Copy-Item -Path "$LibPath/libz.lib" -Destination "$LibPath/z.lib" -Force
+        Log-Debug "Copied libz.lib to z.lib for FFmpeg's MSVC zlib probe"
     }
 }

@@ -130,9 +130,6 @@ function Configure {
     $env:CFLAGS = "$($script:CFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:CXXFLAGS = "$($script:CxxFlags) -I$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/include"
     $env:PKG_CONFIG_LIBDIR = "$($script:ConfigData.OutputPath -replace '([A-Fa-f]):','/$1' -replace '\\','/')/lib/pkgconfig"
-    # lld-link is a native Windows tool and cannot resolve MSYS-style paths, so
-    # LIBPATH must keep the native "D:/..." form rather than the "/D/..." form used
-    # for the MSYS-facing variables above. FFmpeg passes LDFLAGS straight to the linker.
     $env:LDFLAGS = "-LIBPATH:$($script:ConfigData.OutputPath -replace '\\','/')/lib"
     $env:PATH = "$($script:WorkRoot -replace '([A-Fa-f]):','/$1' -replace '\\','/')/gas-preprocessor;$env:PATH"
     $env:MSYS2_PATH_TYPE = 'inherit'

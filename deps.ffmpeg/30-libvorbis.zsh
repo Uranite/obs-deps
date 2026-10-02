@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='libvorbis'
-local version='8de7001691d9177e30ff16a98b37b1e6fd15f7af'
+local version='1b75110b5a2754ba1931d82dd83cb822b266a21d'
 local url='https://gitlab.xiph.org/xiph/vorbis.git'
-local hash='8de7001691d9177e30ff16a98b37b1e6fd15f7af'
+local hash='1b75110b5a2754ba1931d82dd83cb822b266a21d'
 
 ## Build Steps
 setup() {

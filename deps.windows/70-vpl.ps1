@@ -2,7 +2,7 @@ param(
     [string] $Name = 'vpl',
     [string] $Version = 'v2.14.0',
     [string] $Uri = 'https://github.com/intel/libvpl.git',
-    [string] $Hash = '025d43d086a3e663184cb49febe86152bf05409f',
+    [string] $Hash = '674d015bcb294bc39fa276e99a652ea045423e82',
     [array] $Targets = @('x64'),
     [switch] $ForceStatic = $true
 )

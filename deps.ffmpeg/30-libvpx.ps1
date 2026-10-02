@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'libvpx',
-    [string] $Version = '15dca2fe657ea80f929bc99cf6edba333a110322',
+    [string] $Version = '0a6f769e44989222d99ded46daa1e9763637cc19',
     [string] $Uri = 'https://github.com/webmproject/libvpx.git',
-    [string] $Hash = '15dca2fe657ea80f929bc99cf6edba333a110322',
+    [string] $Hash = '0a6f769e44989222d99ded46daa1e9763637cc19',
     [array] $Targets = @('x64', 'arm64')
 )
 

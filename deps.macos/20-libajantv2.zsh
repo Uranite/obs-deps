@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='ntv2'
-local version='2d7636d86b6180bb4c5075fea040b1b812cc8b57'
+local version='21574e4e8e24f53171ffb07792d61d06d3b6c11c'
 local url='https://github.com/aja-video/libajantv2.git'
-local hash='2d7636d86b6180bb4c5075fea040b1b812cc8b57'
+local hash='21574e4e8e24f53171ffb07792d61d06d3b6c11c'
 local -a patches=(
   "* ${0:a:h}/patches/ajantv2/0001-install-m31-headers.patch \
     d77dccb550a1e9c1522abead997c479065ecccd251393bff5cbf3b7ba6e222cb"

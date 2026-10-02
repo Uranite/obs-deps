@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='libpng'
-local version='ef378794235277f3116860c2fa0d356659b05441'
+local version='8334628be93c6e8db518581fcd2a25e7b66db4a3'
 local url='https://github.com/pnggroup/libpng.git'
-local hash="ef378794235277f3116860c2fa0d356659b05441"
+local hash="8334628be93c6e8db518581fcd2a25e7b66db4a3"
 local -a patches=()
 
 ## Build Steps

@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'libtheora',
-    [string] $Version = 'edfba372beb02ff70a1e2797d8cf561c242d0e0b',
+    [string] $Version = '28fd5ec77f0ad0e07a371cef1047828116f6bd8a',
     [string] $Uri = 'https://github.com/xiph/theora.git',
-    [string] $Hash = "edfba372beb02ff70a1e2797d8cf561c242d0e0b",
+    [string] $Hash = "28fd5ec77f0ad0e07a371cef1047828116f6bd8a",
     [array] $Targets = @('x64', 'arm64'),
     [array] $Patches = @(
         @{

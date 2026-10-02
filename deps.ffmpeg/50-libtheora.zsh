@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='libtheora'
-local version='edfba372beb02ff70a1e2797d8cf561c242d0e0b'
+local version='28fd5ec77f0ad0e07a371cef1047828116f6bd8a'
 local url='https://github.com/xiph/theora.git'
-local hash='edfba372beb02ff70a1e2797d8cf561c242d0e0b'
+local hash='28fd5ec77f0ad0e07a371cef1047828116f6bd8a'
 local -a patches=()
 
 ## Dependency Overrides

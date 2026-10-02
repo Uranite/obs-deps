@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'gas-preprocessor',
-    [string] $Version = 'ca93666a02f978ac0801e2ae26eee5a385137fd3',
+    [string] $Version = 'ac1836309c2e77023c228b7184485597286289d3',
     [string] $Uri = 'https://github.com/FFmpeg/gas-preprocessor.git',
-    [string] $Hash = 'ca93666a02f978ac0801e2ae26eee5a385137fd3',
+    [string] $Hash = 'ac1836309c2e77023c228b7184485597286289d3',
     [array] $Targets = @('arm64')
 )
 

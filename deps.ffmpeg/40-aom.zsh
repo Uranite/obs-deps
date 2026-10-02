@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='aom'
-local version='dc0b27cfbc498aa8ecb2fd23c46b2b734314f3ea'
+local version='e80624b5ed070d8e88a39ea78cae60d25a65adba'
 local url='https://aomedia.googlesource.com/aom.git'
-local hash='dc0b27cfbc498aa8ecb2fd23c46b2b734314f3ea'
+local hash='e80624b5ed070d8e88a39ea78cae60d25a65adba'
 local -a patches=(
   "windows ${0:a:h}/patches/aom/0001-force-threading-shim-usage.patch \
   6fa9ca74001c5fa3a6521a2b4944be2a8b4350d31c0234aede9a7052a8f1890b"

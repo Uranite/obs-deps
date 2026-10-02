@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'luajit',
-    [string] $Version = 'fbb36bb6bfa88716a47c58bcf9ce9f2ef752abac',
+    [string] $Version = 'c6ffc141a8762b41703f9287d63d93622a13dd8f',
     [string] $Uri = 'https://github.com/luajit/luajit.git',
-    [string] $Hash = 'fbb36bb6bfa88716a47c58bcf9ce9f2ef752abac',
+    [string] $Hash = 'c6ffc141a8762b41703f9287d63d93622a13dd8f',
     [array] $Targets = @('x64', 'arm64')
 )
 

@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'libpng',
-    [string] $Version = 'ef378794235277f3116860c2fa0d356659b05441',
+    [string] $Version = '8334628be93c6e8db518581fcd2a25e7b66db4a3',
     [string] $Uri = 'https://github.com/pnggroup/libpng.git',
-    [string] $Hash = "ef378794235277f3116860c2fa0d356659b05441",
+    [string] $Hash = "8334628be93c6e8db518581fcd2a25e7b66db4a3",
     [array] $Targets = @('x64', 'arm64'),
     [array] $Patches = @()
 )

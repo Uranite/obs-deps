@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='libvpx'
-local version='15dca2fe657ea80f929bc99cf6edba333a110322'
+local version='0a6f769e44989222d99ded46daa1e9763637cc19'
 local url='https://github.com/webmproject/libvpx.git'
-local hash='15dca2fe657ea80f929bc99cf6edba333a110322'
+local hash='0a6f769e44989222d99ded46daa1e9763637cc19'
 local -a patches=(
   "windows ${0:a:h}/patches/libvpx/0001-libvpx-crosscompile-win-dll.patch \
   9553b8186feac616d4421188d7c6ca75fbce900265e688cafdf1ed3333ad376a"

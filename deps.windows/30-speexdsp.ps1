@@ -2,7 +2,7 @@ param(
     [string] $Name = 'speexdsp',
     [string] $Version = '1.2.1',
     [string] $Uri = 'https://github.com/xiph/speexdsp.git',
-    [string] $Hash = '1b28a0f61bc31162979e1f26f3981fc3637095c8',
+    [string] $Hash = '7a158783df74efe7c2d1c6ee8363c1e695c71226',
     [array] $Targets = @('x64', 'arm64'),
     [array] $Patches = @(
         @{

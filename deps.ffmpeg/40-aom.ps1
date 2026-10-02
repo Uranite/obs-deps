@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'aom',
-    [string] $Version = 'dc0b27cfbc498aa8ecb2fd23c46b2b734314f3ea',
+    [string] $Version = 'e80624b5ed070d8e88a39ea78cae60d25a65adba',
     [string] $Uri = 'https://aomedia.googlesource.com/aom.git',
-    [string] $Hash = 'dc0b27cfbc498aa8ecb2fd23c46b2b734314f3ea',
+    [string] $Hash = 'e80624b5ed070d8e88a39ea78cae60d25a65adba',
     [array] $Targets = @('x64', 'arm64'),
     [array] $Patches = @(
         @{

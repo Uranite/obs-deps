@@ -1,8 +1,8 @@
 param(
     [string] $Name = 'srt',
-    [string] $Version = '44d106f491333a022351f8c105e23886aad4e248',
+    [string] $Version = '4b8813f1dcd9dba7015dbb51585332c85ad73a2a',
     [string] $Uri = 'https://github.com/Haivision/srt.git',
-    [string] $Hash = "44d106f491333a022351f8c105e23886aad4e248",
+    [string] $Hash = "4b8813f1dcd9dba7015dbb51585332c85ad73a2a",
     [array] $Targets = @('x64', 'arm64'),
     [switch] $ForceShared = $true,
     [array] $Patches = @(

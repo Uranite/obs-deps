@@ -2,9 +2,9 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='nv-codec-headers'
-local version='33a9ede8d9914299d9262539c576a15bd0a19621'
+local version='eddcea9e27f6b772057c9b3f87de2cc1737faffc'
 local url='https://github.com/ffmpeg/nv-codec-headers.git'
-local hash='33a9ede8d9914299d9262539c576a15bd0a19621'
+local hash='eddcea9e27f6b772057c9b3f87de2cc1737faffc'
 
 ## Dependency Overrides
 local targets=('windows-x*')

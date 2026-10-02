@@ -56,7 +56,7 @@ jobs:
 
   ffmpeg-macos-build:
     name: Build FFmpeg for macOS
-    runs-on: macos-15
+    runs-on: ${{ matrix.runner }}
     needs: pre-checks
     strategy:
       fail-fast: true
@@ -64,9 +64,11 @@ jobs:
         target: [macos-arm64, macos-x86_64]
         include:
           - target: macos-arm64
+            runner: macos-15
             config: Release
             type: static
           - target: macos-x86_64
+            runner: macos-15-intel
             config: Release
             type: static
     defaults:
@@ -219,7 +221,7 @@ jobs:
 
   macos-build:
     name: Build macOS Dependencies
-    runs-on: macos-15
+    runs-on: ${{ matrix.runner }}
     needs: pre-checks
     strategy:
       fail-fast: true
@@ -227,9 +229,11 @@ jobs:
         target: [macos-arm64, macos-x86_64]
         include:
           - target: macos-arm64
+            runner: macos-15
             config: Release
             type: static
           - target: macos-x86_64
+            runner: macos-15-intel
             config: Release
             type: static
     defaults:

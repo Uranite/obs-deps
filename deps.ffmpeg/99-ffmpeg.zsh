@@ -9,7 +9,7 @@ local -a patches=(
   "* ${0:a:h}/patches/FFmpeg/0001-flvdec-handle-unknown.patch \
     5a5185f54cbcf4672763cce687d1b6ddb662549b69637da826279ce4797f57ef"
   "* ${0:a:h}/patches/FFmpeg/0002-libaomenc-presets.patch \
-    d5f1410efb31fe31e8e905ec3f10ccb7841dd5594cb3591c3b205e77232fd183"
+    70278f2db9dd871c743a30165c0ef0a8b0fafe8926eae2962e408292bcae1c6b"
 )
 
 ## Build Steps

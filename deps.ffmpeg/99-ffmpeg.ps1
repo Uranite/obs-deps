@@ -11,7 +11,7 @@ param(
         }
         @{
             PatchFile = "${PSScriptRoot}/patches/FFmpeg/0002-libaomenc-presets-Windows.patch"
-            HashSum = "cec898b957fc289512094fc2c4e6a61d6872f716e4a643fb970c599a453a33f4"
+            HashSum = "81b5d7c1ccb1ff4c02706e45d77333440c661e2ead0ed811c1e882b25c640f0c"
         }
     )
 )

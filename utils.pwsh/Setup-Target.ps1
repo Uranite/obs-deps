@@ -81,12 +81,16 @@ function Setup-BuildParameters {
         arm64 = 'aarch64-pc-windows-msvc'
     }
 
+    $script:ClangTarget = $ClangTargets[$script:Target]
+    $script:ClangCl = 'C:/PROGRA~1/LLVM/bin/clang-cl.exe'
+    $script:ClangXX = 'C:/PROGRA~1/LLVM/bin/clang-cl.exe'
+
     $script:CmakeOptions = @(
         '-G', 'Ninja'
-        "-DCMAKE_C_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
-        "-DCMAKE_CXX_COMPILER=C:/PROGRA~1/LLVM/bin/clang-cl.exe"
-        "-DCMAKE_C_COMPILER_TARGET=$($ClangTargets[$script:Target])"
-        "-DCMAKE_CXX_COMPILER_TARGET=$($ClangTargets[$script:Target])"
+        "-DCMAKE_C_COMPILER=$($script:ClangCl)"
+        "-DCMAKE_CXX_COMPILER=$($script:ClangXX)"
+        "-DCMAKE_C_COMPILER_TARGET=$($script:ClangTarget)"
+        "-DCMAKE_CXX_COMPILER_TARGET=$($script:ClangTarget)"
         "-DCMAKE_INSTALL_PREFIX=$($script:ConfigData.OutputPath)"
         "-DCMAKE_PREFIX_PATH=$($script:ConfigData.OutputPath)"
         "-DCMAKE_IGNORE_PREFIX_PATH=C:\Strawberry\c"
@@ -110,6 +114,43 @@ C++ flags       : $($script:CxxFlags)
 CMake options   : $($script:CmakeOptions)
 Multi-process   : ${NumProcessors}
 "@
+}
+
+function Initialize-ClangShim {
+    <#
+        .SYNOPSIS
+            Creates a "cl" shim that forwards to clang-cl for the current target.
+        .DESCRIPTION
+            Several dependencies build with their own build systems (autotools,
+            nmake, msvcbuild.bat) and invoke "cl" directly. Inside a Visual Studio
+            Developer Shell that resolves to the real MSVC cl.exe, which would build
+            with a different compiler than the CMake-based dependencies use. Writing a
+            shim into a shared build directory and prepending it to PATH keeps the
+            whole dependency set on one toolchain.
+        .EXAMPLE
+            Initialize-ClangShim
+    #>
+
+    if ( ! ( Test-Path function:Log-Debug ) ) {
+        . $PSScriptRoot/Logger.ps1
+    }
+
+    $script:ClangShimDir = Join-Path $script:WorkRoot "toolchain"
+
+    if ( ! ( Test-Path $script:ClangShimDir ) ) {
+        New-Item -ItemType Directory -Path $script:ClangShimDir -Force | Out-Null
+    }
+
+    $ShimPath = Join-Path $script:ClangShimDir 'cl'
+
+    Set-Content -Path $ShimPath -Encoding 'ascii' -NoNewline -Value (
+        "#!/bin/bash`n" +
+        "exec `"$($script:ClangCl)`" --target=$($script:ClangTarget) `"`$@`"`n"
+    )
+
+    $env:PATH = ($ShimPath -replace '\\','/') + ';' + $env:PATH
+
+    Log-Debug "Created clang-cl shim for $($script:ClangTarget) at ${ShimPath}"
 }
 
 function Find-VisualStudio {

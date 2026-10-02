@@ -39,7 +39,7 @@ function Configure {
         '-DNO_TESTS:BOOL=ON'
         '-DNO_EXAMPLES:BOOL=ON'
         '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
-        "-DCMAKE_C_FLAGS=-w /EHsc"
+        "-DCMAKE_C_FLAGS=-w"
         "-DCMAKE_CXX_FLAGS=-w /EHsc"
     )
 

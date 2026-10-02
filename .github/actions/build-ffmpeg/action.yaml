@@ -122,9 +122,6 @@ runs:
       uses: actions/upload-artifact@v7
       with:
         name: ffmpeg-config-log-${{ inputs.target }}-${{ runner.os }}
-        # FFmpeg's configure is run from <dep>/build_<arch>, so ffbuild/ ends up nested
-        # under the *_build_temp root rather than directly inside it. The first pattern
-        # matches the real location; the second is a fallback for cached/older layouts.
         path: |
           **/*_build_temp/**/build_*/ffbuild/config.log
           **/*_build_temp/**/ffbuild/config.log

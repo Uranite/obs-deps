@@ -29,7 +29,7 @@ jobs:
       shortHash: ${{ steps.checks.outputs.shortHash }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Check for GitHub Labels
         id: checks
@@ -76,7 +76,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -112,7 +112,7 @@ jobs:
 
       - name: Restore Compilation Cache
         id: ccache-cache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.ccache
           key: ${{ matrix.target }}-ccache-ffmpeg-${{ steps.setup.outputs.ccacheDate }}
@@ -142,7 +142,7 @@ jobs:
 
       - name: Save Compilation Cache
         if: github.event_name == 'push'
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: ${{ github.workspace }}/.ccache
           key: ${{ matrix.target }}-ccache-ffmpeg-${{ steps.setup.outputs.ccacheDate }}
@@ -167,7 +167,7 @@ jobs:
         shell: pwsh
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -201,7 +201,7 @@ jobs:
     needs: [pre-checks, ffmpeg-macos-build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Create universal binary package
         if: github.event_name != 'pull_request' || fromJSON(needs.pre-checks.outputs.seekingTesters)
@@ -241,7 +241,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -276,7 +276,7 @@ jobs:
 
       - name: Restore Compilation Cache
         id: ccache-cache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.ccache
           key: ${{ matrix.target }}-ccache-deps-${{ steps.setup.outputs.ccacheDate }}
@@ -306,7 +306,7 @@ jobs:
 
       - name: Save Compilation Cache
         if: github.event_name == 'push' && steps.ccache-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: ${{ github.workspace }}/.ccache
           key: ${{ matrix.target }}-ccache-deps-${{ steps.setup.outputs.ccacheDate }}
@@ -317,7 +317,7 @@ jobs:
     needs: [pre-checks, macos-build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Create universal binary package
         if: github.event_name != 'pull_request' || fromJSON(needs.pre-checks.outputs.seekingTesters)
@@ -344,7 +344,7 @@ jobs:
         shell: zsh --no-rcs --errexit --pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -377,7 +377,7 @@ jobs:
 
       - name: Restore Compilation Cache
         id: ccache-cache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.ccache
           key: macos-universal-ccache-qt6-${{ steps.setup.outputs.ccacheDate }}
@@ -406,7 +406,7 @@ jobs:
 
       - name: Save Compilation Cache
         if: github.event_name == 'push' && steps.ccache-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: ${{ github.workspace }}/.ccache
           key: macos-universal-ccache-qt6-${{ steps.setup.outputs.ccacheDate }}
@@ -426,7 +426,7 @@ jobs:
     needs: [pre-checks, macos-qt6-build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Create single architecture binary package
         if: github.event_name != 'pull_request' || fromJSON(needs.pre-checks.outputs.seekingTesters)
@@ -467,7 +467,7 @@ jobs:
         shell: pwsh
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -557,7 +557,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Environment
         id: setup
@@ -592,7 +592,7 @@ jobs:
     needs: [pre-checks, windows-qt6-build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Create Windows Qt package
         if: github.event_name != 'pull_request' || fromJSON(needs.pre-checks.outputs.seekingTesters)
@@ -687,7 +687,7 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe
+        uses: softprops/action-gh-release@v3
         with:
           draft: false
           prerelease: false

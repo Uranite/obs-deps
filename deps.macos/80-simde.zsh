@@ -4,7 +4,7 @@ autoload -Uz log_debug log_error log_info log_status log_output
 local name='simde'
 local version='0.8.2'
 local url='https://github.com/simd-everywhere/simde.git'
-local hash='71fd833d9666141edcd1d3c109a80e228303d8d7'
+local hash='0ff5341927e15df0c3da8bb13bb32ec7f95aef84'
 
 ## Build Steps
 setup() {

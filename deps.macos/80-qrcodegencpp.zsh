@@ -4,7 +4,7 @@ autoload -Uz log_debug log_error log_info log_status log_output
 local name='qrcodegencpp'
 local version='1.8.0'
 local url='https://github.com/nayuki/QR-Code-generator.git'
-local hash='720f62bddb7226106071d4728c292cb1df519ceb'
+local hash='3c6d0b3cefb4e049dc337e82237c9644399716a8'
 local url_cmake='https://github.com/EasyCoding/qrcodegen-cmake.git'
 local hash_cmake='53c28a05c2a97abacbcdb60924b2db7eb5779d89'
 

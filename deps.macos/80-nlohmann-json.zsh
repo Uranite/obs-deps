@@ -4,7 +4,7 @@ autoload -Uz log_debug log_error log_info log_status log_output
 local name='nlohmann-json'
 local version='3.11.3'
 local url='https://github.com/nlohmann/json.git'
-local hash='9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03'
+local hash='63c10a51fc63a478f6563f9fab755a4b1d5c29b7'
 
 ## Build Steps
 setup() {

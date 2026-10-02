@@ -2,7 +2,7 @@ param(
     [string] $Name = 'asio',
     [string] $Version = '1.32.0',
     [string] $Uri = 'https://github.com/chriskohlhoff/asio.git',
-    [string] $Hash = "03ae834edbace31a96157b89bf50e5ee464e5ef9",
+    [string] $Hash = "8806a6803cde7054c3049d3666d3ec36786568c5",
     [array] $Targets = @('x64', 'arm64')
 )
 

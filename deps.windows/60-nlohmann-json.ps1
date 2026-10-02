@@ -2,7 +2,7 @@ param(
     [string] $Name = 'nlohmann-json',
     [string] $Version = '3.11.3',
     [string] $Uri = 'https://github.com/nlohmann/json.git',
-    [string] $Hash = '9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03',
+    [string] $Hash = '63c10a51fc63a478f6563f9fab755a4b1d5c29b7',
     [array] $Targets = @('x64', 'arm64')
 )
 

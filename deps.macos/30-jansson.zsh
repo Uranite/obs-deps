@@ -4,7 +4,7 @@ autoload -Uz log_debug log_error log_info log_status log_output
 local name='jansson'
 local version='2.14.1'
 local url='https://github.com/akheron/jansson.git'
-local hash="96d160df90016066d04d493d1d69639474ba4f20"
+local hash="851a2145e3256f2e67e5dfe24b0e456bf198b741"
 
 ## Build Steps
 setup() {

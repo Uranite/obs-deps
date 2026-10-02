@@ -2,7 +2,7 @@ param(
     [string] $Name = 'qrcodegencpp',
     [string] $Version = '1.8.0',
     [string] $Uri = 'https://github.com/nayuki/QR-Code-generator.git',
-    [string] $Hash = '720f62bddb7226106071d4728c292cb1df519ceb',
+    [string] $Hash = '3c6d0b3cefb4e049dc337e82237c9644399716a8',
     [string] $UriCMake = 'https://github.com/EasyCoding/qrcodegen-cmake.git',
     [string] $HashCMake = '0bc38a5c3ce8bc700a7e1b3082a55b82e292530e',
     [array] $Targets = @('x64', 'arm64')

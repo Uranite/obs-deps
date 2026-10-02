@@ -10,6 +10,8 @@ local -a patches=(
     5a5185f54cbcf4672763cce687d1b6ddb662549b69637da826279ce4797f57ef"
   "* ${0:a:h}/patches/FFmpeg/0002-libaomenc-presets.patch \
     70278f2db9dd871c743a30165c0ef0a8b0fafe8926eae2962e408292bcae1c6b"
+  "* ${0:a:h}/patches/FFmpeg/0003-relax-test-ld-for-compile-only-macros.patch \
+    a8d064bf559627a6b9d794532946bad2e96200887530d482d0b00fd3cdc41ac1"
 )
 
 ## Build Steps

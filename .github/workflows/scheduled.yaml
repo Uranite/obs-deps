@@ -125,9 +125,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ github.workspace }}/.ccache
-          key: ${{ matrix.target }}-ccache-ffmpeg-${{ steps.setup.outputs.ccacheDate }}
+          key: ${{ matrix.target }}-${{ matrix.runner }}-ccache-ffmpeg-${{ steps.setup.outputs.ccacheDate }}
           restore-keys: |
-            ${{ matrix.target }}-ccache-ffmpeg-
+            ${{ matrix.target }}-${{ matrix.runner }}-ccache-ffmpeg-
 
       - name: Build FFmpeg
         uses: ./.github/actions/build-ffmpeg
@@ -215,9 +215,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ github.workspace }}/.ccache
-          key: ${{ matrix.target }}-ccache-deps-${{ matrix.config }}-${{ steps.setup.outputs.ccacheDate }}
+          key: ${{ matrix.target }}-${{ matrix.runner }}-ccache-deps-${{ matrix.config }}-${{ steps.setup.outputs.ccacheDate }}
           restore-keys: |
-            ${{ matrix.target }}-ccache-deps-${{ matrix.config }}-
+            ${{ matrix.target }}-${{ matrix.runner }}-ccache-deps-${{ matrix.config }}-
 
       - name: Build macOS Dependencies
         uses: ./.github/actions/build-deps

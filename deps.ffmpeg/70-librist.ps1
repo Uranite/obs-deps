@@ -64,6 +64,9 @@ function Configure {
         '-Duse_mbedtls=true'
         '-Dbuiltin_cjson=true'
         '-Dbuiltin_mbedtls=true'
+        # Use the bundled LZ4 so librist.pc does not gain a "Requires.private: liblz4"
+        # entry that FFmpeg's configure cannot resolve against PKG_CONFIG_LIBDIR.
+        '-Dbuiltin_lz4=true'
         '-Dtest=false'
         '-Dbuilt_tools=false'
     )

@@ -2,7 +2,7 @@ param(
     [string] $Name = 'jansson',
     [string] $Version = '2.14.1',
     [string] $Uri = 'https://github.com/akheron/jansson.git',
-    [string] $Hash = '96d160df90016066d04d493d1d69639474ba4f20',
+    [string] $Hash = '851a2145e3256f2e67e5dfe24b0e456bf198b741',
     [array] $Targets = @('x64', 'arm64')
 )
 

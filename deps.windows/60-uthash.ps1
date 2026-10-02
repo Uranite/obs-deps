@@ -2,7 +2,7 @@ param(
     [string] $Name = 'uthash',
     [string] $Version = '2.3.0',
     [string] $Uri = 'https://github.com/troydhanson/uthash.git',
-    [string] $Hash = "e493aa90a2833b4655927598f169c31cfcdf7861",
+    [string] $Hash = "a49bed0b4abb7dff16c73906dcdc8a9718d582d2",
     [array] $Targets = @('x64', 'arm64')
 )
 

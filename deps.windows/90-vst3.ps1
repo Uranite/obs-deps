@@ -2,7 +2,7 @@ param(
     [string] $Name = 'vst3sdk',
     [string] $Version = 'v3.8.0',
     [string] $Uri = 'https://github.com/steinbergmedia/vst3sdk.git',
-    [string] $Hash = '9fad9770f2ae8542ab1a548a68c1ad1ac690abe0',
+    [string] $Hash = '3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96',
     [array] $Targets = @('x64', 'arm64')
 )
 

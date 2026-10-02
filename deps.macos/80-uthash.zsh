@@ -4,7 +4,7 @@ autoload -Uz log_debug log_error log_info log_status log_output
 local name='uthash'
 local version='2.3.0'
 local url='https://github.com/troydhanson/uthash.git'
-local hash='e493aa90a2833b4655927598f169c31cfcdf7861'
+local hash='a49bed0b4abb7dff16c73906dcdc8a9718d582d2'
 
 ## Build Steps
 setup() {

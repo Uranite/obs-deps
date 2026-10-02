@@ -13,6 +13,10 @@ param(
             PatchFile = "${PSScriptRoot}/patches/FFmpeg/0002-libaomenc-presets-Windows.patch"
             HashSum = "81b5d7c1ccb1ff4c02706e45d77333440c661e2ead0ed811c1e882b25c640f0c"
         }
+        @{
+            PatchFile = "${PSScriptRoot}/patches/FFmpeg/0003-relax-test-ld-for-compile-only-macros.patch"
+            HashSum = "a8d064bf559627a6b9d794532946bad2e96200887530d482d0b00fd3cdc41ac1"
+        }
     )
 )
 

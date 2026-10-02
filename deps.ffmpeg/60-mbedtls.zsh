@@ -2,8 +2,8 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='mbedtls'
-local version='3.6.5'
-local url='https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.5/mbedtls-3.6.5.tar.bz2'
+local version='3.6.7'
+local url='https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.7/mbedtls-3.6.7.tar.bz2'
 local hash="${0:a:h}/checksums/mbedtls-${version}.tar.bz2.sha256"
 local -a patches=()
 

@@ -2,12 +2,10 @@ autoload -Uz log_debug log_error log_info log_status log_output
 
 ## Dependency Information
 local name='lame'
-local version='3.100'
-local url='https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz'
-local hash="${0:a:h}/checksums/lame-3.100.tar.gz.sha256"
+local version='3.101'
+local url='https://downloads.sourceforge.net/project/lame/lame/3.101/lame-3.101.tar.gz'
+local hash="${0:a:h}/checksums/lame-3.101.tar.gz.sha256"
 local -a patches=(
-  "* ${0:a:h}/patches/lame/0001-remove-outdated-symbol.patch \
-    d065b95e938652a6c219df7c9c057ba73e23e60fabb42cca633304ebed87a176"
   "windows ${0:a:h}/patches/lame/0002-enable-ldflags-support-for-shared-libs.patch \
     8beb0a98f15f8a0a935f9d68ad46aaa13cef9b24b2e34879201c81f39c72b5d8"
 )

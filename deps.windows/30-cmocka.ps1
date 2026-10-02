@@ -2,7 +2,7 @@ param(
     [string] $Name = 'cmocka',
     [string] $Version = '1.1.7',
     [string] $Uri = 'https://gitlab.com/cmocka/cmocka.git',
-    [string] $Hash = 'a01cc69ee9536f90e57c61a198f2d1944d3d4313',
+    [string] $Hash = '7f736f65dc7e21499702d531a1de84cc5308cb7a',
     [array] $Targets = @('x64')
 )
 

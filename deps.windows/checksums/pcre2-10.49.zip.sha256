@@ -6,8 +6,8 @@
     </TN>
     <MS>
       <S N="Algorithm">SHA256</S>
-      <S N="Hash">4A11F1777BB95BF4AD96721CAC945A26E04BF19F57D905F241FE77EBEDDF46D8</S>
-      <S N="Path">mbedtls-3.6.5.tar.bz2</S>
+      <S N="Hash">40FA9173E167648FB872BEAAEAB667C8778EB37FABEEFFFA99A7753EDB1A9479</S>
+      <S N="Path">pcre2-10.49.zip</S>
     </MS>
   </Obj>
 </Objs>

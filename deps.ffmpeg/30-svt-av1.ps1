@@ -42,10 +42,8 @@ function Configure {
     Log-Information "Configure (${Target})"
     Set-Location $Path
 
-    $OnOff = @('OFF', 'ON')
     $Options = @(
         $CmakeOptions
-        "-DBUILD_SHARED_LIBS:BOOL=$($OnOff[$script:Shared.isPresent])"
         '-DBUILD_APPS:BOOL=OFF'
     )
 

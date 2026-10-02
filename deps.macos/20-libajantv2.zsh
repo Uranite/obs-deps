@@ -6,11 +6,7 @@ local version='21574e4e8e24f53171ffb07792d61d06d3b6c11c'
 local url='https://github.com/aja-video/libajantv2.git'
 local hash='21574e4e8e24f53171ffb07792d61d06d3b6c11c'
 local -a patches=(
-  "* ${0:a:h}/patches/ajantv2/0001-install-m31-headers.patch \
-    d77dccb550a1e9c1522abead997c479065ecccd251393bff5cbf3b7ba6e222cb"
-  "* ${0:a:h}/patches/ajantv2/0002-fix-getdeviceinfolist-scoping.patch \
-    5e21bcf3d960d469679271f5fef6cb1445ba3819fb2e5e9cf7a4bbdcfb6b5dfe"
-  "* ${0:a:h}/patches/ajantv2/0003-export-mbedtls-libs.patch \
+  "* ${0:a:h}/patches/ajantv2/0002-export-mbedtls-libs.patch \
     4073b345b818d424c2dd5f2abc02438b0de383ef925123275c6271d6ab57ff38"
 )
 

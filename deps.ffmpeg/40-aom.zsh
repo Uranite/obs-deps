@@ -5,12 +5,6 @@ local name='aom'
 local version='e80624b5ed070d8e88a39ea78cae60d25a65adba'
 local url='https://aomedia.googlesource.com/aom.git'
 local hash='e80624b5ed070d8e88a39ea78cae60d25a65adba'
-local -a patches=(
-  "windows ${0:a:h}/patches/aom/0001-force-threading-shim-usage.patch \
-  6fa9ca74001c5fa3a6521a2b4944be2a8b4350d31c0234aede9a7052a8f1890b"
-  "macos ${0:a:h}/patches/aom/0002-fix-cmake-nasm-detection.patch \
-  47d926731a31990b432f188e7e16628bd2ca334f5b71fe55241d7b845884a35d"
-)
 
 ## Dependency Overrides
 local targets=(windows-x64 'macos-*' 'linux-*')
@@ -28,24 +22,6 @@ clean() {
     log_info "Clean build directory (%F{3}${target}%f)"
 
     rm -rf build_${arch}
-  }
-}
-
-patch() {
-  autoload -Uz apply_patch
-
-  log_info "Patch (%F{3}${target}%f)"
-
-  cd ${dir}
-
-  local patch
-  local _target
-  local _url
-  local _hash
-  for patch (${patches}) {
-    read _target _url _hash <<< "${patch}"
-
-    if [[ ${_target} == ${target%%-*} ]] apply_patch ${_url} ${_hash}
   }
 }
 
@@ -71,8 +47,8 @@ config() {
   )
 
   case ${target} {
-    macos-*) args+=(-DCMAKE_TOOLCHAIN_FILE="build/cmake/toolchains/${target_config[cmake_arch]}-macos.cmake") ;;
-    windows-x*) args+=(-DCMAKE_TOOLCHAIN_FILE="build/cmake/toolchains/${target_config[cmake_arch]}-mingw-gcc.cmake")
+    macos-*) args+=(-DCMAKE_TOOLCHAIN_FILE="cmake/toolchains/${target_config[cmake_arch]}-macos.cmake") ;;
+    windows-x*) args+=(-DCMAKE_TOOLCHAIN_FILE="cmake/toolchains/${target_config[cmake_arch]}-mingw-gcc.cmake")
   }
 
   log_info "Config (%F{3}${target}%f)"

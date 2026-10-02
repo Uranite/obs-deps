@@ -5,6 +5,10 @@ local name='svt-av1'
 local version='d235cfcc0cfa0a24ec32ea77ec156907921e3a23'
 local url='https://gitlab.com/AOMediaCodec/SVT-AV1.git'
 local hash='d235cfcc0cfa0a24ec32ea77ec156907921e3a23'
+local -a patches=(
+  "* ${0:a:h}/patches/svt-av1/0001-fix-eb-new-macro-trailing-comma.patch \
+    2d21d229ce7d61c4db08edbdc85ea30d50908525d31743a3bce59660c0381a10"
+)
 
 ## Dependency Overrides
 local targets=(windows-x64 'macos-*' 'linux-*')
@@ -13,6 +17,23 @@ local targets=(windows-x64 'macos-*' 'linux-*')
 setup() {
   log_info "Setup (%F{3}${target}%f)"
   setup_dep ${url} ${hash}
+}
+
+patch() {
+  autoload -Uz apply_patch
+
+  log_info "Patch (%F{3}${target}%f)"
+  cd ${dir}
+
+  local patch
+  local _target
+  local _url
+  local _hash
+  for patch (${patches}) {
+    read _target _url _hash <<< "${patch}"
+
+    if [[ ${target%%-*} == ${~_target} ]] apply_patch ${_url} ${_hash}
+  }
 }
 
 clean() {

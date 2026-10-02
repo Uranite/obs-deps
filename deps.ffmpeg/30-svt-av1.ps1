@@ -3,7 +3,13 @@ param(
     [string] $Version = 'd235cfcc0cfa0a24ec32ea77ec156907921e3a23',
     [string] $Uri = 'https://gitlab.com/AOMediaCodec/SVT-AV1.git',
     [string] $Hash = 'd235cfcc0cfa0a24ec32ea77ec156907921e3a23',
-    [array] $Targets = @('x64')
+    [array] $Targets = @('x64'),
+    [array] $Patches = @(
+        @{
+            PatchFile = "${PSScriptRoot}/patches/svt-av1/0001-fix-eb-new-macro-trailing-comma.patch"
+            HashSum = '2D21D229CE7D61C4DB08EDBDC85EA30D50908525D31743A3BCE59660C0381A10'
+        }
+    )
 )
 
 function Setup {
@@ -19,6 +25,16 @@ function Clean {
     if ( Test-Path "build_${Target}" ) {
         Log-Information "Clean build directory (${Target})"
         Remove-Item -Path "build_${Target}" -Recurse -Force
+    }
+}
+
+function Patch {
+    Log-Information "Patch (${Target})"
+    Set-Location $Path
+
+    $Patches | ForEach-Object {
+        $Params = $_
+        Safe-Patch @Params
     }
 }
 

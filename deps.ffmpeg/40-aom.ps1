@@ -3,19 +3,7 @@ param(
     [string] $Version = 'e80624b5ed070d8e88a39ea78cae60d25a65adba',
     [string] $Uri = 'https://aomedia.googlesource.com/aom.git',
     [string] $Hash = 'e80624b5ed070d8e88a39ea78cae60d25a65adba',
-    [array] $Targets = @('x64', 'arm64'),
-    [array] $Patches = @(
-        @{
-            PatchFile = "${PSScriptRoot}/patches/aom/0002-windows-fix-cmake-nasm-detection.patch"
-            HashSum = "9455ba4f016ac8ec8e9604b38af8c89238bed1a4b74c04bd4d250b95c96531fe"
-        }
-    ),
-    [array] $FixupPatches = @(
-        @{
-            PatchFile = "${PSScriptRoot}/patches/aom/0001-windows-pkg-config-fix.patch"
-            HashSum = "22f38b49d6307c2ee860b08df7495b5f8894658b451c020f8a13162fd7dd29f4"
-        }
-    )
+    [array] $Targets = @('x64', 'arm64')
 )
 
 function Setup {
@@ -31,16 +19,6 @@ function Clean {
     if ( Test-Path "build_${Target}" ) {
         Log-Information "Clean build directory (${Target})"
         Remove-Item -Path "build_${Target}" -Recurse -Force
-    }
-}
-
-function Patch {
-    Log-Information "Patch (${Target})"
-    Set-Location $Path
-
-    $Patches | ForEach-Object {
-        $Params = $_
-        Safe-Patch @Params
     }
 }
 
@@ -101,14 +79,4 @@ function Install {
     }
 
     Invoke-External cmake @Options
-}
-
-function Fixup {
-    Log-Information "Fixup (${Target})"
-    Set-Location "$($script:ConfigData.OutputPath)"
-
-    $FixupPatches | ForEach-Object {
-        $Params = $_
-        Safe-Patch @Params
-    }
 }

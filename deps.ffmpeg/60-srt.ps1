@@ -1,22 +1,14 @@
 param(
     [string] $Name = 'srt',
-    [string] $Version = '4b8813f1dcd9dba7015dbb51585332c85ad73a2a',
+    [string] $Version = 'b1551573c74b529b8fdc4d93f1eee4c947017bf9',
     [string] $Uri = 'https://github.com/Haivision/srt.git',
-    [string] $Hash = "4b8813f1dcd9dba7015dbb51585332c85ad73a2a",
+    [string] $Hash = "b1551573c74b529b8fdc4d93f1eee4c947017bf9",
     [array] $Targets = @('x64', 'arm64'),
     [switch] $ForceShared = $true,
     [array] $Patches = @(
         @{
             PatchFile = "${PSScriptRoot}/patches/srt/0002-update-mbedtls-discovery-windows.patch"
             HashSum = "c6b236a15e36767cc516c626c410be42b9ff05bd42338c194e1cf6247e4cbdc5"
-        },
-        @{
-            PatchFile = "${PSScriptRoot}/patches/srt/0003-fix-mbedtls-v3.5.0-plus-build-error-on-windows.patch"
-            HashSum = "7253ecfc1a36b1ff88dcb995ab8779107a5c7f979fd1f74390354a91fdf9f00b"
-        },
-        @{
-            PatchFile = "${PSScriptRoot}/patches/srt/0004-fix-link-bcrypt-on-windows-when-mbedtls-v3.5.0-plus.patch"
-            HashSum = "04a3c5be7402995328da91c2313aa0489c3d9501410361e406db8fff679d4054"
         }
     )
 )

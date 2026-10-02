@@ -1,7 +1,7 @@
 param(
     [string] $Name = 'mbedtls',
-    [string] $Version = '3.6.5',
-    [string] $Uri = 'https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.5/mbedtls-3.6.5.tar.bz2',
+    [string] $Version = '3.6.7',
+    [string] $Uri = 'https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.7/mbedtls-3.6.7.tar.bz2',
     [string] $Hash = "${PSScriptRoot}/checksums/mbedtls-${Version}.tar.bz2.win.sha256",
     [array] $Targets = @('x64', 'arm64'),
     [switch] $ForceStatic = $true

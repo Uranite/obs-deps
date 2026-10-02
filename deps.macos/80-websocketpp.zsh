@@ -4,11 +4,8 @@ autoload -Uz log_debug log_error log_info log_status log_output
 local name='websocketpp'
 local version='0.8.2'
 local url='https://github.com/zaphoyd/websocketpp.git'
-local hash='56123c87598f8b1dd471be83ca841ceae07f95ba'
-local patches=(
-  "${0:a:h}/patches/websocketpp/0001-update-minimum-cmake.patch \
-  61aa39ebe761f71b05306c5a6f025207c494e07b01f29fb6d3746865e93b6d4c"
-)
+local hash='4dfe1be74e684acca19ac1cf96cce0df9eac2a2d'
+local patches=()
 
 ## Build Steps
 setup() {

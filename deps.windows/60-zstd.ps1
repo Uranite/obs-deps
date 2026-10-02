@@ -2,7 +2,7 @@ param(
     [string] $Name = 'zstd',
     [string] $Version = 'v1.5.7',
     [string] $Uri = 'https://github.com/facebook/zstd.git',
-    [string] $Hash = 'f8745da6ff1ad1e7bab384bd1f9d742439278e99',
+    [string] $Hash = 'ac66b19e6bd6b83238bf008eecc1298105298532',
     [array] $Targets = @('x64', 'arm64')
 )
 

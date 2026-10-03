@@ -16,6 +16,43 @@ jobs:
     permissions:
       actions: write
     steps:
+      - name: Remove Aged Cache Entries
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MAX_CACHE_AGE_DAYS: 7
+        run: |
+          : Remove Aged Cache Entries
+
+          # The repo cache quota is 10GB and this repo's build trees exceed it, which
+          # makes GitHub evict the oldest entries at arbitrary times. Trim explicitly by
+          # age instead, so eviction is predictable and never drops a warm cache that
+          # something is still using.
+          echo "::group::Trimming cache entries older than ${MAX_CACHE_AGE_DAYS} days"
+          cutoff=$(date -u -d "${MAX_CACHE_AGE_DAYS} days ago" +%s)
+          deleted=0
+
+          while IFS=$'\t' read -r cache_id cache_key cache_last; do
+            if [[ -z "${cache_id}" ]]; then
+              continue
+            fi
+
+            last_epoch=$(date -u -d "${cache_last}" +%s 2> /dev/null || echo 0)
+            if (( last_epoch == 0 || last_epoch >= cutoff )); then
+              continue
+            fi
+
+            if gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/caches/${cache_id}" &> /dev/null; then
+              echo "Deleted aged cache entry ${cache_key} (last used ${cache_last})"
+              deleted=$((deleted + 1))
+            else
+              echo "::warning::Unable to delete cache entry ${cache_key}"
+            fi
+          done <<< "$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/caches?per_page=100" \
+            --jq '.actions_caches[] | [.id, .key, .last_accessed_at] | @tsv')"
+
+          echo "Deleted ${deleted} aged cache entries"
+          echo '::endgroup::'
+
       - name: Remove Stale Cache Entries
         env:
           GH_TOKEN: ${{ github.token }}

@@ -58,6 +58,7 @@ function Build {
     $cfg = $cfg -replace '(?m)^#define\s+(u?int\d+_t)\s+(signed|unsigned)?\s*(char|short|int|long).*$', ''
     $cfg = "#include <stdint.h>`n" + $cfg
     Set-Content "configMS.h" $cfg -NoNewline
+    Copy-Item "configMS.h" "config.h"
 
     $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
     $Params = @{

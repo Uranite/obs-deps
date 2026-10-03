@@ -91,6 +91,12 @@ function Configure {
         )
     }
 
+    if ( $Config -eq 'Debug' ) {
+        $Options += @(
+            '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDebugDLL'
+        )
+    }
+
     $Options += @(
         '-DFEATURE_androiddeployqt:BOOL=OFF'
         '-DFEATURE_brotli:BOOL=OFF'
@@ -223,6 +229,12 @@ function Qt-Add-Submodules {
     if ( $Config -eq 'RelWithDebInfo' ) {
         $Options += @(
             '-DFEATURE_separate_debug_info:BOOL=ON'
+        )
+    }
+
+    if ( $Config -eq 'Debug' ) {
+        $Options += @(
+            '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDebugDLL'
         )
     }
 

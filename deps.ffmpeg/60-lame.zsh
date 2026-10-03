@@ -76,6 +76,7 @@ config() {
     --enable-nasm
     --disable-gtktest
     --disable-frontend
+    --disable-decoder
     "--${_onoff[(( shared_libs + 1 ))]}-shared"
   )
 

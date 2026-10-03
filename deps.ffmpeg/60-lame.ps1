@@ -8,6 +8,10 @@ param(
         @{
             PatchFile = "${PSScriptRoot}/patches/lame/0001-fix-nmake-64-bit-builds.patch"
             HashSum = "0772e07d3d0c484d281e3bfdb4f93e81adf303623fe57d955b98196795725f39"
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/lame/0003-drop-stale-mpglib-sources-from-msvc-makefile.patch"
+            HashSum = "819da36eadfdbdbdfe54d43850909d6cbc146ea1d1361ad249e98444d557f5e8"
         }
     )
 )
@@ -54,12 +58,13 @@ function Build {
     $cfg = $cfg -replace '(?m)^#define\s+(u?int\d+_t)\s+(signed|unsigned)?\s*(char|short|int|long).*$', ''
     $cfg = "#include <stdint.h>`n" + $cfg
     Set-Content "configMS.h" $cfg -NoNewline
+    Copy-Item "configMS.h" "config.h"
 
     $clangTarget = if ($Target -eq 'arm64') { 'aarch64-pc-windows-msvc' } elseif ($Target -eq 'x86') { 'i686-pc-windows-msvc' } else { 'x86_64-pc-windows-msvc' }
     $Params = @{
         BasePath = (Get-Location | Convert-Path)
         BuildPath = "."
-        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64 CC=`"clang-cl --target=$clangTarget`" LN=link"
+        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64 CC=`"clang-cl --target=$clangTarget`" LN=link libmp3lame-static.lib"
         Target = $Target
     }
 

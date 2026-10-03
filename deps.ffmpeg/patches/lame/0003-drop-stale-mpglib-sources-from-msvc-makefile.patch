@@ -1,0 +1,46 @@
+diff --git a/Makefile.MSVC b/Makefile.MSVC
+index 9bc6316..20f0e2d 100644
+--- a/Makefile.MSVC
++++ b/Makefile.MSVC
+@@ -484,23 +484,12 @@ lamelib_sources = \
+ 	libmp3lame/presets.c \
+ 	libmp3lame/version.c
+ 
+-mpglib_sources = \
+-	mpglib/common.c \
+-	mpglib/dct64_i386.c \
+-	mpglib/decode_i386.c \
+-	mpglib/layer1.c \
+-	mpglib/layer2.c \
+-	mpglib/layer3.c \
+-	mpglib/tabinit.c \
+-	mpglib/interface.c
+-
+ 
+ !IF "$(MSVCVER)" == "Win64"
+ ADDL_OBJ = bufferoverflowU.lib
+ !ENDIF
+ 
+ LIB_OBJ = $(lamelib_sources:.c=.obj)
+-HIP_OBJ = $(mpglib_sources:.c=.obj)
+ CMMN_OBJ = $(common_sources:.c=.obj)
+ LAME_OBJ = $(lame_sources:.c=.obj)
+ MPX_OBJ = $(mpx_sources:.c=.obj)
+@@ -596,7 +585,7 @@ libA:	$(LIB_OBJ)
+ 	@echo --- LAME MP3 ENCODING LIBRARY UPTODATE ---
+ 	@echo.
+ 
+-libB:	$(HIP_OBJ)
++libB:
+ 	@echo.
+ 	@echo --- HIP DECODING LIBRARY UPTODATE ---
+ 	@echo.
+@@ -660,7 +649,7 @@ $(T_DLL) : target_directory config.h $(T_LIB_STATIC)
+ $(T_LIB_STATIC) : target_directory lib
+ 	@lib $(LIB_OPTS) \
+ 		/OUT:"$(TARGET_DIR)$@" \
+-		$(ASM_OBJ) $(LIB_OBJ) $(HIP_OBJ)
++		$(ASM_OBJ) $(LIB_OBJ)
+ 	@echo.
+ 	@echo --=*  $(TARGET_DIR)$@ ready  *=--
+ 	@echo.

@@ -97,6 +97,12 @@ function Configure {
         )
     }
 
+    if ( Get-Command ccache -ErrorAction SilentlyContinue ) {
+        $Options += @(
+            '-DQT_USE_CCACHE:BOOL=ON'
+        )
+    }
+
     $Options += @(
         '-DFEATURE_androiddeployqt:BOOL=OFF'
         '-DFEATURE_brotli:BOOL=OFF'
@@ -235,6 +241,12 @@ function Qt-Add-Submodules {
     if ( $Config -eq 'Debug' ) {
         $Options += @(
             '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDebugDLL'
+        )
+    }
+
+    if ( Get-Command ccache -ErrorAction SilentlyContinue ) {
+        $Options += @(
+            '-DQT_USE_CCACHE:BOOL=ON'
         )
     }
 

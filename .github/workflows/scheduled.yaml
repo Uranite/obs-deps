@@ -364,9 +364,24 @@ jobs:
             runner-os: windows-11-vs2026-arm
     runs-on: ${{ matrix.runner-os }}
 
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 1G
+
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      - name: Install ccache
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          # Install ccache
+          if ( -not (Get-Command ccache -ErrorAction SilentlyContinue) ) {
+            choco install ccache -y --no-progress
+          }
+
+          ccache --version
 
       - name: Setup Environment
         id: setup
@@ -377,12 +392,30 @@ jobs:
 
           "artifactName=${ArtifactName}" >> $env:GITHUB_OUTPUT
           "artifactFileName=${FileName}" >> $env:GITHUB_OUTPUT
+          "ccacheDate=$(Get-Date -Format 'yyyy-MM-dd')" >> $env:GITHUB_OUTPUT
+
+      - name: Restore Compilation Cache
+        id: ccache-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{ matrix.target }}-${{ matrix.runner-os }}-ccache-qt6-${{ matrix.config }}-${{ steps.setup.outputs.ccacheDate }}
+          restore-keys: |
+            ${{ matrix.target }}-${{ matrix.runner-os }}-ccache-qt6-${{ matrix.config }}-
 
       - name: Build Windows Qt
         uses: ./.github/actions/build-qt
         with:
           target: ${{ matrix.target }}
           config: ${{ matrix.config }}
+
+      - name: Save Compilation Cache
+        if: github.event_name == 'push' && steps.ccache-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{ matrix.target }}-${{ matrix.runner-os }}-ccache-qt6-${{ matrix.config }}-${{ steps.setup.outputs.ccacheDate }}
+          if-no-files-found: ignore
 
       - name: Publish Build Artifacts
         if: matrix.target == 'x64'

@@ -63,7 +63,7 @@ function Build {
     $Params = @{
         BasePath = (Get-Location | Convert-Path)
         BuildPath = "."
-        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64 CC=`"clang-cl --target=$clangTarget`" LN=link"
+        BuildCommand = "nmake -f Makefile.MSVC MACHINE=/machine:$($BuildMachines[$Target]) MMX=NO COMP=MS ASM=NO MSVCVER=Win64 CC=`"clang-cl --target=$clangTarget`" LN=link libmp3lame-static.lib"
         Target = $Target
     }
 

@@ -8,6 +8,10 @@ param(
         @{
             PatchFile = "${PSScriptRoot}/patches/lame/0001-fix-nmake-64-bit-builds.patch"
             HashSum = "0772e07d3d0c484d281e3bfdb4f93e81adf303623fe57d955b98196795725f39"
+        },
+        @{
+            PatchFile = "${PSScriptRoot}/patches/lame/0003-drop-stale-mpglib-sources-from-msvc-makefile.patch"
+            HashSum = "819da36eadfdbdbdfe54d43850909d6cbc146ea1d1361ad249e98444d557f5e8"
         }
     )
 )

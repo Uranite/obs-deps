@@ -62,6 +62,6 @@ runs:
             echo "::warning::Unable to delete cache entry ${cache_key}"
           fi
         done <<< "$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/caches?per_page=100" \
-          --jq '.actions_caches[] | [.id, .key] | @tsv')"
+          --jq '.actions_caches[] | [.id, .key] | @tsv' | tr -d '\r')"
 
         echo "Pruned ${deleted} superseded cache entries matching '${CACHE_PREFIX}'"

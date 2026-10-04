@@ -12,6 +12,10 @@ inputs:
     description: Qt version to build
     required: false
     default: '6'
+  cacheDebug:
+    description: Cache Debug build trees
+    required: false
+    default: 'false'
   workingDirectory:
     description: Working directory for repository action
     required: false
@@ -54,7 +58,7 @@ runs:
 
     - name: Restore Qt from Cache
       id: deps-cache
-      if: inputs.config != 'Debug'
+      if: inputs.config != 'Debug' || inputs.cacheDebug == 'true'
       uses: actions/cache/restore@v6
       with:
         path: |
@@ -100,7 +104,7 @@ runs:
         ./Build-Dependencies.ps1 @Params
 
     - name: Save Qt to Cache
-      if: inputs.config != 'Debug' && (github.event_name == 'schedule' || (github.event_name == 'push' && steps.deps-cache.outputs.cache-hit != 'true'))
+      if: (inputs.config != 'Debug' || inputs.cacheDebug == 'true') && (github.event_name == 'schedule' || (github.event_name == 'push' && steps.deps-cache.outputs.cache-hit != 'true'))
       uses: actions/cache/save@v6
       with:
         path: |
@@ -112,7 +116,7 @@ runs:
         key: ${{ inputs.target }}-qt${{ inputs.qtVersion }}-${{inputs.config }}-${{ steps.env-setup.outputs.depHash }}-${{ steps.env-setup.outputs.patchHash }}
 
     - name: Prune Superseded Qt Cache
-      if: inputs.config != 'Debug' && (github.event_name == 'schedule' || (github.event_name == 'push' && steps.deps-cache.outputs.cache-hit != 'true'))
+      if: (inputs.config != 'Debug' || inputs.cacheDebug == 'true') && (github.event_name == 'schedule' || (github.event_name == 'push' && steps.deps-cache.outputs.cache-hit != 'true'))
       uses: ./.github/actions/prune-cache
       with:
         prefix: ${{ inputs.target }}-qt${{ inputs.qtVersion }}-${{ inputs.config }}-

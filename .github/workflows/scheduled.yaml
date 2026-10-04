@@ -124,10 +124,12 @@ jobs:
             runner: macos-15
             config: Release
             type: static
+            cacheDeps: false
           - target: macos-x86_64
             runner: macos-15-intel
             config: Release
             type: static
+            cacheDeps: true
     defaults:
       run:
         shell: zsh --no-rcs --errexit --pipefail {0}
@@ -172,6 +174,7 @@ jobs:
           target: ${{ matrix.target }}
           type: ${{ matrix.type }}
           config: ${{ matrix.config }}
+          cacheDeps: ${{ matrix.cacheDeps }}
 
   ffmpeg-windows-build:
     name: Build FFmpeg for Windows
@@ -185,9 +188,11 @@ jobs:
           - target: x64
             config: Release
             type: static
+            cacheDeps: true
           - target: arm64
             config: Release
             type: static
+            cacheDeps: false
 
     defaults:
       run:
@@ -202,6 +207,7 @@ jobs:
           target: ${{ matrix.target }}
           type: ${{ matrix.type }}
           config: ${{ matrix.config }}
+          cacheDeps: ${{ matrix.cacheDeps }}
 
   macos-build:
     name: Build macOS Dependencies
@@ -420,6 +426,7 @@ jobs:
         with:
           target: ${{ matrix.target }}
           config: ${{ matrix.config }}
+          cacheDebug: ${{ matrix.target == 'x64' }}
 
       - name: Publish Build Artifacts
         if: matrix.target == 'x64'

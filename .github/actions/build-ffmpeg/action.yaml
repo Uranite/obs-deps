@@ -12,6 +12,10 @@ inputs:
     description: Build configuration
     required: false
     default: Release
+  cacheDeps:
+    description: Cache the FFmpeg dependency build trees
+    required: false
+    default: 'true'
   workingDirectory:
     description: Working directory for repository action
     required: false
@@ -40,6 +44,7 @@ runs:
 
     - name: Restore FFmpeg Dependencies from Cache
       id: ffmpeg-deps-cache
+      if: inputs.cacheDeps == 'true'
       uses: actions/cache/restore@v6
       with:
         path: |
@@ -137,7 +142,7 @@ runs:
         key: ${{ inputs.target }}-ffmpeg-${{ inputs.type }}-${{ inputs.config }}-${{ steps.env-setup.outputs.hash }}
 
     - name: Save FFmpeg Dependencies to Cache
-      if: github.event_name == 'schedule' || (github.event_name == 'push' && steps.ffmpeg-deps-cache.outputs.cache-hit != 'true')
+      if: inputs.cacheDeps == 'true' && (github.event_name == 'schedule' || (github.event_name == 'push' && steps.ffmpeg-deps-cache.outputs.cache-hit != 'true'))
       uses: actions/cache/save@v6
       with:
         path: |
@@ -149,3 +154,17 @@ runs:
           !${{ inputs.workingDirectory }}/*_build_temp/FFmpeg*
           !${{ inputs.workingDirectory }}/*_build_temp/x264-*-shared/
         key: ${{ inputs.target }}-ffmpeg-deps-${{ inputs.type }}-${{ inputs.config }}-${{ steps.env-setup.outputs.hash }}
+
+    - name: Prune Superseded FFmpeg Dependencies Cache
+      if: inputs.cacheDeps == 'true' && (github.event_name == 'schedule' || (github.event_name == 'push' && steps.ffmpeg-deps-cache.outputs.cache-hit != 'true'))
+      uses: ./.github/actions/prune-cache
+      with:
+        prefix: ${{ inputs.target }}-ffmpeg-deps-${{ inputs.type }}-${{ inputs.config }}-
+        keep: ${{ inputs.target }}-ffmpeg-deps-${{ inputs.type }}-${{ inputs.config }}-${{ steps.env-setup.outputs.hash }}
+
+    - name: Prune Superseded FFmpeg Cache
+      if: github.event_name == 'schedule' || (github.event_name == 'push' && steps.ffmpeg-cache.outputs.cache-hit != 'true')
+      uses: ./.github/actions/prune-cache
+      with:
+        prefix: ${{ inputs.target }}-ffmpeg-${{ inputs.type }}-${{ inputs.config }}-
+        keep: ${{ inputs.target }}-ffmpeg-${{ inputs.type }}-${{ inputs.config }}-${{ steps.env-setup.outputs.hash }}

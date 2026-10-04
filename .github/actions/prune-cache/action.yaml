@@ -1,0 +1,67 @@
+name: 'Prune Superseded Cache Entries'
+description: 'Delete previous generations of a cache, keeping only the entry that was just saved.'
+
+inputs:
+  prefix:
+    description: 'Stable prefix shared by every generation of this cache.'
+    required: true
+  keep:
+    description: 'Exact key that was just saved and must be preserved.'
+    required: false
+    default: ''
+  dry-run:
+    description: 'List what would be deleted without deleting anything.'
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - name: Delete Superseded Cache Entries
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        CACHE_PREFIX: ${{ inputs.prefix }}
+        CACHE_KEEP: ${{ inputs.keep }}
+        PRUNE_DRY_RUN: ${{ inputs.dry-run }}
+      run: |
+        # Removes cache entries that share a prefix with the entry this job just wrote.
+        #
+        # GitHub cache keys are immutable, so any cache keyed on a date or a content hash
+        # accumulates a new entry per generation and never replaces the previous one. That
+        # pushes the repository against its quota until GitHub evicts entries arbitrarily,
+        # which can drop a cache that is still wanted. Deleting the previous generation
+        # right after a successful save keeps exactly one live entry instead.
+
+        if [[ -z "${CACHE_PREFIX}" ]]; then
+          echo '::warning::No cache prefix given; nothing to prune.'
+          exit 0
+        fi
+
+        deleted=0
+
+        while IFS=$'\t' read -r cache_id cache_key; do
+          [[ -z "${cache_id}" ]] && continue
+          [[ "${cache_key}" == "${CACHE_PREFIX}"* ]] || continue
+
+          if [[ -n "${CACHE_KEEP}" && "${cache_key}" == "${CACHE_KEEP}" ]]; then
+            echo "Keeping ${cache_key}"
+            continue
+          fi
+
+          if [[ "${PRUNE_DRY_RUN}" == 'true' ]]; then
+            echo "Would delete ${cache_key}"
+            deleted=$((deleted + 1))
+            continue
+          fi
+
+          if gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/caches/${cache_id}" &> /dev/null; then
+            echo "Deleted superseded cache entry ${cache_key}"
+            deleted=$((deleted + 1))
+          else
+            echo "::warning::Unable to delete cache entry ${cache_key}"
+          fi
+        done <<< "$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/caches?per_page=100" \
+          --jq '.actions_caches[] | [.id, .key] | @tsv')"
+
+        echo "Pruned ${deleted} superseded cache entries matching '${CACHE_PREFIX}'"

@@ -58,6 +58,8 @@ jobs:
     name: Build FFmpeg for macOS
     runs-on: ${{ matrix.runner }}
     needs: pre-checks
+    permissions:
+      actions: write
     strategy:
       fail-fast: true
       matrix:
@@ -147,6 +149,13 @@ jobs:
           path: ${{ github.workspace }}/.ccache
           key: ${{ matrix.target }}-${{ matrix.runner }}-ccache-ffmpeg-${{ steps.setup.outputs.ccacheDate }}
 
+      - name: Prune Superseded Compilation Cache
+        if: github.event_name == 'push'
+        uses: ./.github/actions/prune-cache
+        with:
+          prefix: ${{ matrix.target }}-${{ matrix.runner }}-ccache-ffmpeg-
+          keep: ${{ matrix.target }}-${{ matrix.runner }}-ccache-ffmpeg-${{ steps.setup.outputs.ccacheDate }}
+
   ffmpeg-windows-build:
     name: Build FFmpeg for Windows
     runs-on: windows-2025-vs2026
@@ -223,6 +232,8 @@ jobs:
     name: Build macOS Dependencies
     runs-on: ${{ matrix.runner }}
     needs: pre-checks
+    permissions:
+      actions: write
     strategy:
       fail-fast: true
       matrix:
@@ -311,6 +322,13 @@ jobs:
           path: ${{ github.workspace }}/.ccache
           key: ${{ matrix.target }}-${{ matrix.runner }}-ccache-deps-${{ steps.setup.outputs.ccacheDate }}
 
+      - name: Prune Superseded Compilation Cache
+        if: github.event_name == 'push' && steps.ccache-cache.outputs.cache-hit != 'true'
+        uses: ./.github/actions/prune-cache
+        with:
+          prefix: ${{ matrix.target }}-${{ matrix.runner }}-ccache-deps-
+          keep: ${{ matrix.target }}-${{ matrix.runner }}-ccache-deps-${{ steps.setup.outputs.ccacheDate }}
+
   macos-package-universal:
     name: Build macOS Dependencies (Universal)
     runs-on: macos-15
@@ -339,6 +357,8 @@ jobs:
     name: Build Qt6 (macOS)
     runs-on: macos-15
     needs: pre-checks
+    permissions:
+      actions: write
     defaults:
       run:
         shell: zsh --no-rcs --errexit --pipefail {0}
@@ -410,6 +430,13 @@ jobs:
         with:
           path: ${{ github.workspace }}/.ccache
           key: macos-universal-ccache-qt6-${{ steps.setup.outputs.ccacheDate }}
+
+      - name: Prune Superseded Compilation Cache
+        if: github.event_name == 'push' && steps.ccache-cache.outputs.cache-hit != 'true'
+        uses: ./.github/actions/prune-cache
+        with:
+          prefix: macos-universal-ccache-qt6-
+          keep: macos-universal-ccache-qt6-${{ steps.setup.outputs.ccacheDate }}
 
   macos-qt6-package:
     name: Create macOS Qt6 (${{ matrix.target }})

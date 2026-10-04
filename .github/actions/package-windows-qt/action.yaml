@@ -47,6 +47,9 @@ runs:
           pull_request {
             '5'
           }
+          default {
+            '5'
+          }
         }
 
         $Artifacts = Get-ChildItem -Filter "windows-deps-qt6*.zip"
